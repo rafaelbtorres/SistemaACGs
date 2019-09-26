@@ -1,0 +1,14 @@
+Boa tarde pessoal! Aqui tem uma playlist com o curso de Spring Boot
+
+Playlist: https://www.youtube.com/playlist?list=PL8iIphQOyG-DHLpEx1TPItqJamy08fs1D
+
+Destas aulas as que considero relevante que vocês assistam são:
+1 , 2 , 4, 8, 9, 10, 11, 12. As outras aulas que tem na playlist podem servir de apoio a vcs, caso queiram relembrar algo sobre criação de banco de dados e etc. Toda a parte que fala sobre interface vocês podem ignorar pois vamos utilizar React para isto. as aulas são bem simples e curtinhas de 10 a 15 minutos  cada. Caso vocês precisem de mais material podem pedir, ou pesquisem por conta. Por favor me informem sobre todo o tempo que vocês dedicarem ok? seja 10 minutos de uma tarde, seja uma hora. Me digam depois cada uma das video aulas q vcs assistiram e aconselho que em paralelo com as video aulas vão criando um projeto de teste. Pra praticarem em paralelo, pode ser até o do projeto já, que ai na aula organizamos e vemos qual utilizar. 
+
+Aqui tem um video que fala sobre a arquitetura de microserviços, caso vcs precisem: https://www.youtube.com/watch?v=zd5iI9tLKm8
+
+Interface React e instalação de node: https://drive.google.com/open?id=1XBQlvkNQoIQiDv1ndWoir7kPwC0yih5o (O video da instalação está indo ainda)
+
+Para agilizar, só dois de vocês assistam as aulas sobre backend e 1 a aula de react.
+
+As partes das instalações das tecnologias é bom que todos assistam pra não termos problemas de git futuramente.  
