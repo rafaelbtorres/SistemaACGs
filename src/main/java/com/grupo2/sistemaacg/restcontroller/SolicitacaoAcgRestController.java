@@ -5,7 +5,7 @@
  */
 package com.grupo2.sistemaacg.restcontroller;
 
-import com.grupo2.sistemaacg.model.Acg;
+import com.grupo2.sistemaacg.model.SolicitacaoAcg;
 import com.grupo2.sistemaacg.model.Disco;
 import static com.grupo2.sistemaacg.model.ListaAcg.getAcg;
 import org.springframework.http.HttpStatus;
@@ -37,19 +37,20 @@ public class SolicitacaoAcgRestController {
     }
     
     @PostMapping("/post/")
-    public @ResponseBody ResponseEntity<Acg> post(@RequestBody Acg acg) {
-        Acg novaAcg = new Acg(0, "nome", "cargaHoraria", "anexo");
+    public @ResponseBody ResponseEntity<SolicitacaoAcg> post(@RequestBody SolicitacaoAcg acg) {
+        SolicitacaoAcg novaAcg = new SolicitacaoAcg(acg.getId(), acg.getNome(),
+        acg.getCargaHoraria(), acg.getAnexo());
         
-        return new ResponseEntity<Acg>(novaAcg, HttpStatus.OK);
+        return new ResponseEntity<SolicitacaoAcg>(novaAcg, HttpStatus.OK);
     }
     
     @GetMapping(value="")
-    public Acg httpGetInformacoesAcg(){
-        return Acg.getInformacoesAcg();
+    public SolicitacaoAcg httpGetInformacoesAcg(){
+        return SolicitacaoAcg.getInformacoesAcg();
     }
     
     @GetMapping(value="/{id}")
-    public Acg httpGetInformacoesAcgPorId(@PathVariable int id) {
+    public SolicitacaoAcg httpGetInformacoesAcgPorId(@PathVariable int id) {
         return getAcg(id);
     }
   

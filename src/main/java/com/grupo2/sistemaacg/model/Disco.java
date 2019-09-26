@@ -21,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class Disco {
 
-    @Value("${contato.disco.raiz}")
+//    @Value("${contato.disco.raiz}")
     private String raiz;
 
-    @Value("${contato.disco.diretorio.anexos}")
+//    @Value("${contato.disco.diretorio.anexos}")
     private String diretorioAnexos;
 
     public void salvarAnexo(MultipartFile anexo) {

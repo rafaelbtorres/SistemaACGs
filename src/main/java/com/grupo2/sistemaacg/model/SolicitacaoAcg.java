@@ -12,9 +12,9 @@ import lombok.Data;
  * @author Vagner <vequincozes@gmail.com>
  */
 @Data
-public class Acg {
+public class SolicitacaoAcg {
 
-    public static Acg getInformacoesAcg() {
+    public static SolicitacaoAcg getInformacoesAcg() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -23,12 +23,12 @@ public class Acg {
     private String cargaHoraria;
     private String anexo;
 
-    public Acg(int id, String nome, String cargaHoraria, String anexo) {
+    public SolicitacaoAcg(int id, String nome, String cargaHoraria, String anexo) {
         this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
         this.anexo = anexo;
     }
     
-    public Acg(){}
+    public SolicitacaoAcg(){}
 }

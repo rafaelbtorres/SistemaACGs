@@ -12,18 +12,20 @@ import java.util.List;
  *
  * @author Vagner <vequincozes@gmail.com>
  */
+
+/* [EM CONSTRUÇÃO] CLASSE PARA TESTES/TREINAMENTO  */
 public class ListaAcg {
 
-    private static List<Acg> listaAcgs = Arrays.asList(
-            new Acg(1, "vagner", "30", "anexo")
+    private static List<SolicitacaoAcg> listaAcgs = Arrays.asList(
+            new SolicitacaoAcg(1, "vagner", "30", "anexo")
     );
 
-    public static List<Acg> getListaAcg() {
+    public static List<SolicitacaoAcg> getListaAcg() {
         return listaAcgs;
     }
 
-    public static Acg getAcg(int id) {
-        for (Acg acg : listaAcgs) {
+    public static SolicitacaoAcg getAcg(int id) {
+        for (SolicitacaoAcg acg : listaAcgs) {
             if (acg.id == id) {
                 return acg;
             }
