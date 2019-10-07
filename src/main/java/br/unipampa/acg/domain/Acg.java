@@ -5,13 +5,7 @@
  */
 package br.unipampa.acg.domain;
 
-import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,44 +14,13 @@ import lombok.Setter;
  * @author vagner
  */
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 public class Acg extends ManageableProcess {
 
-    @Id
-    @NotEmpty
     private int idacg = 0;
-
-    @NotEmpty
-    private String local;
-
-    @NotEmpty
-    private String aluno = "Vagner";
-
-    @NotEmpty
-    private Date dataAtual;
-
-    @NotEmpty
-    private Date dataInicio;
-
-    @NotEmpty
-    private Date dataFim;
-
-    @NotEmpty
-    private String status;
-
-    private String profResponsavel;
-
-    private String descricao;
-
-    @NotEmpty
+    private String nome = "Vagner";
     private String cargaHoraria = "50h";
-
-    @ManyToOne
-    private Atividade atividade;
-
-    @OneToOne
-    private Anexo anexo;
+    private String anexo = "comprovante.pdf";
 
     public Acg() {
         super();
@@ -67,7 +30,7 @@ public class Acg extends ManageableProcess {
     public String[] getCommand() {
         int rajada = (idacg == 0 ? 80 : 256);
 
-        String command = "/home/revangelista/NetBeansProjects/taesa/./envia_sv.o" + " " + rajada + " " + this.aluno + " " + this.cargaHoraria + " " + this.anexo;
+        String command = "/home/revangelista/NetBeansProjects/taesa/./envia_sv.o" + " " + rajada + " " + this.nome + " " + this.cargaHoraria + " " + this.anexo;
         return command.split(" ");
     }
 
