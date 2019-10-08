@@ -5,8 +5,9 @@
  */
 package br.unipampa.acg.controllers;
 
-import br.unipampa.acg.dao.AcgDao;
-import br.unipampa.acg.domain.Acg;
+import br.unipampa.acg.dao.SolicitacaoDao;
+import br.unipampa.acg.domain.Anexo;
+import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import java.util.HashMap;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -27,14 +30,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 
+public class SolicitacaoController {
 
-public class AcgController {
+    private Anexo disco;
 
     @ResponseBody
     @PostMapping("/acg")
     @JsonView(View.Standard.class)
-    public ResponseEntity generate(@Valid @RequestBody Acg acg) {
-        AcgDao dao = new AcgDao();
+    public ResponseEntity generate(@Valid @RequestBody Solicitacao acg) {
+        SolicitacaoDao dao = new SolicitacaoDao();
         dao.persist(acg);
         dao.close();
         return ResponseEntity.ok(acg);
@@ -52,8 +56,8 @@ public class AcgController {
     @ResponseBody
     @PostMapping("/acg/{id}")
     public ResponseEntity start(@PathVariable("id") long id, @RequestBody Map<String, String> input) {
-        AcgDao dao = new AcgDao();               //... Abre sessão com o banco.
-        Acg acg = dao.load(Acg.class, id);      //... Carrega configuração.
+        SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
+        Solicitacao acg = dao.load(Solicitacao.class, id);      //... Carrega configuração.
         dao.save(acg);                         //... Salva a config. com PID.
         dao.close();                          //... Fecha sessão com o banco.
         return ResponseEntity.ok(input);
@@ -62,10 +66,16 @@ public class AcgController {
     @ResponseBody
     @DeleteMapping("/acg/{id}")
     public ResponseEntity kill(@PathVariable("id") long id) {
-        AcgDao dao = new AcgDao();               //... Abre sessão com o banco.
-        Acg sv = dao.load(Acg.class, id);      //... Carrega configuração.
+        SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
+        Solicitacao sv = dao.load(Solicitacao.class, id);      //... Carrega configuração.
         dao.delete(sv);                         //... Salva a config. com PID.
         dao.close();                          //... Fecha sessão com o banco.
         return ResponseEntity.ok("");
     }
+
+    @PostMapping("/acg/{id}/{anexo}")
+    public void upload(@RequestParam MultipartFile anexo) {
+        disco.salvarAnexo(anexo);
+    }
+
 }

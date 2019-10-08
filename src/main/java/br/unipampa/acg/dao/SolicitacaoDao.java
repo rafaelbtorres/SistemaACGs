@@ -5,12 +5,12 @@
  */
 package br.unipampa.acg.dao;
 
-import br.unipampa.acg.domain.Acg;
+import br.unipampa.acg.domain.Solicitacao;
 
 /**
  *
  * @author vagner
  */
-public class AcgDao extends Dao <Acg> {
+public class SolicitacaoDao extends Dao <Solicitacao> {
     
 }
