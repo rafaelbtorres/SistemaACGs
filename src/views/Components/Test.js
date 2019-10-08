@@ -3,8 +3,9 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
-
 import styles from "assets/jss/material-kit-react/views/components.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
 const useStyles = makeStyles(styles);
 
 const SampleFab = () => {
@@ -42,24 +43,26 @@ export default class PersonList extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ name: event.target.value });
-    this.setState({ matricula: event.target.value });
-    this.setState({ nomeResponsavel: event.target.value });
-    this.setState({ localAtividade: event.target.value });
-    this.setState({ periodoAtividadeInicio: event.target.value });
-    this.setState({ periodoAtividadeFinal: event.target.value });
-    this.setState({ cargaHorariaAtividade: event.target.value });
-    this.setState({ cargaHorariaSolicitada: event.target.value });
-    this.setState({ descricaoAtividade: event.target.value });
-    this.setState({ parecerProfessor: event.target.value });
-    this.setState({ data: event.target.value });
-    this.setState({ documento: event.target.value });
+    this.setState({ name: event.target.value },
+      { matricula: event.target.value },
+      { nomeResponsavel: event.target.value },
+      { localAtividade: event.target.value },
+      { periodoAtividadeInicio: event.target.value },
+      { periodoAtividadeFinal: event.target.value },
+      { cargaHorariaAtividade: event.target.value },
+      { cargaHorariaSolicitada: event.target.value },
+      { descricaoAtividade: event.target.value },
+      { parecerProfessor: event.target.value },
+      { data: event.target.value },
+      { documento: event.target.value }
+    );
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
     const solicitacao = {
+      grupos: this.state.grupos,
       nome: this.state.nome,
       matricula: this.state.matricula,
       nomeResponsavel: this.state.nomeResponsavel,
@@ -89,144 +92,152 @@ export default class PersonList extends React.Component {
         <div>
           <Parallax image={require("assets/img/cor.PNG")}>
             <div className={SampleFab.container}>
-              <form id="formSolicitacao" onSubmit={this.handleSubmit}>
-                <label>
-                  Nome do aluno:
+              <GridContainer>
+                <GridItem>
+                  <div className={SampleFab.brand}>
+                    <center>
+                      <form id="formSolicitacao" onSubmit={this.handleSubmit}>
+                        <label>
+                          Nome do aluno:
                   <input type="text" name="nome" onChange={this.handleChange} />
-                </label>
-                <label>
-                  Matrícula:
+                        </label>
+                        <label>
+                          Matrícula:
                   <input
-                    type="text"
-                    name="matricula"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br />
-                <label>
-                  Classificação da atividade
+                            type="text"
+                            name="matricula"
+                            onChange={this.handleChange}
+                          />
+                        </label>
+                        <br />
+                        <label>
+                          Classificação da atividade
                   <select
-                    className="form-control"
-                    id="exampleFormControlSelect1"
-                  >
-                   { this.state.grupos.map(grupo => <option value={grupo.id}>{grupo.nome}</option>) }
-                    {/* <option>Grupo I - Ensino</option>
+                            className="form-control"
+                            id="exampleFormControlSelect1"
+                          >
+                            {this.state.grupos.map(grupo => <option value={grupo.id}>{grupo.nome}</option>)}
+                            {/* <option>Grupo I - Ensino</option>
                     <option>Grupo II - Pesquisa</option>
                     <option>Grupo III - Extensão</option>
                     <option>
                       Grupo IV - Culturais, Artísticas, Sociais e Gestão
                     </option> */}
-                  </select>
-                </label>
-                <br />
-                <label>
-                  Atividade
+                          </select>
+                        </label>
+                        <br />
+                        <label>
+                          Atividade
                   <select
-                    className="form-control"
-                    id="exampleFormControlSelect1"
-                    onChange={this.handleChange}
-                  >
-                    <option>Atividade - 1</option>
-                    <option>Atividade - 2</option>
-                    <option>Atividade - 3</option>
-                  </select>
-                </label>
-                <br />
-                <label>
-                  Professor(a) responsável:
+                            className="form-control"
+                            id="exampleFormControlSelect1"
+                            onChange={this.handleChange}
+                          >
+                            <option>Atividade - 1</option>
+                            <option>Atividade - 2</option>
+                            <option>Atividade - 3</option>
+                          </select>
+                        </label>
+                        <br />
+                        <label>
+                          Professor(a) responsável:
                   <input
-                    type="text"
-                    name="nomeResponsavel"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br />
-                <label>
-                  Local da atividade:
+                            type="text"
+                            name="nomeResponsavel"
+                            onChange={this.handleChange}
+                          />
+                        </label>
+                        <br />
+                        <label>
+                          Local da atividade:
                   <input
-                    type="text"
-                    name="localAtividade"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <br />
-                <label>
-                  Período da atividade:
+                            type="text"
+                            name="localAtividade"
+                            onChange={this.handleChange}
+                          />
+                        </label>
+                        <br />
+                        <label>
+                          Período da atividade:
                   <input
-                    type="date"
-                    name="periodoAtividadeInicio"
-                    onChange={this.handleChange}
-                  />
-                  até
+                            type="date"
+                            name="periodoAtividadeInicio"
+                            onChange={this.handleChange}
+                          />
+                          até
                   <input
-                    type="date"
-                    name="periodoAtividadeFinal"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <label>
-                  Carga-horária da atividade:
+                            type="date"
+                            name="periodoAtividadeFinal"
+                            onChange={this.handleChange}
+                          />
+                        </label>
+                        <label>
+                          Carga-horária da atividade:
                   <input
-                    type="text"
-                    name="cargaHorariaAtividade"
-                    onChange={this.handleChange}
-                  />
-                  horas
+                            type="text"
+                            name="cargaHorariaAtividade"
+                            onChange={this.handleChange}
+                          />
+                          horas
                 </label>
-                <br />
-                <label>
-                  Carga-horária de ACG solicitada:
+                        <br />
+                        <label>
+                          Carga-horária de ACG solicitada:
                   <input
-                    type="text"
-                    name="cargaHorariaSolicitada"
-                    onChange={this.handleChange}
-                  />
-                  horas
+                            type="text"
+                            name="cargaHorariaSolicitada"
+                            onChange={this.handleChange}
+                          />
+                          horas
                 </label>
-                <br />
-                <label>
-                  Descrição da atividade:
+                        <br />
+                        <label>
+                          Descrição da atividade:
                   <br />
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    name="descricaoAtividade"
-                    form="formSolicitacao"
-                    onChange={this.handleChange}
-                  >
-                    Descreva aqui a atividade
+                          <textarea
+                            rows="4"
+                            cols="50"
+                            name="descricaoAtividade"
+                            form="formSolicitacao"
+                            onChange={this.handleChange}
+                          >
+                            Descreva aqui a atividade
                   </textarea>
-                </label>
-                <br />
-                <label>
-                  Parecer do professor:
+                        </label>
+                        <br />
+                        <label>
+                          Parecer do professor:
                   <br />
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    name="parecerProfessor"
-                    form="formSolicitacao"
-                    onChange={this.handleChange}
-                  >
-                    Descreva aqui a atividade
+                          <textarea
+                            rows="4"
+                            cols="50"
+                            name="parecerProfessor"
+                            form="formSolicitacao"
+                            onChange={this.handleChange}
+                          >
+                            Descreva aqui a atividade
                   </textarea>
-                </label>
-                <br />
-                <label>
-                  Data:
+                        </label>
+                        <br />
+                        <label>
+                          Data:
                   <input type="date" name="data" onChange={this.handleChange} />
-                </label>
-                <label>
-                  Anexar documentos comprobatórios:
+                        </label>
+                        <label>
+                          Anexar documentos comprobatórios:
                   <br />
-                  <input
-                    type="file"
-                    name="documento"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <input type="submit" value="Enviar" />
-              </form>
+                          <input
+                            type="file"
+                            name="documento"
+                            onChange={this.handleChange}
+                          />
+                        </label>
+                        <input type="submit" value="Enviar" />
+                      </form>
+                    </center>
+                  </div>
+                </GridItem>
+              </GridContainer>
             </div>
           </Parallax>
           <Footer />
