@@ -7,7 +7,8 @@ import "assets/scss/material-kit-react.scss?v=1.8.0";
 
 // pages for this product
 import Components from "views/Components/Components.js";
-import Solicitacao from "views/Components/Solicitacao.js"
+import PersonList from "views/Components/Test.js";
+import Solicitacao from "views/Components/Solicitacao.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
@@ -19,6 +20,7 @@ ReactDOM.render(
     <Switch>
       <Route exact path="/" component={Components} />
       <Route path="/solicitacao" component={Solicitacao} />
+      <Route path="/test" component={PersonList} />
       <Route path="/landing-page" component={LandingPage} />
       <Route path="/profile-page" component={ProfilePage} />
       <Route path="/login-page" component={LoginPage} />
