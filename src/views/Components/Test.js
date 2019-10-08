@@ -13,6 +13,19 @@ const SampleFab = () => {
 };
 
 export default class PersonList extends React.Component {
+
+  componentWillMount() {
+    // const requestCurriculos = axios.get('/curriculo');
+    // const requestGrupo = axios.get('/grupo');
+
+    // const [curriculos, grupos] = await Promise.all([requestCurriculos, requestGrupo]);
+
+    // const curriculos = [{ id: 1, ano: 2010 }, { id: 2, ano: 2018 }];
+    const grupos = [{ id: 1, nome: 'Grupo I - Atividades' }, { id: 2, nome: 'Grupo II - Pesquisa' }];
+
+    this.setState(state => ({ ...state, grupos }));
+  }
+
   state = {
     nome: "",
     matricula: "",
@@ -96,12 +109,13 @@ export default class PersonList extends React.Component {
                     className="form-control"
                     id="exampleFormControlSelect1"
                   >
-                    <option>Grupo I - Ensino</option>
+                   { this.state.grupos.map(grupo => <option value={grupo.id}>{grupo.nome}</option>) }
+                    {/* <option>Grupo I - Ensino</option>
                     <option>Grupo II - Pesquisa</option>
                     <option>Grupo III - Extensão</option>
                     <option>
                       Grupo IV - Culturais, Artísticas, Sociais e Gestão
-                    </option>
+                    </option> */}
                   </select>
                 </label>
                 <br />
