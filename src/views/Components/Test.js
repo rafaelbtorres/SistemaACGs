@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField';
+
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
@@ -96,7 +98,17 @@ export default class PersonList extends React.Component {
                 <GridItem>
                   <div className={SampleFab.brand}>
                     <center>
-                      <form id="formSolicitacao" onSubmit={this.handleSubmit}>
+                      <form className={SampleFab.container} noValidate autoComplete="off" id="formSolicitacao" onSubmit={this.handleSubmit}>
+                        <TextField
+                          id="outlined-email-input"
+                          label="Email"
+                          className={SampleFab.textField}
+                          type="email"
+                          name="email"
+                          autoComplete="email"
+                          margin="normal"
+                          variant="outlined"
+                        />
                         <label>
                           Nome do aluno:
                   <input type="text" name="nome" onChange={this.handleChange} />

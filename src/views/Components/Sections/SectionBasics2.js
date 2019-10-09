@@ -13,6 +13,18 @@ import School from "@material-ui/icons/School";
 
 const useStyles = makeStyles(styles);
 
+const Discente = (props) => {
+  return (<div style={{height: 100, overflow:'show', padding: 20}}>
+
+    <a href="/test" style={{
+      background: "#4a4",
+      padding: 10,
+      borderRadius: 10,
+      cursor: 'pointer',
+      color: '#fff'
+    }}>Go to Tests</a>
+  </div>)
+}
 export default function SectionBasics() {
   const classes = useStyles();
   return (
@@ -28,11 +40,13 @@ export default function SectionBasics() {
                 tabs={[
                   {
                     tabButton: "Discente",
-                    tabIcon: School
+                    tabIcon: School,
+                    tabContent: <Discente />
                   },
                   {
                     tabButton: "Coordenador",
-                    tabIcon: People
+                    tabIcon: People,
+
                   }
                 ]}
               />
