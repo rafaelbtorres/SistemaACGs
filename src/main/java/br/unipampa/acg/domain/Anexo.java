@@ -40,8 +40,8 @@ public class Anexo {
     @NotEmpty
     private String nome;
 
-    @NotEmpty
-    @OneToOne(mappedBy = "anexo")
+    
+    @OneToOne
     private Solicitacao acg;
 
     public Anexo(String nome) {

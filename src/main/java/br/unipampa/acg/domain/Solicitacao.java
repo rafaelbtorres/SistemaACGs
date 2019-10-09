@@ -9,6 +9,9 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,10 +23,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Solicitacao extends ManageableProcess {
+public class Solicitacao {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idsolicitacao = 0;
+    @Id
+    private long idsolicitacao = 0;
     private String nome = "Vagner";
     private String cargaHoraria = "50h";
     private String local;
@@ -36,20 +40,16 @@ public class Solicitacao extends ManageableProcess {
     private String status;
     private String profResponsavel;
     private String descricao;
+    
     private String atividade;
-    private String anexo;
+    
+    private String nomeAnexo;
 
     public Solicitacao() {
         super();
     }
 
-    @Override
-    public String[] getCommand() {
-        int rajada = (idsolicitacao == 0 ? 80 : 256);
 
-        String command = "/home/revangelista/NetBeansProjects/taesa/./envia_sv.o" + " " + rajada + " " + this.nome + " " + this.cargaHoraria + " " + this.anexo;
-        return command.split(" ");
-    }
 
     public boolean verificaTamanho(int tamanho) {
         return tamanho <= 20;

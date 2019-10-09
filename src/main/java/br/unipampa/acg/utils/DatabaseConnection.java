@@ -1,6 +1,6 @@
 package br.unipampa.acg.utils;
 
-import br.unipampa.acg.domain.ManageableProcess;
+import br.unipampa.acg.domain.Atividade;
 import br.unipampa.acg.domain.Solicitacao;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ public class DatabaseConnection
         
         Configuration cfg = new Configuration ();
         cfg. configure (hibCfg);
-        cfg. addAnnotatedClass (ManageableProcess. class);
         cfg. addAnnotatedClass (Solicitacao. class);
+
         this. sf = cfg. buildSessionFactory (new StandardServiceRegistryBuilder (). applySettings (cfg. getProperties ()). build ());
     }
     

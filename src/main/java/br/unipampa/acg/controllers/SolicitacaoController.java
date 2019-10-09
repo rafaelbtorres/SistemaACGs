@@ -65,7 +65,7 @@ public class SolicitacaoController {
 
     @ResponseBody
     @DeleteMapping("/acg/{id}")
-    public ResponseEntity kill(@PathVariable("id") long id) {
+    public ResponseEntity kill(@PathVariable("id") int id) {
         SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
         Solicitacao sv = dao.load(Solicitacao.class, id);      //... Carrega configuração.
         dao.delete(sv);                         //... Salva a config. com PID.
