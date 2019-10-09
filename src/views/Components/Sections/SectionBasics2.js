@@ -14,7 +14,6 @@ import School from "@material-ui/icons/School";
 const useStyles = makeStyles(styles);
 
 export const Discente = (props) => {
-  const [a,b] = useState()
   return (<div style={{height: 100, overflow:'show', padding: 20}}>
 
     <a href="/test" style={{

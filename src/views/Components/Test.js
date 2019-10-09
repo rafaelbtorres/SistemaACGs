@@ -101,11 +101,11 @@ export default class PersonList extends React.Component {
                       <form className={SampleFab.container} noValidate autoComplete="off" id="formSolicitacao" onSubmit={this.handleSubmit}>
                         <TextField
                           id="outlined-email-input"
-                          label="Email"
+                          label="Nome"
                           className={SampleFab.textField}
-                          type="email"
-                          name="email"
-                          autoComplete="email"
+                          type="text"
+                          name="nome"
+                          autoComplete="Nome"
                           margin="normal"
                           variant="outlined"
                         />
