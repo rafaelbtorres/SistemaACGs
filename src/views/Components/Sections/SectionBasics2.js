@@ -13,15 +13,17 @@ import School from "@material-ui/icons/School";
 
 const useStyles = makeStyles(styles);
 
-const Discente = (props) => {
+export const Discente = (props) => {
+  const [a,b] = useState()
   return (<div style={{height: 100, overflow:'show', padding: 20}}>
 
     <a href="/test" style={{
-      background: "#4a4",
+      background: "#fff",
       padding: 10,
       borderRadius: 10,
       cursor: 'pointer',
-      color: '#fff'
+      border: '#4f4 solid 2px',
+      color: '#4a4'
     }}>Go to Tests</a>
   </div>)
 }
