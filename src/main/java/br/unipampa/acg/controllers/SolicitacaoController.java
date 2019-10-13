@@ -10,10 +10,19 @@ import br.unipampa.acg.domain.Anexo;
 import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +32,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+
+import br.unipampa.acg.upload.StorageService;
 
 /**
  *
@@ -33,6 +45,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class SolicitacaoController {
 
     private Anexo disco;
+
+    
+    private final StorageService storageService;
+
+
+
+    @Autowired
+    public SolicitacaoController(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
 
     @ResponseBody
     @PostMapping("/acg")
@@ -76,6 +99,32 @@ public class SolicitacaoController {
     @PostMapping("/anexo")
     public void upload(@RequestParam MultipartFile arquivoAnexo) {
         disco.salvarAnexo(arquivoAnexo);
+    }
+
+
+    @PostMapping("/upload")
+    public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
+
+        return storageService.store(file, nome);
+
+    }
+
+    @GetMapping("/anexos")
+    public String listUploadedFiles(Model model) throws IOException {
+
+        this.model = model;
+		model.addAttribute("files", storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(SolicitacaoController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
+
+        return "uploadForm";
+    }
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
 }
