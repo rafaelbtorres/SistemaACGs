@@ -3,7 +3,7 @@ package br.unipampa.acg.upload;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
-public class StorageProperties {
+public class AnexoProperties {
 
     /**
      * Folder location for storing files

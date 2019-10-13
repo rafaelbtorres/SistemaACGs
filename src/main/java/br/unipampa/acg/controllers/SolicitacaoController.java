@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import br.unipampa.acg.upload.StorageService;
+import br.unipampa.acg.upload.AnexoService;
 
 /**
  *
@@ -47,12 +47,12 @@ public class SolicitacaoController {
     private Anexo disco;
 
     
-    private final StorageService storageService;
+    private final AnexoService storageService;
 
 
 
     @Autowired
-    public SolicitacaoController(StorageService storageService) {
+    public SolicitacaoController(AnexoService storageService) {
         this.storageService = storageService;
     }
 
@@ -101,7 +101,7 @@ public class SolicitacaoController {
         disco.salvarAnexo(arquivoAnexo);
     }
 
-
+    //Armazena o anexo no banco de dados
     @PostMapping("/upload")
     public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
 
@@ -109,6 +109,7 @@ public class SolicitacaoController {
 
     }
 
+    //Mostra todos os anexos do banco
     @GetMapping("/anexos")
     public String listUploadedFiles(Model model) throws IOException {
 
@@ -120,6 +121,8 @@ public class SolicitacaoController {
 
         return "uploadForm";
     }
+
+    //Metodo de salvar o anexo
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = storageService.loadAsResource(filename);

@@ -17,13 +17,13 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 @Service
-public class StorageAnexo implements StorageService {
+public class Anexo implements AnexoService {
 
     private Path rootLocation;
-    StorageProperties properties;
+    AnexoProperties properties;
 
     @Autowired
-    public StorageAnexo(StorageProperties properties) {
+    public Anexo(AnexoProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
         this.properties = properties;
     }
