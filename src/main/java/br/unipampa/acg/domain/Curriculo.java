@@ -25,14 +25,11 @@ public class Curriculo {
 
 
 	@Id
-	@NotEmpty
 	@GeneratedValue
 	private long idCurriculo;
 	
-	@NotEmpty
 	private int ano;
 
-	@NotEmpty
 	private boolean status;
 
 	@OneToMany(mappedBy = "curriculo")

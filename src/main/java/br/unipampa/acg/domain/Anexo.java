@@ -17,7 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
+
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,20 +27,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class Anexo {
 
     @Id
-    @NotEmpty
     @GeneratedValue
     private long idAnexo;
 
     private String caminhoRaiz;
     private String diretorioAnexos;
 
-    @NotEmpty
     private int limite;
 
-    @NotEmpty
     private String nome;
 
-    
     @OneToOne
     private Solicitacao acg;
 

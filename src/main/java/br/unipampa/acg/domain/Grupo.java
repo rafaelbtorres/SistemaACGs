@@ -21,11 +21,9 @@ import lombok.Data;
 public class Grupo {
 
 	@Id
-	@NotEmpty
 	@GeneratedValue
 	private long idGrupo;
 
-	@NotEmpty
 	private String nome;
 
 	@ManyToOne

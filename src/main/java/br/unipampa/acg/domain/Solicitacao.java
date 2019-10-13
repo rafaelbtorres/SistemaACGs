@@ -40,8 +40,9 @@ public class Solicitacao {
     private String status;
     private String profResponsavel;
     private String descricao;
-    
-    private String atividade;
+
+    @ManyToOne
+    private Atividade atividade;
     
     private String nomeAnexo;
 
