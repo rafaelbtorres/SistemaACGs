@@ -27,9 +27,9 @@ public class Solicitacao {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long idsolicitacao = 0;
-    private String nome = "Vagner";
-    private String cargaHoraria = "50h";
+    private long idsolicitacao;
+    private String nome;
+    private String cargaHoraria;
     private String local;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataAtual;

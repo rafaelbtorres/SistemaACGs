@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
@@ -30,7 +31,10 @@ public class Anexo {
     @GeneratedValue
     private long idAnexo;
 
+    @Value("${contato.disco.raiz}")
     private String caminhoRaiz;
+    
+    @Value("${contato.disco.diretorio.arquivos}")
     private String diretorioAnexos;
 
     private int limite;

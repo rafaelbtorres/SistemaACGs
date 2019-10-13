@@ -73,9 +73,9 @@ public class SolicitacaoController {
         return ResponseEntity.ok("");
     }
 
-    @PostMapping("/acg/{id}/{anexo}")
-    public void upload(@RequestParam MultipartFile anexo) {
-        disco.salvarAnexo(anexo);
+    @PostMapping("/anexo")
+    public void upload(@RequestParam MultipartFile arquivoAnexo) {
+        disco.salvarAnexo(arquivoAnexo);
     }
 
 }
