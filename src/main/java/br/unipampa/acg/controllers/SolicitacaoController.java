@@ -23,11 +23,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,22 +40,22 @@ import br.unipampa.acg.upload.AnexoService;
 
 /**
  *
- * @author vagner
+ * @author
  */
 @RestController
 
-public class SolicitacaoController {
+public abstract class SolicitacaoController implements AnexoService {
 
     private Anexo disco;
 
     
-    private final AnexoService storageService;
+    private final AnexoService anexoService;
 
 
 
     @Autowired
-    public SolicitacaoController(AnexoService storageService) {
-        this.storageService = storageService;
+    public SolicitacaoController(AnexoService anexoService) {
+        this.anexoService = anexoService;
     }
 
 
@@ -105,7 +107,7 @@ public class SolicitacaoController {
     @PostMapping("/upload")
     public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
 
-        return storageService.store(file, nome);
+        return anexoService.store(file, nome);
 
     }
 
@@ -113,8 +115,7 @@ public class SolicitacaoController {
     @GetMapping("/anexos")
     public String listUploadedFiles(Model model) throws IOException {
 
-        this.model = model;
-		model.addAttribute("files", storageService.loadAll().map(
+        model.addAttribute("files", anexoService.loadAll().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(SolicitacaoController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
@@ -122,12 +123,22 @@ public class SolicitacaoController {
         return "uploadForm";
     }
 
-    //Metodo de salvar o anexo
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-        Resource file = storageService.loadAsResource(filename);
+        Resource file = anexoService.loadAsResource(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
+
+    //Metodo de salvar o anexo
+    //public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+      //  Resource file = anexoService.loadAsResource(filename);
+        //return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+          //      "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    //}
 
 }
