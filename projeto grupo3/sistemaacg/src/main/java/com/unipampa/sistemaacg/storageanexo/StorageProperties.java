@@ -14,8 +14,8 @@ public class StorageProperties {
         return location;
     }
 
-    public void setLocation(String nome) {
-        this.location = this.location + "/" + nome;
+    public void setLocation() {
+        this.location = this.location;
     }
 
 }

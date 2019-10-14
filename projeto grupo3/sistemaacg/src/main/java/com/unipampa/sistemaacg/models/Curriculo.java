@@ -1,11 +1,9 @@
 package com.unipampa.sistemaacg.models;
 
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -26,7 +24,7 @@ public class Curriculo {
 	@NotEmpty
 	private boolean status;
 
-	@OneToMany(mappedBy = "curriculo")
-	private List<Grupo> grupo;
+	//@OneToMany
+	//private List<Grupo> grupo;
 
 }
