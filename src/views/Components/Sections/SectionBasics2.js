@@ -13,19 +13,26 @@ import School from "@material-ui/icons/School";
 
 const useStyles = makeStyles(styles);
 
-export const Discente = (props) => {
-  return (<div style={{height: 100, overflow:'show', padding: 20}}>
-
-    <a href="/test" style={{
-      background: "#fff",
-      padding: 10,
-      borderRadius: 10,
-      cursor: 'pointer',
-      border: '#4f4 solid 2px',
-      color: '#4a4'
-    }}>Go to Tests</a>
-  </div>)
-}
+// eslint-disable-next-line no-unused-vars
+export const Discente = props => {
+  return (
+    <div style={{ height: 100, overflow: "show", padding: 20 }}>
+      <a
+        href="/solicitacao"
+        style={{
+          background: "#009349",
+          padding: 10,
+          borderRadius: 10,
+          cursor: "pointer",
+          border: "#009349 solid 2px",
+          color: "white"
+        }}
+      >
+        Solicitar
+      </a>
+    </div>
+  );
+};
 export default function SectionBasics() {
   const classes = useStyles();
   return (
@@ -46,8 +53,7 @@ export default function SectionBasics() {
                   },
                   {
                     tabButton: "Coordenador",
-                    tabIcon: People,
-
+                    tabIcon: People
                   }
                 ]}
               />
