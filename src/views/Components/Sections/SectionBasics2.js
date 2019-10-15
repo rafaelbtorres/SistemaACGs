@@ -16,20 +16,37 @@ const useStyles = makeStyles(styles);
 // eslint-disable-next-line no-unused-vars
 export const Discente = props => {
   return (
-    <div style={{ height: 100, overflow: "show", padding: 20 }}>
-      <a
-        href="/solicitacao"
-        style={{
-          background: "#009349",
-          padding: 10,
-          borderRadius: 10,
-          cursor: "pointer",
-          border: "#009349 solid 2px",
-          color: "white"
-        }}
-      >
-        Solicitar
-      </a>
+    <div>
+      <div style={{ height: 50, overflow: "show", padding: 20 }}>
+        <a
+          href="/solicitacao"
+          style={{
+            background: "#009349",
+            padding: 10,
+            borderRadius: 10,
+            cursor: "pointer",
+            border: "#009349 solid 2px",
+            color: "white"
+          }}
+        >
+          Solicitar
+        </a>
+      </div>
+      <div style={{ height: 100, overflow: "show", padding: 20 }}>
+        <a
+          href="/exibir"
+          style={{
+            background: "#009349",
+            padding: 10,
+            borderRadius: 10,
+            cursor: "pointer",
+            border: "#009349 solid 2px",
+            color: "white"
+          }}
+        >
+          Exibir
+        </a>
+      </div>
     </div>
   );
 };
