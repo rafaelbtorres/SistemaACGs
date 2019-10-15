@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan ({"br.unipampa.acg.controllers", "br.unipampa.acg.domain"})
+@ComponentScan ({"br.unipampa.acg.controllers", "br.unipampa.acg.domain","br.unipampa.acg.upload"})
 @SpringBootApplication
 public class App
 {

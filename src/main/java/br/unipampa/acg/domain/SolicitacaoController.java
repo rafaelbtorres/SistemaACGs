@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.unipampa.acg.controllers;
+package br.unipampa.acg.domain;
 
 import br.unipampa.acg.dao.SolicitacaoDao;
 import br.unipampa.acg.domain.Anexo;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import br.unipampa.acg.upload.AnexoService;
+//import br.unipampa.acg.upload.AnexoService;
 
 /**
  *
@@ -44,19 +44,15 @@ import br.unipampa.acg.upload.AnexoService;
  */
 @RestController
 
-public abstract class SolicitacaoController implements AnexoService {
+public class SolicitacaoController {
 
     private Anexo disco;
+    //private final AnexoService anexoService;
 
-    
-    private final AnexoService anexoService;
-
-
-
-    @Autowired
-    public SolicitacaoController(AnexoService anexoService) {
-        this.anexoService = anexoService;
-    }
+    // @Autowired
+    // public SolicitacaoController(AnexoService anexoService) {
+    //     this.anexoService = anexoService;
+    // }
 
 
     @ResponseBody
@@ -103,34 +99,34 @@ public abstract class SolicitacaoController implements AnexoService {
         disco.salvarAnexo(arquivoAnexo);
     }
 
-    //Armazena o anexo no banco de dados
-    @PostMapping("/upload")
-    public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
+    // //Armazena o anexo no banco de dados
+    // @PostMapping("/upload")
+    // public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
 
-        return anexoService.store(file, nome);
+    //     return anexoService.store(file, nome);
 
-    }
+    // }
 
-    //Mostra todos os anexos do banco
-    @GetMapping("/anexos")
-    public String listUploadedFiles(Model model) throws IOException {
+    // //Mostra todos os anexos do banco
+    // @GetMapping("/anexos")
+    // public String listUploadedFiles(Model model) throws IOException {
 
-        model.addAttribute("files", anexoService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(SolicitacaoController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+    //     model.addAttribute("files", anexoService.loadAll().map(
+    //             path -> MvcUriComponentsBuilder.fromMethodName(SolicitacaoController.class,
+    //                     "serveFile", path.getFileName().toString()).build().toString())
+    //             .collect(Collectors.toList()));
 
-        return "uploadForm";
-    }
+    //     return "uploadForm";
+    // }
 
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    // @GetMapping("/files/{filename:.+}")
+    // @ResponseBody
+    // public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-        Resource file = anexoService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
+    //     Resource file = anexoService.loadAsResource(filename);
+    //     return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+    //             "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    // }
 
 
     //Metodo de salvar o anexo

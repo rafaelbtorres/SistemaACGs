@@ -17,7 +17,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 @Service
-public class Anexo implements AnexoService {
+public abstract class Anexo implements AnexoService {
 
     private Path rootLocation;
     AnexoProperties properties;
