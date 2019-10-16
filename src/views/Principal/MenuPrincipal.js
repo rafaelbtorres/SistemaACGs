@@ -21,6 +21,7 @@ export const Discente = props => {
         <a
           href="/solicitacao"
           style={{
+            textDecoration: "none",
             background: "#009349",
             padding: 10,
             borderRadius: 10,
@@ -36,6 +37,7 @@ export const Discente = props => {
         <a
           href="/listar"
           style={{
+            textDecoration: "none",
             background: "#009349",
             padding: 10,
             borderRadius: 10,
@@ -59,6 +61,7 @@ export const Coordenador = props => {
         <a
           href="/avaliar"
           style={{
+            textDecoration: "none",
             background: "#009349",
             padding: 10,
             borderRadius: 10,
@@ -74,6 +77,7 @@ export const Coordenador = props => {
         <a
           href="/listar"
           style={{
+            textDecoration: "none",
             background: "#009349",
             padding: 10,
             borderRadius: 10,

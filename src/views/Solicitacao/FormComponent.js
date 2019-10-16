@@ -7,23 +7,7 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 
 //import styles from "assets/jss/material-kit-react/views/components.js";
-const useStyles = makeStyles(styles => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    marginLeft: styles.spacing(1),
-    marginRight: styles.spacing(1),
-    width: 200
-  },
-  dense: {
-    marginTop: 19
-  },
-  menu: {
-    width: 200
-  }
-}));
+const useStyles = makeStyles();
 
 const SampleFab = () => {
   const classes = useStyles();
@@ -32,12 +16,12 @@ const SampleFab = () => {
 export default class FormularioSolicitacao extends React.Component {
   // eslint-disable-next-line react/no-deprecated
   componentWillMount() {
-    // const requestCurriculos = axios.get('/curriculo');
-    // const requestGrupo = axios.get('/grupo');
+    // const requestGrupos = axios.get('/grupo');
+    // const requestAtividades = axios.get('/atividade');
 
-    // const [curriculos, grupos] = await Promise.all([requestCurriculos, requestGrupo]);
+    // const [grupos, atividades] = await Promise.all([requestGrupos, requestAtividades]);
 
-    // const curriculos = [{ id: 1, ano: 2010 }, { id: 2, ano: 2018 }];
+    // const atividades = [{ id: 1, ano: 2010 }, { id: 2, ano: 2018 }];
     const grupos = [
       { id: 1, nome: "Grupo I - Atividades" },
       { id: 2, nome: "Grupo II - Pesquisa" }

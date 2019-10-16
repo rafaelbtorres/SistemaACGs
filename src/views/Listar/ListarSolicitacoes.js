@@ -52,6 +52,7 @@ export default function ListarSolicitacoes() {
             <a
               href="/"
               style={{
+                textDecoration: "none",
                 background: "#ffffff ",
                 padding: 10,
                 borderRadius: 10,
