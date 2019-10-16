@@ -1,7 +1,7 @@
 {
-  "name": "material-kit-react",
+  "name": "sgag",
   "version": "1.8.0",
-  "description": "Material Kit React. Coded by Creative Tim",
+  "description": "Sistema para Gerenciamento de Atividades de Graduação.",
   "private": true,
   "main": "dist/index.js",
   "dependencies": {
@@ -11,8 +11,6 @@
     "classnames": "2.2.6",
     "history": "4.9.0",
     "material-table": "^1.52.0",
-    "moment": "2.24.0",
-    "node-sass": "4.12.0",
     "nouislider": "14.0.2",
     "prop-types": "15.7.2",
     "react": "16.9.0",

@@ -285,7 +285,7 @@ export default class FormularioSolicitacao extends React.Component {
           }
         />
         <br />
-        <Button
+        <button
           variant="contained"
           color="#009349"
           className={SampleFab}
@@ -293,7 +293,7 @@ export default class FormularioSolicitacao extends React.Component {
           type="submit"
         >
           Enviar
-        </Button>
+        </button>
         <Button
           variant="contained"
           color="#009349"
