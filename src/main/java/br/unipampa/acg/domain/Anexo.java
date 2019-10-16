@@ -18,7 +18,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +32,8 @@ public class Anexo {
 
     @Value("${contato.disco.raiz}")
     private String caminhoRaiz;
-    
-    @Value("${contato.disco.diretorio.arquivos}")
+
+    @Value("${contato.disco.diretorio-arquivos}")
     private String diretorioAnexos;
 
     private int limite;
@@ -47,23 +46,26 @@ public class Anexo {
     public Anexo(String nome) {
         this.nome = nome;
     }
-    
-    
-    
-    public void salvarAnexo(MultipartFile anexo) {
-        this.salvar(this.diretorioAnexos, anexo);
+
+    public String salvarAnexo(MultipartFile anexo) {
+        return this.salvar(this.diretorioAnexos, anexo);
     }
 
-    public void salvar(String diretorio, MultipartFile arquivo) {
+    public String salvar(String diretorio, MultipartFile arquivo) {
+        diretorio = "arquivos";
+        caminhoRaiz = "C:\\upload";
+        System.out.println("caminhoRaiz: " + caminhoRaiz);
+        System.out.println("diretorio: " + diretorio);
         Path diretorioPath = Paths.get(this.caminhoRaiz, diretorio);
         Path arquivoPath = diretorioPath.resolve(arquivo.getOriginalFilename());
+        System.out.println("Caminho: " + arquivoPath);
         try {
             Files.createDirectories(diretorioPath);
             arquivo.transferTo(arquivoPath.toFile());
         } catch (IOException e) {
             throw new RuntimeException("Problemas ao anexar");
         }
+        return arquivoPath.toString();
     }
-    
 
 }

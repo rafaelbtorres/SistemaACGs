@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.unipampa.acg.domain;
+package br.unipampa.acg.controllers;
 
 import br.unipampa.acg.dao.SolicitacaoDao;
 import br.unipampa.acg.domain.Anexo;
+import br.unipampa.acg.domain.Anexo;
+import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -37,7 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 //import br.unipampa.acg.upload.AnexoService;
-
 /**
  *
  * @author
@@ -46,19 +47,17 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 public class SolicitacaoController {
 
-    private Anexo disco;
+    private Anexo anexo;
     //private final AnexoService anexoService;
 
     // @Autowired
     // public SolicitacaoController(AnexoService anexoService) {
     //     this.anexoService = anexoService;
     // }
-
-
     @ResponseBody
     @PostMapping("/acg")
     @JsonView(View.Standard.class)
-    public ResponseEntity generate(@Valid @RequestBody Solicitacao acg) {
+    public ResponseEntity adicionarSolicitacao(@Valid @RequestBody Solicitacao acg) {
         SolicitacaoDao dao = new SolicitacaoDao();
         dao.persist(acg);
         dao.close();
@@ -86,7 +85,7 @@ public class SolicitacaoController {
 
     @ResponseBody
     @DeleteMapping("/acg/{id}")
-    public ResponseEntity kill(@PathVariable("id") int id) {
+    public ResponseEntity excluirSolicitacao(@PathVariable("id") int id) {
         SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
         Solicitacao sv = dao.load(Solicitacao.class, id);      //... Carrega configuração.
         dao.delete(sv);                         //... Salva a config. com PID.
@@ -94,47 +93,53 @@ public class SolicitacaoController {
         return ResponseEntity.ok("");
     }
 
-    @PostMapping("/anexo")
-    public void upload(@RequestParam MultipartFile arquivoAnexo) {
-        disco.salvarAnexo(arquivoAnexo);
+    @ResponseBody
+    @PostMapping("/acg_anexo/")
+    @JsonView(View.Standard.class)
+
+    public ResponseEntity salvarComAnexo(@Valid @RequestBody Solicitacao acg, @RequestParam MultipartFile arquivoAnexo) {
+
+        anexo = new Anexo("anexo");
+        String caminho = anexo.salvarAnexo(arquivoAnexo);
+        acg.setNomeAnexo(caminho);
+        SolicitacaoDao dao = new SolicitacaoDao();
+        dao.persist(acg);
+        dao.close();
+        return ResponseEntity.ok(acg);
+
     }
+
+//    @PostMapping("/anexo")
+//    public void upload(@RequestParam MultipartFile arquivoAnexo) {
+//        anexo = new Anexo("anexo");
+//        anexo.salvarAnexo(arquivoAnexo);
+//    }
 
     // //Armazena o anexo no banco de dados
     // @PostMapping("/upload")
     // public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
-
     //     return anexoService.store(file, nome);
-
     // }
-
     // //Mostra todos os anexos do banco
     // @GetMapping("/anexos")
     // public String listUploadedFiles(Model model) throws IOException {
-
     //     model.addAttribute("files", anexoService.loadAll().map(
     //             path -> MvcUriComponentsBuilder.fromMethodName(SolicitacaoController.class,
     //                     "serveFile", path.getFileName().toString()).build().toString())
     //             .collect(Collectors.toList()));
-
     //     return "uploadForm";
     // }
-
     // @GetMapping("/files/{filename:.+}")
     // @ResponseBody
     // public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
     //     Resource file = anexoService.loadAsResource(filename);
     //     return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
     //             "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     // }
-
-
     //Metodo de salvar o anexo
     //public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
-      //  Resource file = anexoService.loadAsResource(filename);
-        //return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-          //      "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    //  Resource file = anexoService.loadAsResource(filename);
+    //return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+    //      "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     //}
-
 }
