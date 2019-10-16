@@ -17,7 +17,7 @@ const useStyles = makeStyles(styles);
 export const Discente = props => {
   return (
     <div>
-      <div style={{ height: 50, overflow: "show", padding: 20 }}>
+      <div style={{ height: 20, overflow: "show", padding: 20 }}>
         <a
           href="/solicitacao"
           style={{
@@ -32,7 +32,7 @@ export const Discente = props => {
           Solicitar
         </a>
       </div>
-      <div style={{ height: 100, overflow: "show", padding: 20 }}>
+      <div style={{ height: 20, overflow: "show", padding: 20 }}>
         <a
           href="/listar"
           style={{
@@ -45,6 +45,44 @@ export const Discente = props => {
           }}
         >
           Exibir
+        </a>
+      </div>
+    </div>
+  );
+};
+
+// eslint-disable-next-line no-unused-vars
+export const Coordenador = props => {
+  return (
+    <div>
+      <div style={{ height: 20, overflow: "show", padding: 20 }}>
+        <a
+          href="/avaliar"
+          style={{
+            background: "#009349",
+            padding: 10,
+            borderRadius: 10,
+            cursor: "pointer",
+            border: "#009349 solid 2px",
+            color: "white"
+          }}
+        >
+          Avaliar
+        </a>
+      </div>
+      <div style={{ height: 20, overflow: "show", padding: 20 }}>
+        <a
+          href="/listar"
+          style={{
+            background: "#009349",
+            padding: 10,
+            borderRadius: 10,
+            cursor: "pointer",
+            border: "#009349 solid 2px",
+            color: "white"
+          }}
+        >
+          Excluir avaliações
         </a>
       </div>
     </div>
@@ -70,7 +108,8 @@ export default function MenuPrincipal() {
                   },
                   {
                     tabButton: "Coordenador",
-                    tabIcon: People
+                    tabIcon: People,
+                    tabContent: <Coordenador />
                   }
                 ]}
               />

@@ -9,14 +9,15 @@ import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
+
 // sections for this page
 import styles from "assets/jss/material-kit-react/views/components.js";
 
-import Exibir from "views/Listar/Listar.js";
+import Exibir from "views/Avaliacao/Listar.js";
 
 const useStyles = makeStyles(styles);
 
-export default function ListarSolicitacoes() {
+export default function Avaliar() {
   const classes = useStyles();
   return (
     <div>
@@ -26,10 +27,9 @@ export default function ListarSolicitacoes() {
             <GridItem>
               <div className={classes.brand}>
                 <center>
-                  <h1 className={classes.title}>Solicitações</h1>
+                  <h1 className={classes.title}>Avaliar solicitações</h1>
                   <h3 className={classes.subtitle}>
-                    Aqui você pode visualizar as solicitações já cadastradas e
-                    excluir aquelas que contém inconsistências.
+                    Selecione uma solicitação para começar a avaliar.
                   </h3>
                 </center>
               </div>
