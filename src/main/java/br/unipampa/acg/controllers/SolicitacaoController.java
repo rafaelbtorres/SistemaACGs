@@ -66,21 +66,11 @@ public class SolicitacaoController {
 
     @ResponseBody
     @GetMapping("/acg/{id}/report")
-    public ResponseEntity report(@PathVariable("id") long id) {
-        Map<String, String> output = new HashMap<>();
-        output.put("vagner", "3421");
-        output.put("rate", "1024.3");
-        return ResponseEntity.ok(output);
-    }
-
-    @ResponseBody
-    @PostMapping("/acg/{id}")
-    public ResponseEntity start(@PathVariable("id") long id, @RequestBody Map<String, String> input) {
-        SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
-        Solicitacao acg = dao.load(Solicitacao.class, id);      //... Carrega configuração.
-        dao.save(acg);                         //... Salva a config. com PID.
-        dao.close();                          //... Fecha sessão com o banco.
-        return ResponseEntity.ok(input);
+    public ResponseEntity buscaSolicitacaoPorId(@PathVariable("id") long id) {
+        SolicitacaoDao dao = new SolicitacaoDao();
+        Map<Solicitacao, SolicitacaoDao> solicitacao = new HashMap<>();
+        solicitacao.get(id);
+        return ResponseEntity.ok(solicitacao);
     }
 
     @ResponseBody
@@ -108,12 +98,6 @@ public class SolicitacaoController {
         return ResponseEntity.ok(acg);
 
     }
-
-//    @PostMapping("/anexo")
-//    public void upload(@RequestParam MultipartFile arquivoAnexo) {
-//        anexo = new Anexo("anexo");
-//        anexo.salvarAnexo(arquivoAnexo);
-//    }
 
     // //Armazena o anexo no banco de dados
     // @PostMapping("/upload")
