@@ -34,7 +34,7 @@ export const Discente = props => {
       </div>
       <div style={{ height: 100, overflow: "show", padding: 20 }}>
         <a
-          href="/exibir"
+          href="/listar"
           style={{
             background: "#009349",
             padding: 10,
@@ -50,7 +50,7 @@ export const Discente = props => {
     </div>
   );
 };
-export default function SectionBasics() {
+export default function MenuPrincipal() {
   const classes = useStyles();
   return (
     <div className={classes.sections}>

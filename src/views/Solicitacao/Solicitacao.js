@@ -12,11 +12,11 @@ import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
 import styles from "assets/jss/material-kit-react/views/components.js";
 
-import Exibir from "views/Components/exibir.js";
+import FormularioSolicitacao from "views/Solicitacao/Form.js";
 
 const useStyles = makeStyles(styles);
 
-export default function ExibirSolicitacoes() {
+export default function Solicitacao() {
   const classes = useStyles();
   return (
     <div>
@@ -26,10 +26,12 @@ export default function ExibirSolicitacoes() {
             <GridItem>
               <div className={classes.brand}>
                 <center>
-                  <h1 className={classes.title}>Solicitações</h1>
+                  <h1 className={classes.title}>
+                    Solicitação de aproveitamento
+                  </h1>
                   <h3 className={classes.subtitle}>
-                    Aqui você pode visualizar as solicitações já cadastradas e
-                    excluir aquelas que contém inconsistências.
+                    Preencha os campos abaixo para efetuar uma solicitação de
+                    aproveitamento de horas de atividade complementar de curso.
                   </h3>
                 </center>
               </div>
@@ -39,7 +41,7 @@ export default function ExibirSolicitacoes() {
       </Parallax>
 
       <div className={classNames(classes.main, classes.mainRaised)}>
-        <Exibir />
+        <FormularioSolicitacao />
       </div>
       <Footer />
     </div>

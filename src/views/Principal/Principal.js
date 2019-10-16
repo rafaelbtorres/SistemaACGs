@@ -10,7 +10,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
-import SectionBasics from "./Sections/SectionBasics2.js";
+import MenuPrincipal from "views/Principal/MenuPrincipal.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 
 const useStyles = makeStyles(styles);
@@ -38,7 +38,7 @@ export default function Components() {
       </Parallax>
 
       <div className={classNames(classes.main, classes.mainRaised)}>
-        <SectionBasics />
+        <MenuPrincipal />
       </div>
       <Footer />
     </div>
