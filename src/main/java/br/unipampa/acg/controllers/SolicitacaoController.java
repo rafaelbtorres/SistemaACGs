@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -66,11 +67,11 @@ public class SolicitacaoController {
 
     @ResponseBody
     @GetMapping("/acg/{id}/report")
-    public ResponseEntity buscaSolicitacaoPorId(@PathVariable("id") long id) {
+    public ResponseEntity buscaSolicitacaoPorId(@PathVariable("idsolicitacao") long id) {
         SolicitacaoDao dao = new SolicitacaoDao();
-        Map<Solicitacao, SolicitacaoDao> solicitacao = new HashMap<>();
-        solicitacao.get(id);
-        return ResponseEntity.ok(solicitacao);
+        dao.load(Solicitacao.class, id);
+        dao.close();
+        return ResponseEntity.ok("ID da solicitação:" + id);
     }
 
     @ResponseBody
