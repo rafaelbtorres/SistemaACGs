@@ -117,9 +117,8 @@ export default class FormularioSolicitacao extends React.Component {
               margin="normal"
               variant="outlined"
               onChange={e => this.setState({ nome: e.target.value })}
-              style={{ width: '70%' }}
+              style={{ width: '60%' }}
             />
-            <br />
             <TextField
               id="matricula"
               label="Matrícula"
@@ -130,199 +129,244 @@ export default class FormularioSolicitacao extends React.Component {
               margin="normal"
               variant="outlined"
               onChange={e => this.setState({ matricula: e.target.value })}
-              style={{ width: '25%' }}
+              style={{ width: '35%' }}
             />
-            <br />
           </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}
+          >
+            <TextField
+              id="campoGrupos"
+              select
+              label="Grupo"
+              className="form-control"
+              onChange={e => this.setState({ grupo: e.target.value })}
+              value={this.state.grupo}
+              helperText="Por favor seleciona o grupo."
+              margin="normal"
+              style={{ width: '40%' }}
 
-          <TextField
-            id="campoGrupos"
-            select
-            label="Grupo"
-            className="form-control"
-            onChange={e => this.setState({ grupo: e.target.value })}
-            value={this.state.grupo}
-            helperText="Por favor seleciona o grupo."
-            margin="normal"
-          >
-            {this.state.grupos.map((grupo, index) => (
-              <option key={index} value={grupo.id}>
-                {grupo.nome}
-              </option>
-            ))}
-          </TextField>
-          <br />
-          <TextField
-            id="campoAtividades"
-            select
-            label="Atividade"
-            className="form-control"
-            onChange={e => this.setState({ atividade: e.target.value })}
-            value={this.state.atividade}
-            helperText="Por favor seleciona uma atividade."
-            margin="normal"
-          >
-            {this.state.atividades.map((atividade, index) => (
-              <option key={index} value={atividade.id}>
-                {atividade.nome}
-              </option>
-            ))}
-          </TextField>
-          <br />
-          <TextField
-            id="outlined-email-input"
-            label="Professor(a) responsável"
-            className={SampleFab.textField}
-            type="text"
-            name="nomeResponsavel"
-            autoComplete="nomeResponsavel"
-            margin="normal"
-            variant="outlined"
-            onChange={e => this.setState({ nomeResponsavel: e.target.value })}
-          />
-          <br />
-          <TextField
-            id="outlined-email-input"
-            label="Local da atividade"
-            className={SampleFab.textField}
-            type="text"
-            name="localAtividade"
-            autoComplete="localAtividade"
-            margin="normal"
-            variant="outlined"
-            onChange={e => this.setState({ localAtividade: e.target.value })}
-          />
-          <br />
-          <TextField
-            id="periodoAtividadeInicio"
-            value={this.state.periodoAtividadeInicio}
-            label="Período da atividade"
-            className={SampleFab.textField}
-            type="date"
-            
-            name="periodoAtividadeInicio"
-            autoComplete="periodoAtividadeInicio"
-            margin="normal"
-            variant="outlined"
-            onChange={e =>
-              this.setState({
-                periodoAtividadeInicio: e.target.value
-              })
-            }
-          />
-          <TextField
-            id="periodoAtividadeFinal"
-            style={{ padding: '5%' }}
-            label="Até"
-            className={SampleFab.textField}
-            value={this.state.periodoAtividadeInicio}
-            type="date"
-            name="periodoAtividadeFinal"
-            autoComplete="periodoAtividadeFinal"
-            margin="normal"
-            variant="outlined"
-            onChange={e =>
-              this.setState({
-                periodoAtividadeFinal: e.target.value
-              })
-            }
-          />
-          <br />
-          <TextField
-            id="cargaHorariaAtividade"
-            label="Carga-horária da atividade"
-            className={SampleFab.textField}
-            type="number"
-            name="cargaHorariaAtividade"
-            autoComplete="cargaHorariaAtividade"
-            margin="normal"
-            variant="outlined"
-            onChange={e =>
-              this.setState({
-                cargaHorariaAtividade: e.target.value
-              })
-            }
-          />
-          <br />
-          <TextField
-            id="cargaHorariaSolicitada"
-            label="Carga-horária solicitada"
-            className={SampleFab.textField}
-            type="number"
-            name="cargaHorariaSolicitada"
-            autoComplete="cargaHorariaSolicitada"
-            margin="normal"
-            variant="outlined"
-            onChange={e =>
-              this.setState({
-                cargaHorariaSolicitada: e.target.value
-              })
-            }
-            InputProps={{
-              className: SampleFab.teste
-            }}
-          />
-          <br />
-          <TextField
-            id="descricaoAtividade"
-            label="Descrição da atividade"
-            multiline
-            rows="4"
-            className={SampleFab.textField}
-            margin="normal"
-            variant="outlined"
-            form="formSolicitacao"
-            onChange={e =>
-              this.setState({
-                descricaoAtividade: e.target.value
-              })
-            }
-          />
-          <br />
-          <TextField
-            id="documento"
-            label="Comprovante"
-            className={SampleFab.textField}
-            type="file"
-            name="documento"
-            margin="normal"
-            variant="outlined"
-            onChange={e =>
-              this.setState({
-                documento: e.target.value
-              })
-            }
-          />
-          <br />
-          <Button
-            variant="contained"
-            color="#009349"
-            className={SampleFab}
-          >
+            >
+              {this.state.grupos.map((grupo, index) => (
+                <option key={index} value={grupo.id}>
+                  {grupo.nome}
+                </option>
+              ))}
+            </TextField>
+            <TextField
+              id="campoAtividades"
+              select
+              label="Atividade"
+              className="form-control"
+              onChange={e => this.setState({ atividade: e.target.value })}
+              value={this.state.atividade}
+              helperText="Por favor seleciona uma atividade."
+              margin="normal"
+              style={{ width: '40%' }}
 
-            <input value="Enviar" style={{ display: 'none' }} />
+            >
+              {this.state.atividades.map((atividade, index) => (
+                <option key={index} value={atividade.id}>
+                  {atividade.nome}
+                </option>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}>
+            <TextField
+              id="outlined-email-input"
+              label="Professor(a) responsável"
+              className={SampleFab.textField}
+              type="text"
+              name="nomeResponsavel"
+              autoComplete="nomeResponsavel"
+              margin="normal"
+              variant="outlined"
+              onChange={e => this.setState({ nomeResponsavel: e.target.value })}
+              style={{ width: '60%' }}
 
-          </Button>
-          <button
-            variant="contained"
-            color="#009349"
-            className={SampleFab}
-            endIcon={<Icon>Enviar</Icon>}
-            type="submit"
-           // onClick={handleSubmit}
-          >
-            Enviar
-        </button>
-          <Button
-            variant="contained"
-            color="#009349"
-            className={SampleFab}
-            href="/"
-          >
-            Voltar
-        </Button>
+            />
+            <TextField
+              id="outlined-email-input"
+              label="Local da atividade"
+              className={SampleFab.textField}
+              type="text"
+              name="localAtividade"
+              autoComplete="localAtividade"
+              margin="normal"
+              variant="outlined"
+              onChange={e => this.setState({ localAtividade: e.target.value })}
+              style={{ width: '35%' }}
+
+            />
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}>
+            <TextField
+              id="periodoAtividadeInicio"
+              value={this.state.periodoAtividadeInicio}
+              label="Período da atividade"
+              className={SampleFab.textField}
+              type="date"
+
+              name="periodoAtividadeInicio"
+              autoComplete="periodoAtividadeInicio"
+              margin="normal"
+              variant="outlined"
+              style={{ width: '40%' }}
+              onChange={e =>
+                this.setState({
+                  periodoAtividadeInicio: e.target.value
+                })
+              }
+            />
+            <TextField
+              id="periodoAtividadeFinal"
+              style={{ padding: '5%' }}
+              label="Até"
+              className={SampleFab.textField}
+              value={this.state.periodoAtividadeInicio}
+              type="date"
+              name="periodoAtividadeFinal"
+              autoComplete="periodoAtividadeFinal"
+              margin="normal"
+              variant="outlined"
+              style={{ width: '40%' }}
+              onChange={e =>
+                this.setState({
+                  periodoAtividadeFinal: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}>
+            <TextField
+              id="cargaHorariaAtividade"
+              label="Carga-horária da atividade"
+              className={SampleFab.textField}
+              type="number"
+              name="cargaHorariaAtividade"
+              autoComplete="cargaHorariaAtividade"
+              margin="normal"
+              variant="outlined"
+              style={{ width: '40%' }}
+              onChange={e =>
+                this.setState({
+                  cargaHorariaAtividade: e.target.value
+                })
+              }
+            />
+            <TextField
+              id="cargaHorariaSolicitada"
+              label="Carga-horária solicitada"
+              className={SampleFab.textField}
+              type="number"
+              name="cargaHorariaSolicitada"
+              autoComplete="cargaHorariaSolicitada"
+              margin="normal"
+              variant="outlined"
+              style={{ width: '40%' }}
+              onChange={e =>
+                this.setState({
+                  cargaHorariaSolicitada: e.target.value
+                })
+              }
+              InputProps={{
+                className: SampleFab.teste
+              }}
+            />
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}>
+            <TextField
+              id="descricaoAtividade"
+              label="Descrição da atividade"
+              multiline
+              rows="4"
+              className={SampleFab.textField}
+              margin="normal"
+              variant="outlined"
+              form="formSolicitacao"
+              style={{ width: '100%' }}
+              onChange={e =>
+                this.setState({
+                  descricaoAtividade: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '100%' }}>
+            <TextField
+              id="documento"
+              label="Comprovante"
+              className={SampleFab.textField}
+              type="file"
+              name="documento"
+              margin="normal"
+              variant="outlined"
+              style={{ width: '50%' }}
+              onChange={e =>
+                this.setState({
+                  documento: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            style={{ width: '40%' }}>
+            <Button
+              variant="contained"
+              color="#009349"
+              className={SampleFab}
+              style={{ width: '45%' }}
+            >
+              Enviar
+            <input type="submit" value="Enviar" style={{ display: 'none' }} />
+
+            </Button>
+            <Button
+              variant="contained"
+              color="#009349"
+              className={SampleFab}
+              style={{ width: '45%' }}
+              href="/"
+            >
+              Voltar
+            </Button>
+          </Grid>
         </Grid>
-      </form>
+      </form >
     );
   }
 }
