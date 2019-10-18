@@ -351,15 +351,19 @@ export default class FormularioSolicitacao extends React.Component {
               className={SampleFab}
               style={{ width: '45%' }}
             >
+            </Button>\
               Enviar
-            <input type="submit" value="Enviar" style={{ display: 'none' }} />
+              <label for="botaoEnviar">
+                dsyuhsdyuashdbygsadb
+              </label>
+              <input id="botaoEnviar" type="submit" value="Enviar" style={{ display: 'none' }} />
 
-            </Button>
+
             <Button
               variant="contained"
               color="#009349"
               className={SampleFab}
-              style={{ width: '45%' }}
+              style={{ width: '50%' }}
               href="/"
             >
               Voltar
