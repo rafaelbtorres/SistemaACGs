@@ -107,24 +107,24 @@ public class SolicitacaoController {
     } 
 
     
-    //Avaliar
-    //Primeiro carrega todos os dados da avaliacao
-     @ResponseBody
-    @GetMapping("/acg/{id}/aval")
-    public Solicitacao avaliarSolicitacao(@PathVariable("idsolicitacao") long id) {
-        Solicitacao dados = new Solicitacao();
-        SolicitacaoDao dao = new SolicitacaoDao();
-        dados = dao.load(Solicitacao.class, id);
-        dao.close();
-        return dados;
-    }
-    //Despois de avaliar, salva os dados no banco
-    @RequestMapping(value = "/acg/{id}/aval", method = RequestMethod.POST)
-    public ModelAndView avaliar(Solicitacao s){
-        SolicitacaoDao dao = new SolicitacaoDao();      
-        dao.update(s);
-        return null;
-    } 
+//    //Avaliar
+//    //Primeiro carrega todos os dados da avaliacao
+//     @ResponseBody
+//    @GetMapping("/acg/{id}/aval")
+//    public Solicitacao avaliarSolicitacao(@PathVariable("idsolicitacao") long id) {
+//        Solicitacao dados = new Solicitacao();
+//        SolicitacaoDao dao = new SolicitacaoDao();
+//        dados = dao.load(Solicitacao.class, id);
+//        dao.close();
+//        return dados;
+//    }
+//    //Despois de avaliar, salva os dados no banco
+//    @RequestMapping(value = "/acg/{id}/aval", method = RequestMethod.POST)
+//    public ModelAndView avaliar(Solicitacao s){
+//        SolicitacaoDao dao = new SolicitacaoDao();      
+//        dao.update(s);
+//        return null;
+//    } 
 
 
 
