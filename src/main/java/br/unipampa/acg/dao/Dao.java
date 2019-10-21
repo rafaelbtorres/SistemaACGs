@@ -1,8 +1,9 @@
 package br.unipampa.acg.dao;
 
-import br.unipampa.acg.utils.DatabaseConnection;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import br.unipampa.acg.utils.DatabaseConnection;
 
 public class Dao <T>
 {
@@ -58,5 +59,13 @@ public class Dao <T>
             obj = session. load (type, id);
         }
         return obj;
+    }
+
+    public void update (T obj)
+    {
+        if (session != null)
+        {
+            session. update(obj);
+        }
     }
 }

@@ -6,13 +6,14 @@
 package br.unipampa.acg.domain;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,6 +41,9 @@ public class Solicitacao {
     private String status;
     private String profResponsavel;
     private String descricao;
+    private String avaliacao;
+    private String nota;
+    private String horasAceitas;
 
     @ManyToOne
     private Atividade atividade;
