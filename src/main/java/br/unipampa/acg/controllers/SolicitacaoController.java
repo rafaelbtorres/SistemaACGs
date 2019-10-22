@@ -5,6 +5,9 @@
  */
 package br.unipampa.acg.controllers;
 
+import br.unipampa.acg.dao.AtividadeDao;
+import br.unipampa.acg.dao.CurriculoDao;
+import br.unipampa.acg.dao.GrupoDao;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -23,6 +26,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.unipampa.acg.dao.SolicitacaoDao;
 import br.unipampa.acg.domain.Anexo;
+import br.unipampa.acg.domain.Atividade;
+import br.unipampa.acg.domain.Curriculo;
+import br.unipampa.acg.domain.Grupo;
 import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
 
@@ -58,23 +64,47 @@ public class SolicitacaoController {
 
         SolicitacaoDao dao = new SolicitacaoDao();
         Solicitacao s = dao.load(Solicitacao.class, id);
-        System.out.println("Solicitação: " + s.getNome());
+        String a = s.toString();
         dao.close();
-        
-        return ResponseEntity.ok(s.toString() + "ID da solicitação:" + id);
+
+        return ResponseEntity.ok(a);
     }
-    
+
     @ResponseBody
     @GetMapping("/acg/{id}/atividade")
     public ResponseEntity buscaAtividade(@PathVariable("id") long id) {
 
-        SolicitacaoDao dao = new SolicitacaoDao();
-        Solicitacao s = dao.load(Solicitacao.class, id);
-        System.out.println("Solicitação: " + s.getAtividade().toString());
+        AtividadeDao dao = new AtividadeDao();
+        Atividade s = dao.load(Atividade.class, id);
+        String a = s.toString();
         dao.close();
-        
-        return ResponseEntity.ok(s.getAtividade().toString());
+
+        return ResponseEntity.ok(a);
     }
+
+//    @ResponseBody
+//    @GetMapping("/acg/{id}/grupo")
+//    public ResponseEntity buscaGrupo(@PathVariable("id") long id) {
+//
+//        GrupoDao dao = new GrupoDao();
+//        Grupo s = dao.load(Grupo.class, id);
+//        String a = s.toString();
+//        dao.close();
+//
+//        return ResponseEntity.ok(a);
+//    }
+    
+//        @ResponseBody
+//    @GetMapping("/acg/{id}/curriculo")
+//    public ResponseEntity buscaCurriculo(@PathVariable("id") long id) {
+//
+//        CurriculoDao dao = new CurriculoDao();
+//        Curriculo s = dao.load(Curriculo.class, id);
+//        String a = s.toString();
+//        dao.close();
+//
+//        return ResponseEntity.ok(a);
+//    }
 
     @ResponseBody
     @DeleteMapping("/acg/{id}")

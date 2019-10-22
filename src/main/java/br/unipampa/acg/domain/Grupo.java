@@ -20,13 +20,22 @@ import lombok.Data;
 @Data
 public class Grupo {
 
-	@Id
-	@GeneratedValue
-	private long idGrupo;
+    @Id
+    @GeneratedValue
+    private long idGrupo;
 
-	private String nome;
+    private String nome;
 
-	@ManyToOne
-	private Curriculo curriculo;
+    @ManyToOne
+    private Curriculo curriculo;
+
+    @Override
+    public String toString() {
+        return "{ "
+                + "\"idGrupo \" : \"" + getIdGrupo()+ "\","
+                + "\"nome \" : \"" + getNome()+ "\","
+                + "\"curriculo \" : \"" + getCurriculo()+ "\""
+                + "}";
+    }
 
 }

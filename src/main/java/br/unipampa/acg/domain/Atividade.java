@@ -38,7 +38,7 @@ public class Atividade {
                 + "\"docsNecessarios \" : \"" + getDocsNecessarios() + "\","
                 + "\"descricao \" : \"" + getDescricao() + "\","
                 + "\"observacao \" : \"" + getObservacao() + "\","
-                + "\"ch \" : \"" + getCh() + "\","
+                + "\"ch \" : \"" + getCh() + "\""
                 + "}";
     }
 
