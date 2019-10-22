@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
+//import Icon from "@material-ui/core/Icon";
 
 //import styles from "assets/jss/material-kit-react/views/components.js";
 const useStyles = makeStyles();
@@ -354,7 +354,6 @@ export default class FormularioSolicitacao extends React.Component {
             </Button>\
               Enviar
               <label for="botaoEnviar">
-                dsyuhsdyuashdbygsadb
               </label>
               <input id="botaoEnviar" type="submit" value="Enviar" style={{ display: 'none' }} />
 
