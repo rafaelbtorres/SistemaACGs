@@ -47,15 +47,33 @@ public class Solicitacao {
 
     @ManyToOne
     private Atividade atividade;
-    
+
     private String nomeAnexo;
 
     public Solicitacao() {
-        super();
     }
 
-
-
+    @Override
+    public String toString() {
+        return "{ "
+                + "\"idsolicitacao \" : \"" + getIdsolicitacao() + "\","
+                + "\"nome \" : \"" + getNome() + "\","
+                + "\"cargaHoraria \" : \"" + getCargaHoraria() + "\","
+                + "\"local \" : \"" + getLocal() + "\","
+                + "\"dataAtual \" : \"" + getDataAtual() + "\","
+                + "\"dataInicio \" : \"" + getDataInicio() + "\","
+                + "\"dataFim \" : \"" + getDataFim() + "\","
+                + "\"status \" : \"" + getStatus() + "\","
+                + "\"profResponsavel \" : \"" + getProfResponsavel() + "\","
+                + "\"descricao \" : \"" + getDescricao() + "\","
+                + "\"avaliacao \" : \"" + getAvaliacao() + "\","
+                + "\"nota \" : \"" + getNota() + "\","
+                + "\"horasAceitas \" : \"" + getHorasAceitas() + "\","
+                + "\"atividade \" : \"" + getAtividade() + "\","
+                + "\"nomeAnexo \" : \"" + getNomeAnexo() + "\""
+                + "}";
+    }
+    
     public boolean verificaTamanho(int tamanho) {
         return tamanho <= 20;
     }

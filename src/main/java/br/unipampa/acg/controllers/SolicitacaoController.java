@@ -54,11 +54,26 @@ public class SolicitacaoController {
 
     @ResponseBody
     @GetMapping("/acg/{id}/report")
-    public ResponseEntity buscaSolicitacaoPorId(@PathVariable("idsolicitacao") long id) {
+    public ResponseEntity buscaSolicitacaoPorId(@PathVariable("id") long id) {
+
         SolicitacaoDao dao = new SolicitacaoDao();
-        dao.load(Solicitacao.class, id);
+        Solicitacao s = dao.load(Solicitacao.class, id);
+        System.out.println("Solicitação: " + s.getNome());
         dao.close();
-        return ResponseEntity.ok("ID da solicitação:" + id);
+        
+        return ResponseEntity.ok(s.toString() + "ID da solicitação:" + id);
+    }
+    
+    @ResponseBody
+    @GetMapping("/acg/{id}/atividade")
+    public ResponseEntity buscaAtividade(@PathVariable("id") long id) {
+
+        SolicitacaoDao dao = new SolicitacaoDao();
+        Solicitacao s = dao.load(Solicitacao.class, id);
+        System.out.println("Solicitação: " + s.getAtividade().toString());
+        dao.close();
+        
+        return ResponseEntity.ok(s.getAtividade().toString());
     }
 
     @ResponseBody
@@ -74,9 +89,7 @@ public class SolicitacaoController {
     // @ResponseBody
     // @PostMapping("/acg_anexo/")
     // @JsonView(View.Standard.class)
-
     // public ResponseEntity salvarComAnexo(@Valid @RequestBody Solicitacao acg, @RequestParam MultipartFile arquivoAnexo) {
-
     //     anexo = new Anexo("anexo");
     //     String caminho = anexo.salvarAnexo(arquivoAnexo);
     //     acg.setNomeAnexo(caminho);
@@ -84,12 +97,9 @@ public class SolicitacaoController {
     //     dao.persist(acg);
     //     dao.close();
     //     return ResponseEntity.ok(acg);
-
     // }
-
-
     //Editar
-     @ResponseBody
+    @ResponseBody
     @GetMapping("/acg/{id}/edit")
     public Solicitacao editarSolicitacao(@PathVariable("idsolicitacao") long id) {
         Solicitacao dados = new Solicitacao();
@@ -98,15 +108,15 @@ public class SolicitacaoController {
         dao.close();
         return dados;
     }
+
     //Despois de modificar, salva os dados no banco
     @RequestMapping(value = "/acg/{id}/aval", method = RequestMethod.POST)
-    public ModelAndView editar(Solicitacao s){
-        SolicitacaoDao dao = new SolicitacaoDao();      
+    public ModelAndView editar(Solicitacao s) {
+        SolicitacaoDao dao = new SolicitacaoDao();
         dao.update(s);
         return null;
-    } 
+    }
 
-    
 //    //Avaliar
 //    //Primeiro carrega todos os dados da avaliacao
 //     @ResponseBody
@@ -125,11 +135,6 @@ public class SolicitacaoController {
 //        dao.update(s);
 //        return null;
 //    } 
-
-
-
-
-    
     // //Armazena o anexo no banco de dados
     // @PostMapping("/upload")
     // public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {

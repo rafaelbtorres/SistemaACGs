@@ -19,17 +19,27 @@ import lombok.Data;
 @Data
 public class Atividade {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long idAtividade;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long idAtividade;
 
-	private String docsNecessarios;
+    private String docsNecessarios;
 
-	private String descricao;
+    private String descricao;
 
-	private String observacao;
+    private String observacao;
 
-	private int ch;
+    private int ch;
 
+    @Override
+    public String toString() {
+        return "{ "
+                + "\"idAtividade \" : \"" + getIdAtividade() + "\","
+                + "\"docsNecessarios \" : \"" + getDocsNecessarios() + "\","
+                + "\"descricao \" : \"" + getDescricao() + "\","
+                + "\"observacao \" : \"" + getObservacao() + "\","
+                + "\"ch \" : \"" + getCh() + "\","
+                + "}";
+    }
 
 }
