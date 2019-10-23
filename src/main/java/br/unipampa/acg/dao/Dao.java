@@ -1,16 +1,13 @@
 package br.unipampa.acg.dao;
 
-import antlr.debug.Event;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.unipampa.acg.utils.DatabaseConnection;
-import java.util.List;
 
 public class Dao <T>
 {
     private Session session = null;
-    
     
     public Dao ()
     {
@@ -21,7 +18,6 @@ public class Dao <T>
     {
         this. session. close ();
     }
-    
     
     public void persist (T obj)
     {
