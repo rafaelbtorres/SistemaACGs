@@ -4,7 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.unipampa.acg.utils.DatabaseConnection;
-
+import java.util.List;
+import org.hibernate.Query;
 public class Dao <T>
 {
     private Session session = null;
@@ -12,6 +13,15 @@ public class Dao <T>
     public Dao ()
     {
         this. session = DatabaseConnection. instance (). openSession ();
+    }
+    
+    public <T> List<T> loadAllData(Class<T> type) {
+        
+        Query qry = session.createQuery("from Solicitacao s");
+        List l = qry.list();
+        
+        
+        return l;
     }
     
     public void close ()

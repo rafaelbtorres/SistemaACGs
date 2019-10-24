@@ -25,12 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.unipampa.acg.dao.SolicitacaoDao;
+import br.unipampa.acg.dao.Solicitacoes;
 import br.unipampa.acg.domain.Anexo;
 import br.unipampa.acg.domain.Atividade;
 import br.unipampa.acg.domain.Curriculo;
 import br.unipampa.acg.domain.Grupo;
 import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
+import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestParam;
 
 //import br.unipampa.acg.upload.AnexoService;
 /**
@@ -49,7 +53,31 @@ public class SolicitacaoController {
     //     this.anexoService = anexoService;
     // }
     @ResponseBody
-    @PostMapping("/acg")
+    @GetMapping("/acg/todassolicitacoes")
+    public ResponseEntity buscaTodasSolicitacoes() {
+
+        SolicitacaoDao dao = new SolicitacaoDao();
+
+        List<Solicitacao> s = dao.loadAllData(Solicitacao.class);
+
+        String json = "[";
+
+        for (int i = 0; i < s.size(); i++) {
+            Solicitacao sol = s.get(i);
+            json = json + s.get(i).toString();
+            if (i != s.size() - 1) {
+                json = json + ",";
+            } 
+        }
+        json = json + "]";
+        String.valueOf(s.size());
+        dao.close();
+
+        return ResponseEntity.ok(json);
+    }
+
+    @ResponseBody
+    @PostMapping("/solicitacao")
     @JsonView(View.Standard.class)
     public ResponseEntity adicionarSolicitacao(@Valid @RequestBody Solicitacao acg) {
         SolicitacaoDao dao = new SolicitacaoDao();
@@ -59,7 +87,7 @@ public class SolicitacaoController {
     }
 
     @ResponseBody
-    @GetMapping("/acg/{id}/report")
+    @GetMapping("/acg/{id}/solicitacaoporid")
     public ResponseEntity buscaSolicitacaoPorId(@PathVariable("id") long id) {
 
         SolicitacaoDao dao = new SolicitacaoDao();
@@ -71,7 +99,7 @@ public class SolicitacaoController {
     }
 
     @ResponseBody
-    @GetMapping("/acg/{id}/atividade")
+    @GetMapping("/acg/{id}/buscaatividade")
     public ResponseEntity buscaAtividade(@PathVariable("id") long id) {
 
         AtividadeDao dao = new AtividadeDao();
@@ -93,7 +121,6 @@ public class SolicitacaoController {
 //
 //        return ResponseEntity.ok(a);
 //    }
-    
 //        @ResponseBody
 //    @GetMapping("/acg/{id}/curriculo")
 //    public ResponseEntity buscaCurriculo(@PathVariable("id") long id) {
@@ -106,8 +133,9 @@ public class SolicitacaoController {
 //        return ResponseEntity.ok(a);
 //    }
 
+
     @ResponseBody
-    @DeleteMapping("/acg/{id}")
+    @DeleteMapping("/solicitacao/{id}")
     public ResponseEntity excluirSolicitacao(@PathVariable("id") int id) {
         SolicitacaoDao dao = new SolicitacaoDao();               //... Abre sessão com o banco.
         Solicitacao sv = dao.load(Solicitacao.class, id);      //... Carrega configuração.

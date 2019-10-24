@@ -18,7 +18,7 @@
         <version>2.1.4.RELEASE</version>
     </parent>
     <!-- CONFIG. SPRING FRAMEWORK .-->
-    
+
     <dependencies>
         <!-- CONFIG. SPRING FRAMEWORK -->
         <dependency>
@@ -26,12 +26,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- CONFIG. SPRING FRAMEWORK -->
-	<dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
             <scope>provided</scope>
-	</dependency>
+        </dependency>
         <!-- DATABASE CONNECTION AND HIBERNATE -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -81,31 +81,36 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>5.2.0.M2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>2.1.11.RELEASE</version>
             <type>jar</type>
         </dependency>
     </dependencies>
     
     <build>
-      <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>repackage</goal>
-                    </goals>
-                    <configuration>
-                        <classifier>spring-boot</classifier>
-                        <mainClass>
-                          br.uff.taesa.App
-                        </mainClass>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-      </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>spring-boot</classifier>
+                            <mainClass>
+                                br.uff.taesa.App
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <name>acg</name>
 </project>

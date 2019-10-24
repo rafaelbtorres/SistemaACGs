@@ -5,6 +5,7 @@
  */
 package br.unipampa.acg.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Solicitacao {
+public class Solicitacao implements Serializable{
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
