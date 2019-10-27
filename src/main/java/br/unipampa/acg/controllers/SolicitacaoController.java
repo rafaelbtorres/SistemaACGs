@@ -61,20 +61,20 @@ public class SolicitacaoController {
 
         List<Solicitacao> s = dao.loadAllData(Solicitacao.class);
 
-        String json = "[";
-
-        for (int i = 0; i < s.size(); i++) {
-            Solicitacao sol = s.get(i);
-            json = json + s.get(i).toString();
-            if (i != s.size() - 1) {
-                json = json + ",";
-            } 
-        }
-        json = json + "]";
-        String.valueOf(s.size());
+//        String json = "[";
+//
+//        for (int i = 0; i < s.size(); i++) {
+//            Solicitacao sol = s.get(i);
+//            json = json + s.get(i).toString();
+//            if (i != s.size() - 1) {
+//                json = json + ",";
+//            } 
+//        }
+//        json = json + "]";
+//        String.valueOf(s.size());
         dao.close();
 
-        return ResponseEntity.ok(json);
+        return ResponseEntity.ok(s);
     }
 
     @ResponseBody
