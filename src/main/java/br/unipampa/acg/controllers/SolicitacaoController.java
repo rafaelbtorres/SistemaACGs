@@ -33,6 +33,8 @@ import br.unipampa.acg.domain.Curriculo;
 import br.unipampa.acg.domain.Grupo;
 import br.unipampa.acg.domain.Solicitacao;
 import br.unipampa.acg.utils.View;
+
+import java.sql.PreparedStatement;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -200,6 +202,10 @@ public class SolicitacaoController {
 
 
 
+
+
+
+    
 
 
     // //Armazena o anexo no banco de dados

@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import br.unipampa.acg.utils.DatabaseConnection;
+
+import java.sql.PreparedStatement;
 import java.util.List;
 import org.hibernate.Query;
 public class Dao <T>
@@ -75,7 +77,9 @@ public class Dao <T>
     {
         if (session != null)
         {
+            Transaction tr = session. beginTransaction ();
             session. update(obj);
+            tr. commit ();
         }
     }
 }
