@@ -29,13 +29,6 @@ public class Grupo {
     @ManyToOne
     private Curriculo curriculo;
 
-    // @Override
-    // public String toString() {
-    //     return "{ "
-    //             + "\"idGrupo \" : \"" + getIdGrupo()+ "\","
-    //             + "\"nome \" : \"" + getNome()+ "\","
-    //             + "\"curriculo \" : \"" + getCurriculo()+ "\""
-    //             + "}";
-    // }
+
 
 }
