@@ -31,15 +31,15 @@ public class Atividade {
 
     private int ch;
 
-    @Override
-    public String toString() {
-        return "{ "
-                + "\"idAtividade \" : \"" + getIdAtividade() + "\","
-                + "\"docsNecessarios \" : \"" + getDocsNecessarios() + "\","
-                + "\"descricao \" : \"" + getDescricao() + "\","
-                + "\"observacao \" : \"" + getObservacao() + "\","
-                + "\"ch \" : \"" + getCh() + "\""
-                + "}";
-    }
+    // @Override
+    // public String toString() {
+    //     return "{ "
+    //             + "\"idAtividade \" : \"" + getIdAtividade() + "\","
+    //             + "\"docsNecessarios \" : \"" + getDocsNecessarios() + "\","
+    //             + "\"descricao \" : \"" + getDescricao() + "\","
+    //             + "\"observacao \" : \"" + getObservacao() + "\","
+    //             + "\"ch \" : \"" + getCh() + "\""
+    //             + "}";
+    // }
 
 }
