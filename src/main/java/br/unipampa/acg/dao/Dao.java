@@ -11,6 +11,7 @@ import org.hibernate.Query;
 public class Dao <T>
 {
     private Session session = null;
+    private Transaction tx;
     
     public Dao ()
     {
@@ -73,13 +74,21 @@ public class Dao <T>
         return obj;
     }
 
-    public void update (T obj)
+    public void oldupdate (T obj)
     {
         if (session != null)
         {
             Transaction tr = session. beginTransaction ();
             session. update(obj);
             tr. commit ();
+        }
+    }
+    public void update(T obj){
+        try {
+            session.update(obj);
+            tx.commit();
+        } catch (NullPointerException e) {
+            System.out.println(e);;
         }
     }
 }
