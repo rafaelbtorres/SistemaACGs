@@ -215,8 +215,8 @@ public class SolicitacaoController {
     @JsonView(View.Standard.class)
     public ResponseEntity avaliarSolicitacao(@Valid @RequestBody Solicitacao sol) throws SQLException {
         Connection conect = connection();
-        PreparedStatement stmt = conect.prepareStatement("update from solicitacao where id=?");
-        stmt.setLong(1, sol.getIdsolicitacao());
+        Long id = sol.getIdsolicitacao();
+        PreparedStatement stmt = conect.prepareStatement("update from solicitacao where id="+id);
         stmt.execute();
         stmt.close();  
         SolicitacaoDao dao = new SolicitacaoDao();
