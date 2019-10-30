@@ -58,4 +58,12 @@ public class Solicitacao implements Serializable{
         return tamanho <= 20;
     }
 
+    public long getIdsolicitacao() {
+        return idsolicitacao;
+    }
+
+    public void setIdsolicitacao(long idsolicitacao) {
+        this.idsolicitacao = idsolicitacao;
+    }
+
 }

@@ -85,7 +85,9 @@ public class Dao <T>
     }
     public void update(T obj){
         try {
+            System.out.println(obj.toString());
             session.update(obj);
+            
             tx.commit();
         } catch (NullPointerException e) {
             System.out.println(e);;
