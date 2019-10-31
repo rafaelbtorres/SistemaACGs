@@ -5,7 +5,6 @@
  */
 package br.unipampa.acg.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -14,33 +13,45 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotEmpty;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
 
 /**
  *
  * @author vagner
  */
 @Entity
-@Getter
-@Setter
-public class Solicitacao implements Serializable{
+@Data
+public class Solicitacao{
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idsolicitacao;
+
+    @NotEmpty
     private String nome;
+
     private long cargaHoraria;
+
+    @NotEmpty
     private String local;
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @JsonFormat(pattern = "yyy-MM-dd")
     private Date dataAtual;
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @JsonFormat(pattern = "yyy-MM-dd")
     private Date dataInicio;
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @JsonFormat(pattern = "yyy-MM-dd")
     private Date dataFim;
+
     private String status;
+
     private String profResponsavel;
+
     private String descricao;
 
     @ManyToOne
