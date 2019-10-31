@@ -42,9 +42,6 @@ public class Solicitacao implements Serializable{
     private String status;
     private String profResponsavel;
     private String descricao;
-    private String avaliacao;
-    private String nota;
-    private String horasAceitas;
 
     @ManyToOne
     private Atividade atividade;
