@@ -107,7 +107,7 @@ public class SolicitacaoController {
     @PostMapping("/solicitacao")
     public ResponseEntity adicionarSolicitacao(@ModelAttribute SolicitacaoDto solicitacao, MultipartFile files[]) {
 
-        Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
+        java.util.Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
 
         if (!atividade.isPresent()) {
             return ResponseEntity.badRequest().body("A atividade com o ID" + solicitacao.getIdAtividade() + "não foi encontrada");
@@ -117,6 +117,7 @@ public class SolicitacaoController {
 
         novasolicitacao.setAtividade(atividade.get());
         novasolicitacao.setCargaHoraria(solicitacao.getCargaHoraria());
+        return null;
         }
 
         
