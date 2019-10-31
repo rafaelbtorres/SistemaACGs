@@ -9,7 +9,7 @@ public class SolicitacaoDto {
 
     private String local;
     private String aluno;
-    private String matricula;
+    private long matricula;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String dataInicio;
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -58,6 +57,9 @@ public class Solicitacao{
     private Atividade atividade;
 
     private String nomeAnexo;
+
+    @NotEmpty
+    private long matricula;
 
     public long getIdsolicitacao() {
         return idsolicitacao;
