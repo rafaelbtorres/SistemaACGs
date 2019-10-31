@@ -20,7 +20,6 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
@@ -29,20 +28,33 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import org.apache.el.stream.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.unipampa.acg.dao.AtividadeDao;
 import br.unipampa.acg.dao.SolicitacaoDao;
 import br.unipampa.acg.domain.Anexo;
 import br.unipampa.acg.domain.Atividade;
 import br.unipampa.acg.domain.Solicitacao;
+import br.unipampa.acg.dto.FormularioDto;
+import br.unipampa.acg.dto.SolicitacaoDto;
+import br.unipampa.acg.repository.AnexoRepository;
+import br.unipampa.acg.repository.AtividadeRepository;
+import br.unipampa.acg.repository.CurriculoRepository;
+import br.unipampa.acg.repository.GrupoRepository;
+import br.unipampa.acg.repository.SolicitacaoRepository;
+import br.unipampa.acg.upload.AnexoService;
 import br.unipampa.acg.utils.View;
 
 //import br.unipampa.acg.upload.AnexoService;
@@ -50,51 +62,64 @@ import br.unipampa.acg.utils.View;
  *
  * @author
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-
 public class SolicitacaoController {
 
     private Anexo anexo;
-    // private final AnexoService anexoService;
+    @Autowired
+    AnexoRepository anexoRepository;
+    @Autowired
+    SolicitacaoRepository solicitacaoRepository;
+    @Autowired
+    AtividadeRepository atividadeRepository;
+    @Autowired
+    GrupoRepository grupoRepository;
+    @Autowired
+    CurriculoRepository curriculoRepository;
 
-    // @Autowired
-    // public SolicitacaoController(AnexoService anexoService) {
-    // this.anexoService = anexoService;
-    // }
-    @ResponseBody
+    private final AnexoService storageService;
+
+    @Autowired
+    public SolicitacaoController(AnexoService storageService) {
+        this.storageService = storageService;
+    }
+
     @GetMapping("/acg/todassolicitacoes")
-    public ResponseEntity buscaTodasSolicitacoes() {
+    public @ResponseBody
+    ResponseEntity<Iterable<Solicitacao>> getSolitacoes() {
+        Iterable<Solicitacao> retornableSolicitacoes = solicitacaoRepository.findAll();
+        return ResponseEntity.ok(retornableSolicitacoes);
+    }
 
-        SolicitacaoDao dao = new SolicitacaoDao();
+    @GetMapping(value = "/formulario") // Lista de atividades, grupo e curriculo no formato JSON -  // localhost:8080/solicitacao/infos/
+    public FormularioDto getFormulario() {
 
-        List<Solicitacao> s = dao.loadAllData(Solicitacao.class);
+        FormularioDto formulario = new FormularioDto();
+        formulario.setAtividade(atividadeRepository.findAll());
+        //infos.setCurriculo(curriculoRepository.findAll());
+        formulario.setGrupo(grupoRepository.findAll());
 
-        // String json = "[";
-        //
-        // for (int i = 0; i < s.size(); i++) {
-        // Solicitacao sol = s.get(i);
-        // json = json + s.get(i).toString();
-        // if (i != s.size() - 1) {
-        // json = json + ",";
-        // }
-        // }
-        // json = json + "]";
-        // String.valueOf(s.size());
-        dao.close();
-
-        return ResponseEntity.ok(s);
+        return formulario;
     }
 
     @ResponseBody
     @PostMapping("/solicitacao")
-    @JsonView(View.Standard.class)
-    public ResponseEntity adicionarSolicitacao(@Valid @RequestBody Solicitacao acg) {
-        SolicitacaoDao dao = new SolicitacaoDao();
-        dao.persist(acg);
-        dao.close();
-        return ResponseEntity.ok(acg);
-    }
+    public ResponseEntity adicionarSolicitacao(@ModelAttribute SolicitacaoDto solicitacao, MultipartFile files[]) {
 
+        Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
+
+        if (!atividade.isPresent()) {
+            return ResponseEntity.badRequest().body("A atividade com o ID" + solicitacao.getIdAtividade() + "não foi encontrada");
+        }
+
+        Solicitacao novasolicitacao = new Solicitacao();
+
+        novasolicitacao.setAtividade(atividade.get());
+        novasolicitacao.setCargaHoraria(solicitacao.getCargaHoraria());
+        }
+
+        
     @ResponseBody
     @GetMapping("/acg/{id}/solicitacaoporid")
     public ResponseEntity buscaSolicitacaoPorId(@PathVariable("id") long id) {

@@ -31,7 +31,7 @@ public class Solicitacao implements Serializable{
     @Id
     private long idsolicitacao;
     private String nome;
-    private String cargaHoraria;
+    private long cargaHoraria;
     private String local;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataAtual;
@@ -47,12 +47,6 @@ public class Solicitacao implements Serializable{
     private Atividade atividade;
 
     private String nomeAnexo;
-
-    
-
-    public boolean verificaTamanho(int tamanho) {
-        return tamanho <= 20;
-    }
 
     public long getIdsolicitacao() {
         return idsolicitacao;
