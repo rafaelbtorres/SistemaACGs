@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"
 import api from "../../services/api";
 import _ from "lodash";
 
 export default function Solicitar({ history }) {
   // listas de grupos e atividades
-  const [grupos, setGrupos] = useState("");
-  const [atividades, setAtividades] = useState("");
+  const [grupos, setGrupos] = useState([]);
+  const [atividades, setAtividades] = useState([]);
+  const [documentos, setDocumentos] = useState([]);
 
   // dados para criar a solicitação
   const [nome, setNome] = useState("");
@@ -20,7 +22,7 @@ export default function Solicitar({ history }) {
   const [cargaHorariaSolicitada, setCargaHorariaSolicitada] = useState("");
   const [descricaoAtividade, setDescricaoAtividade] = useState("");
   const [data, setData] = useState("");
-  const [documento, setDocumento] = useState("");
+  const [documentosEnv, setDocumentosEnv] = useState([])
 
   useEffect(() => {
     api.get("grupos").then(response => {
@@ -33,11 +35,19 @@ export default function Solicitar({ history }) {
     });
   }, [grupos, grupo]);
 
+  const setarDocumentos = event => {
+    setAtividade(event.target.value);
+    setDocumentos(event.target.value.docsNecessarios.split(','))
+    console.log(atividade)
+    console.log(documentos)
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log(nome)
 
     try {
-      await api.post("/solicitacoes", {
+      await api.post("/solicitacao", {
         nome,
         matricula,
         grupo,
@@ -50,7 +60,7 @@ export default function Solicitar({ history }) {
         cargaHorariaSolicitada,
         descricaoAtividade,
         data,
-        documento
+        documentosEnv
       });
       history.push("/");
     } catch (e) {
@@ -95,7 +105,7 @@ export default function Solicitar({ history }) {
           id="grupo"
           name="grupo"
           value={grupo}
-          required
+          // required
           onChange={e => {
             setGrupo(e.target.value);
           }}
@@ -112,11 +122,11 @@ export default function Solicitar({ history }) {
         <select
           id="atividade"
           name="atividade"
-          required
+          // required
           value={atividade}
-          onChange={e => {
-            setAtividade(e.target.value);
-          }}
+          onChange={
+            setarDocumentos
+          }
         >
           <option selected disabled>
             Selecione uma atividade
@@ -207,32 +217,36 @@ export default function Solicitar({ history }) {
         />
 
         <label htmlFor="documento">Comprovante *</label>
-        <input
-          id="documento"
-          name="documento"
-          type="file"
-          placeholder="Comprovante"
-          value={documento}
-          required
-          onChange={event => setDocumento(event.target.value)}
-        />
+        {_.map(documentos, (documento, index) => {
+          return <input
+            id={documento.nome}
+            name={documento.nome}
+            type="file"
+            placeholder="Comprovante"
+            value={documento}
+            required
+            onChange={event => setDocumentosEnv(event.target.value)}
+          />;
+        })}
+
 
         <button type="submit" className="btn btn-add">
           Solicitar
         </button>
 
-        <button className="btn btn-add">
-          <a
+      </form>
+      <Link to="/">
+        <button className="btn btn-add" >
+          <a href="/"
             style={{
               textDecoration: "none",
               color: "white"
             }}
-            href="/"
           >
             Voltar
           </a>
         </button>
-      </form>
+      </Link>
     </>
   );
 }
