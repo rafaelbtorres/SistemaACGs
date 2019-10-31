@@ -5,35 +5,6 @@
  */
 package br.unipampa.acg.controllers;
 
-import br.unipampa.acg.dao.AtividadeDao;
-import br.unipampa.acg.dao.CurriculoDao;
-import br.unipampa.acg.dao.GrupoDao;
-import javax.validation.Valid;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
-import br.unipampa.acg.dao.SolicitacaoDao;
-import br.unipampa.acg.dao.Solicitacoes;
-import br.unipampa.acg.domain.Anexo;
-import br.unipampa.acg.domain.Atividade;
-import br.unipampa.acg.domain.Curriculo;
-import br.unipampa.acg.domain.Grupo;
-import br.unipampa.acg.domain.Solicitacao;
-import br.unipampa.acg.utils.View;
-
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -54,8 +25,25 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.RequestParam;
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.unipampa.acg.dao.AtividadeDao;
+import br.unipampa.acg.dao.SolicitacaoDao;
+import br.unipampa.acg.domain.Anexo;
+import br.unipampa.acg.domain.Atividade;
+import br.unipampa.acg.domain.Solicitacao;
+import br.unipampa.acg.utils.View;
 
 //import br.unipampa.acg.upload.AnexoService;
 /**
@@ -214,11 +202,7 @@ public class SolicitacaoController {
     @PostMapping("/avaliar")
     @JsonView(View.Standard.class)
     public ResponseEntity avaliarSolicitacao(@Valid @RequestBody Solicitacao sol) throws SQLException {
-        Connection conect = connection();
-        Long id = sol.getIdsolicitacao();
-        PreparedStatement stmt = conect.prepareStatement("update from solicitacao where id="+id);
-        stmt.execute();
-        stmt.close();  
+        sol.setIdsolicitacao(sol.getIdsolicitacao());      
         SolicitacaoDao dao = new SolicitacaoDao();
         dao.update(sol);
         dao.close();
