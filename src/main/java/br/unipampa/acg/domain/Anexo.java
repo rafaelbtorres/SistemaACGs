@@ -5,67 +5,30 @@
  */
 package br.unipampa.acg.domain;
 
-/**
- *
- * @author Vagner <vequincozes@gmail.com>
- */
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Data
 public class Anexo {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idAnexo;
 
-    @Value("${contato.disco.raiz}")
-    private String caminhoRaiz;
-
-    @Value("${contato.disco.diretorio-arquivos}")
-    private String diretorioAnexos;
-
-    private int limite;
-
+    @NotEmpty
     private String nome;
 
-    @OneToOne
-    private Solicitacao acg;
+    @ManyToOne
+    private Solicitacao solicitacao;
 
-    public Anexo(String nome) {
-        this.nome = nome;
+    public Anexo() {
     }
-
-    public String salvarAnexo(MultipartFile anexo) {
-        return this.salvar(this.diretorioAnexos, anexo);
-    }
-
-    public String salvar(String diretorio, MultipartFile arquivo) {
-        diretorio = "arquivos";
-        caminhoRaiz = "C:\\upload";
-        System.out.println("caminhoRaiz: " + caminhoRaiz);
-        System.out.println("diretorio: " + diretorio);
-        Path diretorioPath = Paths.get(this.caminhoRaiz, diretorio);
-        Path arquivoPath = diretorioPath.resolve(arquivo.getOriginalFilename());
-        System.out.println("Caminho: " + arquivoPath);
-        try {
-            Files.createDirectories(diretorioPath);
-            arquivo.transferTo(arquivoPath.toFile());
-        } catch (IOException e) {
-            throw new RuntimeException("Problemas ao anexar");
-        }
-        return arquivoPath.toString();
-    }
-
+    
 }

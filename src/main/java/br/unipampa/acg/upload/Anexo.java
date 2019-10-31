@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
@@ -30,19 +31,19 @@ public abstract class Anexo implements AnexoService {
 
     @Override
     public String store(MultipartFile file, String nome) {
-        properties.setLocation(nome);
-        this.rootLocation = Paths.get(properties.getLocation());
-
+        Random gerador =  new Random();
+        String filename;
+        filename = nome+"-"+gerador.nextInt(3000)+"-"+file.getOriginalFilename();
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Falha ao salvar arquivo vazio" + file.getOriginalFilename());
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename));
         } catch (IOException e) {
             throw new StorageException("Falha ao armazenar " + file.getOriginalFilename(), e);
         }
 
-        return this.rootLocation.toString() + file.getOriginalFilename();
+        return filename;
     }
 
     @Override
