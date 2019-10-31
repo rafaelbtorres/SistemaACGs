@@ -48,8 +48,7 @@ public class Solicitacao implements Serializable{
 
     private String nomeAnexo;
 
-    public Solicitacao() {
-    }
+    
 
     public boolean verificaTamanho(int tamanho) {
         return tamanho <= 20;
@@ -62,5 +61,7 @@ public class Solicitacao implements Serializable{
     public void setIdsolicitacao(long idsolicitacao) {
         this.idsolicitacao = idsolicitacao;
     }
+
+    public Solicitacao(){}
 
 }
