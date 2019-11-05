@@ -78,27 +78,41 @@ export default function Solicitar({ history }) {
       </p>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="nome">Nome *</label>
-        <input
-          id="nome"
-          name="nome"
-          type="text"
-          placeholder="Nome"
-          value={nome}
-          required
-          onChange={event => setNome(event.target.value)}
-        />
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
 
-        <label htmlFor="matricula">Matrícula *</label>
-        <input
-          id="matricula"
-          name="matricula"
-          type="number"
-          placeholder="Matricula"
-          value={matricula}
-          required
-          onChange={event => setMatricula(event.target.value)}
-        />
+            <label htmlFor="nome">Nome *</label>
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder="Nome"
+              value={nome}
+              required
+              onChange={event => setNome(event.target.value)}
+              style={{
+                color: "white"
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+
+            <label htmlFor="matricula">Matrícula *</label>
+            <input
+              id="matricula"
+              name="matricula"
+              type="number"
+              placeholder="Matricula"
+              value={matricula}
+              required
+              onChange={event => setMatricula(event.target.value)}
+              style={{
+                color: "white"
+              }}
+            />
+          </div>
+        </div>
 
         <label htmlFor="grupo">Grupo *</label>
         <select
@@ -110,7 +124,7 @@ export default function Solicitar({ history }) {
             setGrupo(e.target.value);
           }}
         >
-          <option selected disabled>
+          <option disabled value=''>
             Selecione um grupo
           </option>
           {_.map(grupos, (grupo, index) => {
@@ -128,7 +142,7 @@ export default function Solicitar({ history }) {
             setarDocumentos
           }
         >
-          <option selected disabled>
+          <option value="" disabled>
             Selecione uma atividade
           </option>
           {_.map(atividades, (atividade, index) => {
@@ -237,14 +251,7 @@ export default function Solicitar({ history }) {
       </form>
       <Link to="/">
         <button className="btn btn-add" >
-          <a href="/"
-            style={{
-              textDecoration: "none",
-              color: "white"
-            }}
-          >
-            Voltar
-          </a>
+          Voltar
         </button>
       </Link>
     </>

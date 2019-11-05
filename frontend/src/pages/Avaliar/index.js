@@ -111,7 +111,6 @@ export default function Avaliar({ history }) {
           type="text"
           placeholder={grupo}
           value={grupo}
-          disabled
         />
         <label htmlFor="atividade">Atividade *</label>
         <input
@@ -120,7 +119,6 @@ export default function Avaliar({ history }) {
           type="text"
           placeholder={atividade}
           value={atividade}
-          disabled
         />
         <label htmlFor="nomeResponsavel">Professor(a) responsável *</label>
         <input
