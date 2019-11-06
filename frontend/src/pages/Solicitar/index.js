@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import api from "../../services/api";
 import _ from "lodash";
+import { Form, Input } from '@rocketseat/unform';
 
 export default function Solicitar({ history }) {
   // listas de grupos e atividades
@@ -79,7 +80,7 @@ export default function Solicitar({ history }) {
 
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
 
             <label htmlFor="nome">Nome *</label>
             <input
@@ -90,13 +91,10 @@ export default function Solicitar({ history }) {
               value={nome}
               required
               onChange={event => setNome(event.target.value)}
-              style={{
-                color: "white"
-              }}
             />
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
 
             <label htmlFor="matricula">Matrícula *</label>
             <input
@@ -107,120 +105,138 @@ export default function Solicitar({ history }) {
               value={matricula}
               required
               onChange={event => setMatricula(event.target.value)}
-              style={{
-                color: "white"
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="grupo">Grupo *</label>
+            <select
+              id="grupo"
+              name="grupo"
+              value={grupo}
+              // required
+              onChange={e => {
+                setGrupo(e.target.value);
               }}
+            >
+              <option disabled value=''>
+                Selecione um grupo
+          </option>
+              {_.map(grupos, (grupo, index) => {
+                return <option value={grupo.id}>{grupo.nome}</option>;
+              })}
+            </select>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="atividade">Atividade *</label>
+            <select
+              id="atividade"
+              name="atividade"
+              // required
+              value={atividade}
+              onChange={
+                setarDocumentos
+              }
+            >
+              <option value="" disabled>
+                Selecione uma atividade
+          </option>
+              {_.map(atividades, (atividade, index) => {
+                return <option value={atividade.id}>{atividade.nome}</option>;
+              })}
+            </select>
+
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="nomeResponsavel">Professor(a) responsável </label>
+            <input
+              id="nomeResponsavel"
+              name="nomeResponsavel"
+              type="text"
+              placeholder="Professor(a) responsável"
+              value={nomeResponsavel}
+              onChange={event => setNomeResponsavel(event.target.value)}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="localAtividade">Local da Atividade </label>
+            <input
+              id="localAtividade"
+              name="localAtividade"
+              type="text"
+              placeholder="Local da Atividade"
+              value={localAtividade}
+              onChange={event => setLocalAtividade(event.target.value)}
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="periodoAtividadeInicio">Data inicial da atividade *</label>
+            <input
+              id="periodoAtividadeInicio"
+              name="periodoAtividadeInicio"
+              type="date"
+              placeholder="Período da atividade inicio"
+              value={periodoAtividadeInicio}
+              required
+              onChange={event => setPeriodoAtividadeInicio(event.target.value)}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="periodoAtividadeFinal">Data final da atividade *</label>
+            <input
+              id="periodoAtividadeFinal"
+              name="periodoAtividadeFinal"
+              type="date"
+              placeholder="Período da atividade final"
+              value={periodoAtividadeFinal}
+              required
+              onChange={event => setPeriodoAtividadeFinal(event.target.value)}
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="cargaHorariaAtividade">
+              Carga-horária realizada *
+        </label>
+            <input
+              id="cargaHorariaAtividade"
+              name="cargaHorariaAtividade"
+              type="number"
+              placeholder="Carga-horária da atividade"
+              value={cargaHorariaAtividade}
+              required
+              onChange={event => setCargaHorariaAtividade(event.target.value)}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="cargaHorariaSolicitada">
+              Carga-horária solicitada *
+        </label>
+            <input
+              id="cargaHorariaSolicitada"
+              name="cargaHorariaSolicitada"
+              type="number"
+              placeholder="Carga-horária solicitada"
+              value={cargaHorariaSolicitada}
+              required
+              onChange={event => setCargaHorariaSolicitada(event.target.value)}
             />
           </div>
         </div>
 
-        <label htmlFor="grupo">Grupo *</label>
-        <select
-          id="grupo"
-          name="grupo"
-          value={grupo}
-          // required
-          onChange={e => {
-            setGrupo(e.target.value);
-          }}
-        >
-          <option disabled value=''>
-            Selecione um grupo
-          </option>
-          {_.map(grupos, (grupo, index) => {
-            return <option value={grupo.id}>{grupo.nome}</option>;
-          })}
-        </select>
-
-        <label htmlFor="atividade">Atividade *</label>
-        <select
-          id="atividade"
-          name="atividade"
-          // required
-          value={atividade}
-          onChange={
-            setarDocumentos
-          }
-        >
-          <option value="" disabled>
-            Selecione uma atividade
-          </option>
-          {_.map(atividades, (atividade, index) => {
-            return <option value={atividade.id}>{atividade.nome}</option>;
-          })}
-        </select>
-
-        <label htmlFor="nomeResponsavel">Professor(a) responsável *</label>
-        <input
-          id="nomeResponsavel"
-          name="nomeResponsavel"
-          type="text"
-          placeholder="Professor(a) responsável"
-          value={nomeResponsavel}
-          required
-          onChange={event => setNomeResponsavel(event.target.value)}
-        />
-
-        <label htmlFor="localAtividade">Local da Atividade *</label>
-        <input
-          id="localAtividade"
-          name="localAtividade"
-          type="text"
-          placeholder="Local da Atividade"
-          value={localAtividade}
-          required
-          onChange={event => setLocalAtividade(event.target.value)}
-        />
-
-        <label htmlFor="periodoAtividadeInicio">Período da atividade *</label>
-        <input
-          id="periodoAtividadeInicio"
-          name="periodoAtividadeInicio"
-          type="date"
-          placeholder="Período da atividade inicio"
-          value={periodoAtividadeInicio}
-          required
-          onChange={event => setPeriodoAtividadeInicio(event.target.value)}
-        />
-        <label htmlFor="periodoAtividadeInicio">Até</label>
-        <input
-          id="periodoAtividadeFinal"
-          name="periodoAtividadeFinal"
-          type="date"
-          placeholder="Período da atividade final"
-          value={periodoAtividadeFinal}
-          required
-          onChange={event => setPeriodoAtividadeFinal(event.target.value)}
-        />
-
-        <label htmlFor="cargaHorariaAtividade">
-          Carga-horária da atividade *
-        </label>
-        <input
-          id="cargaHorariaAtividade"
-          name="cargaHorariaAtividade"
-          type="number"
-          placeholder="Carga-horária da atividade"
-          value={cargaHorariaAtividade}
-          required
-          onChange={event => setCargaHorariaAtividade(event.target.value)}
-        />
-
-        <label htmlFor="cargaHorariaSolicitada">
-          Carga-horária solicitada *
-        </label>
-        <input
-          id="cargaHorariaSolicitada"
-          name="cargaHorariaSolicitada"
-          type="number"
-          placeholder="Carga-horária solicitada"
-          value={cargaHorariaSolicitada}
-          required
-          onChange={event => setCargaHorariaSolicitada(event.target.value)}
-        />
 
         <label htmlFor="descricaoAtividade">Descrição da atividade *</label>
-        <input
+        <Input multiline
+          style={{
+            height: "100px",
+          }}
           id="descricaoAtividade"
           name="descricaoAtividade"
           type="text"

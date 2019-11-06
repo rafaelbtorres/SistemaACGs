@@ -18,6 +18,7 @@ export default function Avaliar({ history }) {
   const [documento, setDocumento] = useState("");
 
   //Dados da avaliação
+  const [nomeCoordenador, setNomeCoordenador] = useState("");
   const [deferimentoResultado, setDeferimentoResultado] = useState("");
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
@@ -220,7 +221,7 @@ export default function Avaliar({ history }) {
               onChange={event => setDeferimentoResultado(event.target.value)}
             />
             <br />
-            <label htmlFor="parecerCoordenador">Parecer do Coordenador *</label>
+            <label htmlFor="parecerCoordenador">Justificativa *</label>
             <br />
             <input
               id="parecerCoordenador"
@@ -245,6 +246,18 @@ export default function Avaliar({ history }) {
               required
               onChange={event => setCargaHorariaAtribuida(event.target.value)}
             />
+            <br />
+            <label htmlFor="parecerCoordenador">Coordenador *</label>
+            <input
+              id="nomeCoordenador"
+              name="nomeCoordenador"
+              type="text"
+              placeholder="Nome do Coordenador"
+              value={nomeCoordenador}
+              required
+              onChange={event => setNomeCoordenador(event.target.value)}
+            />
+            <br />
           </center>
         </div>
         <button type="submit" className="btn btn-add">
