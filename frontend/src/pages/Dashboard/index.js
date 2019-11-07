@@ -8,6 +8,7 @@ import "./index.css";
 import api from "../../services/api";
 
 export default function Dashboard({ history }) {
+
   const [solicitacoes, setSolicitacoes] = useState([]);
 
   //Pega as solicitacoes utilizando o verbo get do http
@@ -44,7 +45,6 @@ export default function Dashboard({ history }) {
       <Table className="example">
         <Thead>
           <Tr>
-            <Th>Nome</Th>
             <Th>Matricula</Th>
             <Th>Grupo</Th>
             <Th>Atividade</Th>
@@ -54,7 +54,6 @@ export default function Dashboard({ history }) {
         <Tbody>
           {solicitacoes.map(solicitacao => (
             <Tr key={solicitacao.id}>
-              <Td>{solicitacao.nome}</Td>
               <Td>{solicitacao.matricula}</Td>
               <Td>{solicitacao.grupo}</Td>
               <Td>{solicitacao.atividade}</Td>
