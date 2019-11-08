@@ -1,0 +1,13 @@
+package br.sistema.sistemag2.repository;
+
+import br.sistema.sistemag2.models.Atividade;
+
+import org.springframework.data.repository.CrudRepository;
+
+/**
+ * AtividadeRepository
+ */
+public interface AtividadeRepository extends CrudRepository<Atividade, Long> {
+
+
+}
