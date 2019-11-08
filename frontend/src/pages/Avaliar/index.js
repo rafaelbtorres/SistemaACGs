@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
+import { Input } from '@rocketseat/unform';
+
 
 export default function Avaliar({ history }) {
   //Dados da solicitacao exibidos
@@ -87,100 +89,134 @@ export default function Avaliar({ history }) {
           value={data}
           disabled
         />
-        <label htmlFor="nome">Nome *</label>
-        <input
-          id="nome"
-          name="nome"
-          type="text"
-          placeholder={nome}
-          value={nome}
-          disabled
-        />
-        <label htmlFor="matricula">Matrícula *</label>
-        <input
-          id="matricula"
-          name="matricula"
-          type="number"
-          placeholder={matricula}
-          value={matricula}
-          disabled
-        />
-        <label htmlFor="grupo">Grupo *</label>
-        <input
-          id="grupo"
-          name="grupo"
-          type="text"
-          placeholder={grupo}
-          value={grupo}
-        />
-        <label htmlFor="atividade">Atividade *</label>
-        <input
-          id="atividade"
-          name="atividade"
-          type="text"
-          placeholder={atividade}
-          value={atividade}
-        />
-        <label htmlFor="nomeResponsavel">Professor(a) responsável *</label>
-        <input
-          id="nomeResponsavel"
-          name="nomeResponsavel"
-          type="text"
-          placeholder={nomeResponsavel}
-          value={nomeResponsavel}
-          disabled
-        />
-        <label htmlFor="localAtividade">Local da Atividade *</label>
-        <input
-          id="localAtividade"
-          name="localAtividade"
-          type="text"
-          placeholder={localAtividade}
-          value={localAtividade}
-          disabled
-        />
-        <label htmlFor="periodoAtividadeInicio">Período da atividade *</label>
-        <input
-          id="periodoAtividadeInicio"
-          name="periodoAtividadeInicio"
-          type="date"
-          placeholder={periodoAtividadeInicio}
-          value={periodoAtividadeInicio}
-          disabled
-        />
-        <label htmlFor="periodoAtividadeInicio">Até</label>
-        <input
-          id="periodoAtividadeFinal"
-          name="periodoAtividadeFinal"
-          type="date"
-          placeholder={periodoAtividadeFinal}
-          value={periodoAtividadeFinal}
-          disabled
-        />
-        <label htmlFor="cargaHorariaAtividade">
-          Carga-horária da atividade *
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="nome">Nome *</label>
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder={nome}
+              value={nome}
+              disabled
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="matricula">Matrícula *</label>
+            <input
+              id="matricula"
+              name="matricula"
+              type="number"
+              placeholder={matricula}
+              value={matricula}
+              disabled
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="grupo">Grupo *</label>
+            <input
+              id="grupo"
+              name="grupo"
+              type="text"
+              placeholder={grupo}
+              value={grupo}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="atividade">Atividade *</label>
+            <input
+              id="atividade"
+              name="atividade"
+              type="text"
+              placeholder={atividade}
+              value={atividade}
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="nomeResponsavel">Professor(a) responsável </label>
+            <input
+              id="nomeResponsavel"
+              name="nomeResponsavel"
+              type="text"
+              placeholder={nomeResponsavel}
+              value={nomeResponsavel}
+              disabled
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="localAtividade">Local da Atividade </label>
+            <input
+              id="localAtividade"
+              name="localAtividade"
+              type="text"
+              placeholder={localAtividade}
+              value={localAtividade}
+              disabled
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="periodoAtividadeInicio">Período da atividade *</label>
+            <input
+              id="periodoAtividadeInicio"
+              name="periodoAtividadeInicio"
+              type="date"
+              placeholder={periodoAtividadeInicio}
+              value={periodoAtividadeInicio}
+              disabled
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="periodoAtividadeInicio">Até</label>
+            <input
+              id="periodoAtividadeFinal"
+              name="periodoAtividadeFinal"
+              type="date"
+              placeholder={periodoAtividadeFinal}
+              value={periodoAtividadeFinal}
+              disabled
+            />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="cargaHorariaAtividade">
+              Carga-horária da atividade *
         </label>
-        <input
-          id="cargaHorariaAtividade"
-          name="cargaHorariaAtividade"
-          type="number"
-          placeholder={cargaHorariaAtividade}
-          value={cargaHorariaAtividade}
-          disabled
-        />
-        <label htmlFor="cargaHorariaSolicitada">
-          Carga-horária solicitada *
-        </label>
-        <input
-          id="cargaHorariaSolicitada"
-          name="cargaHorariaSolicitada"
-          type="number"
-          placeholder={cargaHorariaSolicitada}
-          value={cargaHorariaSolicitada}
-          disabled
-        />
+            <input
+              id="cargaHorariaAtividade"
+              name="cargaHorariaAtividade"
+              type="number"
+              placeholder={cargaHorariaAtividade}
+              value={cargaHorariaAtividade}
+              disabled
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+            <label htmlFor="cargaHorariaSolicitada">
+              Carga-horária solicitada *
+          </label>
+            <input
+              id="cargaHorariaSolicitada"
+              name="cargaHorariaSolicitada"
+              type="number"
+              placeholder={cargaHorariaSolicitada}
+              value={cargaHorariaSolicitada}
+              disabled
+            />
+          </div>
+        </div>
+
         <label htmlFor="descricaoAtividade">Descrição da atividade *</label>
-        <input
+        <Input multiline
+          style={{
+            height: "100px",
+          }}
           id="descricaoAtividade"
           name="descricaoAtividade"
           type="text"
@@ -199,83 +235,94 @@ export default function Avaliar({ history }) {
           disabled
         />
         <div className="content2">
-          <center>
-            <label htmlFor="deferimentoResultado">
-              Status do deferimento *
-            </label>
-            <br />
-            <label>Deferido</label>
-            <input
-              type="radio"
-              name="deferimentoResultado"
-              value="Deferido"
-              required
-              onChange={event => setDeferimentoResultado(event.target.value)}
-            />
-            <label>Indeferido</label>
-            <input
-              type="radio"
-              name="deferimentoResultado"
-              value="Indeferido"
-              required
-              onChange={event => setDeferimentoResultado(event.target.value)}
-            />
-            <br />
-            <label htmlFor="parecerCoordenador">Justificativa *</label>
-            <br />
-            <input
-              id="parecerCoordenador"
-              name="parecerCoordenador"
-              type="text"
-              placeholder="Parecer do Coordenador"
-              value={parecerCoordenador}
-              required
-              onChange={event => setParecerCoordenador(event.target.value)}
-            />
-            <br />
+          <p>
+            Status do deferimento
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <label>Deferido</label>
+              <input
+                type="radio"
+                name="deferimentoResultado"
+                value="Deferido"
+                required
+                onChange={event => setDeferimentoResultado(event.target.value)}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <label>Indeferido</label>
+              <input
+                type="radio"
+                name="deferimentoResultado"
+                value="Indeferido"
+                required
+                onChange={event => setDeferimentoResultado(event.target.value)}
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <label htmlFor="parecerCoordenador">Justificativa *</label>
+              <Input multiline
+                style={{
+                  height: "100px",
+                }}
+                id="parecerCoordenador"
+                name="parecerCoordenador"
+                type="text"
+                placeholder="Parecer do Coordenador"
+                value={parecerCoordenador}
+                required
+                onChange={event => setParecerCoordenador(event.target.value)}
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
             <label htmlFor="cargaHorariaAtribuida">
-              Carga Horária Atribuida *
+            Carga Horária Atribuida *
             </label>
-            <br />
-            <input
-              id="cargaHorariaAtribuida"
-              name="cargaHorariaAtribuida"
-              type="number"
-              placeholder="Carga Horária Atribuida"
-              value={cargaHorariaAtribuida}
-              required
-              onChange={event => setCargaHorariaAtribuida(event.target.value)}
-            />
-            <br />
+          <input
+            id="cargaHorariaAtribuida"
+            name="cargaHorariaAtribuida"
+            type="number"
+            placeholder="Carga Horária Atribuida"
+            value={cargaHorariaAtribuida}
+            required
+            onChange={event => setCargaHorariaAtribuida(event.target.value)}
+          />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
             <label htmlFor="parecerCoordenador">Coordenador *</label>
-            <input
-              id="nomeCoordenador"
-              name="nomeCoordenador"
-              type="text"
-              placeholder="Nome do Coordenador"
-              value={nomeCoordenador}
-              required
-              onChange={event => setNomeCoordenador(event.target.value)}
-            />
-            <br />
-          </center>
+          <input
+            id="nomeCoordenador"
+            name="nomeCoordenador"
+            type="text"
+            placeholder="Nome do Coordenador"
+            value={nomeCoordenador}
+            required
+            onChange={event => setNomeCoordenador(event.target.value)}
+          />
+            </div>
+          </div>
+          
         </div>
-        <button type="submit" className="btn btn-add">
-          Avaliar
+      <button type="submit" className="btn btn-add">
+        Avaliar
         </button>
-        <button className="btn btn-add">
-          {" "}
-          <a
-            style={{
-              textDecoration: "none",
-              color: "white"
-            }}
-            href="/"
-          >
-            Voltar
+      <button className="btn btn-add">
+        {" "}
+        <a
+          style={{
+            textDecoration: "none",
+            color: "white"
+          }}
+          href="/"
+        >
+          Voltar
           </a>
-        </button>
-      </form>
+      </button>
+    </form>
     </>
   );
 }

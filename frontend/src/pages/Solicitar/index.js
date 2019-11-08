@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import api from "../../services/api";
 import _ from "lodash";
-import { Form, Input } from '@rocketseat/unform';
+import { Input } from '@rocketseat/unform';
 
 export default function Solicitar({ history }) {
   // listas de grupos e atividades
