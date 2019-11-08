@@ -68,11 +68,14 @@ public class AvaliacaoController {
 
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
-        Solicitacao avaliada = solicitacaoRepository.findById(id).get();
+      //  if(solicitacaoRepository.findById(id).isPresent())
+        Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
 
         if(avaliacao.isDeferido()){
+            assert avaliada != null;
             avaliada.setStatus(Status.DEFERIDO.toString());
         }else{
+            assert avaliada != null;
             avaliada.setStatus(Status.INDEFERIDO.toString());
         }
         avaliada.setIdSolicitacao(id);
@@ -93,7 +96,11 @@ public class AvaliacaoController {
     public @ResponseBody ResponseEntity<Optional<AvaliacaoSolicitacao>> deleteAvaliacaobyId(@PathVariable long id) {
         Optional<AvaliacaoSolicitacao> retornableAvaliacao = avaliacaoRepository.findById(id);
         avaliacaoRepository.deleteById(id);
-        retornableAvaliacao.get().getSolicitacao().setStatus(Status.PENDENTE.toString());
+        if(retornableAvaliacao.isPresent()) {
+            retornableAvaliacao.get().getSolicitacao().setStatus(Status.PENDENTE.toString());
+        } else {
+            throw new ExceptionInInitializerError();
+        }
         solicitacaoRepository.save(retornableAvaliacao.get().getSolicitacao());
         return ResponseEntity.ok(retornableAvaliacao);
     }
@@ -101,7 +108,8 @@ public class AvaliacaoController {
     @GetMapping(value = "/dados/{id}") // Busca dados para avaliacao
     public HashMap<Solicitacao,List<String>> getInfos(@PathVariable long id) {
         // Busca no banco pelo id
-        Solicitacao retornableSolicitacao = solicitacaoRepository.findById(id).get();
+
+        Solicitacao retornableSolicitacao = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
 
         Iterable<Anexo> anexos = anexoRepository.findAll();
 

@@ -11,12 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Data
@@ -32,7 +33,7 @@ public class Solicitacao{
 
 	@Range(min = 5, max = 10, message = "A matrícula é inválida.")
 	@NotNull(message = "A matrícula é obrigatória")
-	@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
+	//@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
 	private long matricula;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
