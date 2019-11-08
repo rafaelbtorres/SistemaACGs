@@ -27,15 +27,16 @@ public class AvaliacaoSolicitacao {
 
     private String justificativa;//obrigatório if indeferido
 
-	//@NotEmpty
+	@NotEmpty
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date dataAvaliacao;//atual
 
+	@Positive
 	private long cargaHorariaAtribuida;//obrigatório if deferido
 
 	@OneToOne
-    @JsonBackReference
-    @NotBlank
+	@JsonBackReference
+	@NotNull(message = "Solicitação inválida.")
     private Solicitacao solicitacao;
 
 	public AvaliacaoSolicitacao(){}

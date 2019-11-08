@@ -27,38 +27,38 @@ public class Solicitacao{
 	private long idSolicitacao;
 
 	@NotEmpty
-	//@Size(min = 3)
+	@Size(min = 3)
 	private String nomeAluno;
 
-	//@Size(min = 5, max = 10, message = "A matrícula é inválida.")
-	//@NotBlank(message = "A matrícula é obrigatória")
-	//@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
+	@Range(min = 5, max = 10, message = "A matrícula é inválida.")
+	@NotNull(message = "A matrícula é obrigatória")
+	@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
 	private long matricula;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
-	//@FutureOrPresent
+	@FutureOrPresent
 	private Date dataAtual;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
-	//@PastOrPresent
-	//@NotBlank(message = "A data de inicio é obrigatória")
+	@PastOrPresent
+	@NotNull(message = "A data de inicio é obrigatória")
 	private Date dataInicio;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
-	//@NotBlank(message = "A data de fim é obrigatória")
+	@NotNull(message = "A data de fim é obrigatória")
 	private Date dataFim;
 
-	//@NotBlank(message = "A matrícula é obrigatória")
-	//@Positive
+	@NotNull(message = "A matrícula é obrigatória")
+	@Positive
 	private long cargaHorariaSoli;
 
 	@ManyToOne
-	//@NotBlank(message = "É obrigatório selecionar uma atividade")
+	@NotNull(message = "É obrigatório selecionar uma atividade")
 	private Atividade atividade;
 
 	@OneToMany(mappedBy = "solicitacao", cascade=CascadeType.ALL)
 	@JsonManagedReference
-	//@NotBlank(message = "É obrigatório anexar os arquivos comprobatórios")
+	@NotNull(message = "É obrigatório anexar os arquivos comprobatórios")
 	private List<Anexo> anexos;
 
 	@OneToOne(mappedBy = "solicitacao")

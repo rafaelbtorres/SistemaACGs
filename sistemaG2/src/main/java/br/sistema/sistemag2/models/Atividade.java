@@ -23,16 +23,19 @@ public class Atividade {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long idAtividade;
 
-	//@NotEmpty
+	@NotEmpty
 	private String detalhamento;
 
-	//@NotEmpty
+	@NotEmpty
+	@Size(max = 250)
 	private String descricao;
 
 	@ManyToOne
 	private Grupo grupo;
-        
-        private long cargaHoraria;
+		
+	@Range(min = 0, message = "Carga Horaria é inválida.")
+	@Positive
+  	private long cargaHoraria;
 
 	@ManyToMany
         @JoinTable(name="atividade_has_doc", joinColumns=

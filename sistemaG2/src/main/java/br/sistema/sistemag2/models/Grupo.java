@@ -21,6 +21,7 @@ public class Grupo {
 	private String nome;
 
 	@ManyToOne
+	@NotNull
 	private Curriculo curriculo;
 
 }

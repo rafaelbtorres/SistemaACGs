@@ -26,12 +26,7 @@ public class DocsNecessarios {
 	private long idDocNecessario;
 
     @NotNull
+    @Size(min=5);
     String nome;
-
-//    @ManyToMany
-//    @JoinTable(name="doc_has_informacao", joinColumns=
-//    {@JoinColumn(name = "id_doc_necessario") }, inverseJoinColumns =
-//      {@JoinColumn(name="id_informacao")})
-//    List<Infos> informacao;
 
 }
