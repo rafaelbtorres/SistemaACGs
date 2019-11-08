@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,7 +112,7 @@ public class SolicitacaoController {
 
     @JsonIgnore
     @PostMapping("/")
-    public ResponseEntity postSolicitacao(@RequestBody SolicitacaoPostDTO solicitacao, MultipartFile[] anexos)
+    public ResponseEntity postSolicitacao(@ModelAttribute SolicitacaoPostDTO solicitacao, MultipartFile[] anexos)
             throws Exception {
         // try {
             
@@ -144,11 +145,11 @@ public class SolicitacaoController {
         Solicitacao retornableSolicitacao = solicitacaoRepository.save(newsolicitacao);
 
 
-//        for (int j = 0; j < anexos.length; j++) {
-//            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno()));
-//            newAnexo.setDoc(atividade.get().getDocs().get(j));
-//            anexoRepository.save(newAnexo);
-//        }
+       for (int j = 0; j < anexos.length; j++) {
+           newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno()));
+           newAnexo.setDoc(atividade.get().getDocs().get(j));
+           anexoRepository.save(newAnexo);
+       }
 
         return ResponseEntity.ok(retornableSolicitacao);
         // } catch (Exception e) {

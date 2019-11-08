@@ -30,6 +30,7 @@ export default function Solicitar({ history }) {
   const [temAtividade, setTemAtividade] = useState(false);
   const [atividadeName, setAtividadeName] = useState("");
   const [listaDeDocumentos, setListaDeDocumentos] = useState([]);
+  const [atividadeId, setAtividadeId] = useState("")
 
   useEffect(() => {
     async function loadGrupos() {
@@ -60,22 +61,28 @@ export default function Solicitar({ history }) {
     event.preventDefault();
     console.log(nome)
 
+    var solicitacao = {
+      aluno: nome,
+      matricula: matricula,
+      dataInicio: periodoAtividadeInicio,
+      dataFim: periodoAtividadeFinal,
+      cargaHorariaSoli: cargaHorariaSolicitada,
+      idAtividade: atividadeId,
+      cargaHoraria: cargaHorariaAtividade,
+      profRes: nomeResponsavel,
+      descricao: descricaoAtividade,
+      local: localAtividade
+
+    }
+
+    var form = new FormData()
+    _.forEach(solicitacao, (value, index)=>{
+      form.append(index, value);
+    })
+    form.append("anexos", documentosEnv)
+
     try {
-      await api.post("/solicitacao/", {
-        nome,
-        matricula,
-        grupo,
-        atividade,
-        nomeResponsavel,
-        localAtividade,
-        periodoAtividadeInicio,
-        periodoAtividadeFinal,
-        cargaHorariaAtividade,
-        cargaHorariaSolicitada,
-        descricaoAtividade,
-        data,
-        documentosEnv
-      });
+      await api.post("/solicitacao/", form)
       history.push("/");
     } catch (e) {
       alert(
@@ -114,6 +121,7 @@ export default function Solicitar({ history }) {
     let lista = []
     for (let index = 0; index < array.length; index++) {
       if (array[index].descricao === atividadeName) {
+        setAtividadeId(array[index].idAtividade.toString())
         for (let j = 0; j < array[index].docs.length; j++) {
           lista.push(array[index].docs[j])          
         }
@@ -124,7 +132,7 @@ export default function Solicitar({ history }) {
 
   function handleGrupo(grupo) {
     setGroupName(grupo)
-    console.log(grupo, atividades)
+    //console.log(periodoAtividadeInicio)
     setGrupo(grupo)
 
   }
