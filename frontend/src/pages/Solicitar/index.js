@@ -26,13 +26,13 @@ export default function Solicitar({ history }) {
   const [documentosEnv, setDocumentosEnv] = useState([])
 
   useEffect(() => {
-    api.get("grupos").then(response => {
-      setGrupos(response.data);
+    api.get("solicitacao/dados").then(response => {
+      setGrupos(response.data.grupos);
     });
   }, []);
   useEffect(() => {
-    api.get("atividades").then(response => {
-      setAtividades(response.data);
+    api.get("solicitacao/dados").then(response => {
+      setAtividades(response.data.atividades);
     });
   }, [grupos, grupo]);
 

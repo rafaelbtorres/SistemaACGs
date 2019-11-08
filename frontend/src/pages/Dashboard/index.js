@@ -13,7 +13,7 @@ export default function Dashboard({ history }) {
 
   //Pega as solicitacoes utilizando o verbo get do http
   useEffect(() => {
-    api.get("/solicitacoes").then(response => setSolicitacoes(response.data));
+    api.get("/solicitacao/listar").then(response => setSolicitacoes(response.data));
   }, [solicitacoes]);
 
   function handleSubmitToDelete(solicitacaoId) {
@@ -22,10 +22,10 @@ export default function Dashboard({ history }) {
         "Você deseja mesmo deletar esta solicitação?"
       );
       if (userChoice) {
-        const response = await api.delete("/solicitacoes/" + solicitacaoId);
+        const response = await api.delete("solicitacao/deleta/" + solicitacaoId);
 
         if (response.status === 204) {
-          const response = await api.get("/solicitacoes");
+          const response = await api.get("/solicitacao/listar");
           setSolicitacoes(response.data);
         } else {
           alert("Ocorreu algum erro ao tentar excluir, tente novamente.");
@@ -55,7 +55,7 @@ export default function Dashboard({ history }) {
           {solicitacoes.map(solicitacao => (
             <Tr key={solicitacao.id}>
               <Td>{solicitacao.matricula}</Td>
-              <Td>{solicitacao.grupo}</Td>
+              <Td>{solicitacao.atividade.grupo}</Td>
               <Td>{solicitacao.atividade}</Td>
               <Td>
                 <Link to={"/avaliar"}>
