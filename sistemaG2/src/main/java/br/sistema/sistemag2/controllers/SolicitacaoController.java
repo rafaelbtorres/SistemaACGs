@@ -112,7 +112,7 @@ public class SolicitacaoController {
 
     @JsonIgnore
     @PostMapping("/")
-    public ResponseEntity postSolicitacao(@ModelAttribute SolicitacaoPostDTO solicitacao, MultipartFile[] anexos)
+    public ResponseEntity postSolicitacao(@ModelAttribute SolicitacaoPostDTO solicitacao, @RequestParam("anexos") MultipartFile[] anexos)
             throws Exception {
         // try {
             

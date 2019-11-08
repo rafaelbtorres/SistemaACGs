@@ -14,7 +14,7 @@ export default function Dashboard({ history }) {
   //Pega as solicitacoes utilizando o verbo get do http
   useEffect(() => {
     api.get("/solicitacao/listar").then(response => setSolicitacoes(response.data));
-  }, [solicitacoes]);
+  }, []);
 
   function handleSubmitToDelete(solicitacaoId) {
     async function deletarSolicitacao() {
@@ -36,6 +36,26 @@ export default function Dashboard({ history }) {
     deletarSolicitacao();
   }
 
+  function handleSubmitToDeleteAvaliacao(idAvaliacao) {
+    console.log(idAvaliacao)
+    async function deletarAvaliacao() {
+      var userChoice = window.confirm(
+        "Você deseja mesmo deletar esta avaliação?"
+      );
+      if (userChoice) {
+        const response = await api.delete("avaliacao/" + idAvaliacao);
+
+        if (response.status === 200) {
+          const response = await api.get("/solicitacao/listar");
+          setSolicitacoes(response.data);
+        } else {
+          alert("Ocorreu algum erro ao tentar excluir, tente novamente.");
+        }
+      }
+    }
+    deletarAvaliacao();
+  }
+
   return (
     <>
       <Link to="/solicitar">
@@ -48,6 +68,7 @@ export default function Dashboard({ history }) {
             <Th>Matricula</Th>
             <Th>Grupo</Th>
             <Th>Atividade</Th>
+            <Th>Status</Th>
             <Th>Data</Th>
           </Tr>
         </Thead>
@@ -57,6 +78,7 @@ export default function Dashboard({ history }) {
               <Td>{solicitacao.matricula}</Td>
               <Td>{solicitacao.atividade.grupo.nome}</Td>
               <Td>{solicitacao.atividade.descricao}</Td>
+              <Td>{solicitacao.status}</Td>
               <Td>
                 <Link to={"/avaliar"}>
                   <button
@@ -72,6 +94,13 @@ export default function Dashboard({ history }) {
                 <button
                   type="button"
                   onClick={() => handleSubmitToDelete(solicitacao.idSolicitacao)}
+                  className="btn-delete"
+                >
+                  <i className="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSubmitToDeleteAvaliacao(solicitacao.avaliacao.idAvaliacao)}
                   className="btn-delete"
                 >
                   <i className="fa fa-trash" aria-hidden="true"></i>
