@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,18 +29,31 @@ public class AvaliacaoSolicitacao {
 
     private String justificativa;//obrigatório if indeferido
 
-	//@NotEmpty
+	@NotEmpty
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date dataAvaliacao;//atual
 
+	@Positive
 	private long cargaHorariaAtribuida;//obrigatório if deferido
 
 	@OneToOne
-    @JsonBackReference
-    @NotBlank
+	@JsonBackReference
+	@NotNull(message = "Solicitação inválida.")
     private Solicitacao solicitacao;
 
 	public AvaliacaoSolicitacao(){}
+
+	public void ValidaDeferimento () throws Exception {
+		if (this.solicitacao.getStatus().equalsIgnoreCase(("DEFERIDO"))) {
+			if(this.cargaHorariaAtribuida <=0){
+				throw new Exception("Carga horaria não pode nula");
+			} else if (this.solicitacao.getStatus().equalsIgnoreCase(("INDEFERIDO"))) {
+				if(this.justificativa == null || this.justificativa.isEmpty()){
+					throw new Exception("É obrigatório a justificativa para o indeferimento");
+				}
+			}
+		}
+	}
 
     
 }

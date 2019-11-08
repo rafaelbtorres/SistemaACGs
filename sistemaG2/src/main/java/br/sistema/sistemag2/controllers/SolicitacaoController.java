@@ -1,6 +1,5 @@
 package br.sistema.sistemag2.controllers;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,7 +99,7 @@ public class SolicitacaoController {
     }
 
     @PostMapping("/salvaAnexos") // Salva varios anexos
-    public ArrayList postAnexos(@RequestParam("file") MultipartFile files[], String nome) throws Exception {
+    public ArrayList postAnexos(@RequestParam("file") MultipartFile[] files, String nome) throws Exception {
         ArrayList<String> filesName = new ArrayList<>();
         String nomeCaminho;
         for (MultipartFile string : files) {
@@ -113,7 +111,7 @@ public class SolicitacaoController {
 
     @JsonIgnore
     @PostMapping("/")
-    public ResponseEntity postSolicitacao(@RequestBody SolicitacaoPostDTO solicitacao, MultipartFile anexos[])
+    public ResponseEntity postSolicitacao(@RequestBody SolicitacaoPostDTO solicitacao, MultipartFile[] anexos)
             throws Exception {
         // try {
             
@@ -135,10 +133,11 @@ public class SolicitacaoController {
 
         Date dataAtual = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date dataTeste = formato.parse(solicitacao.getDataInicio());
+        Date dataInicio = formato.parse(solicitacao.getDataInicio());
+        Date dataFim = formato.parse(solicitacao.getDataFim());
         newsolicitacao.setDataAtual(dataAtual);
-        newsolicitacao.setDataInicio(dataTeste);
-        newsolicitacao.setDataFim(dataTeste);
+        newsolicitacao.setDataInicio(dataInicio);
+        newsolicitacao.setDataFim(dataFim);
 
         newsolicitacao.setStatus("PENDENTE");
 

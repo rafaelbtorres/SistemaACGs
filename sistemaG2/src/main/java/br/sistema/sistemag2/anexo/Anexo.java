@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class Anexo implements AnexoService {
 
-    private Path rootLocation;
-    AnexoProperties properties;
+    private final Path rootLocation;
+    private final AnexoProperties properties;
 
     @Autowired
     public Anexo(AnexoProperties properties) {
@@ -28,10 +28,6 @@ public class Anexo implements AnexoService {
         this.properties = properties;
     }
 
-    public String saveCaminho(String caminho) {
-
-        return "caminho";
-    }
 
     @Override
     public String store(MultipartFile file, String nome) throws IOException, NoSuchAlgorithmException {
