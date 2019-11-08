@@ -133,7 +133,7 @@ public class SolicitacaoController {
 
         Date dataAtual = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date dataIncio = formato.parse(solicitacao.getDataInicio());
+        Date dataInicio = formato.parse(solicitacao.getDataInicio());
         Date dataFim = formato.parse(solicitacao.getDataFim());
         newsolicitacao.setDataAtual(dataAtual);
         newsolicitacao.setDataInicio(dataInicio);
