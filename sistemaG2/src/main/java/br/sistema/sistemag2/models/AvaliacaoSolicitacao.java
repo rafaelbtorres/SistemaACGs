@@ -43,5 +43,17 @@ public class AvaliacaoSolicitacao {
 
 	public AvaliacaoSolicitacao(){}
 
+	public void ValidaDeferimento () throws Exception {
+		if (this.solicitacao.getStatus().equalsIgnoreCase(("DEFERIDO"))) {
+			if(this.cargaHorariaAtribuida <=0){
+				throw new Exception("Carga horaria não pode nula");
+			} else if (this.solicitacao.getStatus().equalsIgnoreCase(("INDEFERIDO"))) {
+				if(this.justificativa == null || this.justificativa.isEmpty()){
+					throw new Exception("É obrigatório a justificativa para o indeferimento");
+				}
+			}
+		}
+	}
+
     
 }

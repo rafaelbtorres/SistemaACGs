@@ -68,9 +68,10 @@ public class AvaliacaoController {
 
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
-      //  if(solicitacaoRepository.findById(id).isPresent())
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
 
+     try {
+      //  if(solicitacaoRepository.findById(id).isPresent())
         if(avaliacao.isDeferido()){
             assert avaliada != null;
             avaliada.setStatus(Status.DEFERIDO.toString());
@@ -86,6 +87,12 @@ public class AvaliacaoController {
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
+
+
+            newavaliacao.ValidaDeferimento();
+        }catch (Exception e){
+            return  ResponseEntity.ok(("Houve um erro ao realizar a avaliação " + e.getMessage()));
+        }
 
         AvaliacaoSolicitacao retornableAvaliacao = avaliacaoRepository.save(newavaliacao);
 
