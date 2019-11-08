@@ -24,7 +24,7 @@ export default function Dashboard({ history }) {
       if (userChoice) {
         const response = await api.delete("solicitacao/deleta/" + solicitacaoId);
 
-        if (response.status === 204) {
+        if (response.status === 200) {
           const response = await api.get("/solicitacao/listar");
           setSolicitacoes(response.data);
         } else {
@@ -53,16 +53,16 @@ export default function Dashboard({ history }) {
         </Thead>
         <Tbody>
           {solicitacoes.map(solicitacao => (
-            <Tr key={solicitacao.id}>
+            <Tr key={solicitacao.idSolicitacao}>
               <Td>{solicitacao.matricula}</Td>
-              <Td>{solicitacao.atividade.grupo}</Td>
-              <Td>{solicitacao.atividade}</Td>
+              <Td>{solicitacao.atividade.grupo.nome}</Td>
+              <Td>{solicitacao.atividade.descricao}</Td>
               <Td>
                 <Link to={"/avaliar"}>
                   <button
                     type="button"
                     onClick={() =>
-                      localStorage.setItem("solicitacaoId", solicitacao.id)
+                      localStorage.setItem("solicitacaoId", solicitacao.idSolicitacao)
                     }
                     className="btn-edit"
                   >
@@ -71,7 +71,7 @@ export default function Dashboard({ history }) {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => handleSubmitToDelete(solicitacao.id)}
+                  onClick={() => handleSubmitToDelete(solicitacao.idSolicitacao)}
                   className="btn-delete"
                 >
                   <i className="fa fa-trash" aria-hidden="true"></i>

@@ -23,24 +23,37 @@ export default function Solicitar({ history }) {
   const [cargaHorariaSolicitada, setCargaHorariaSolicitada] = useState("");
   const [descricaoAtividade, setDescricaoAtividade] = useState("");
   const [data, setData] = useState("");
-  const [documentosEnv, setDocumentosEnv] = useState([])
+  let documentosEnv = [];
+  const [temGrupo, setTemGrupo] = useState(true);
+  const [atividadesSelect, setAtividadeSelect] = useState([]);
+  const [groupName, setGroupName] = useState("");
+  const [temAtividade, setTemAtividade] = useState(false);
+  const [atividadeName, setAtividadeName] = useState("");
+  const [listaDeDocumentos, setListaDeDocumentos] = useState([]);
 
   useEffect(() => {
-    api.get("solicitacao/dados").then(response => {
-      setGrupos(response.data.grupos);
-    });
+    async function loadGrupos() {
+      api.get("solicitacao/dados").then(response => {
+        //console.log(response.data)
+        setGrupos(response.data.grupos);
+        setAtividades(response.data.atividades);
+      });
+    }
+    loadGrupos()
   }, []);
-  useEffect(() => {
-    api.get("solicitacao/dados").then(response => {
-      setAtividades(response.data.atividades);
-    });
-  }, [grupos, grupo]);
+  // useEffect(() => {
+  //   api.get("solicitacao/dados").then(response => {
+  //   });
+  // }, [grupos, grupo]);
 
   const setarDocumentos = event => {
     setAtividade(event.target.value);
-    setDocumentos(event.target.value.docsNecessarios.split(','))
-    console.log(atividade)
-    console.log(documentos)
+    setAtividadeName(event.target.value)
+    //setDocumentos(event.target.value.docsNecessarios)
+  }
+
+  function addDoc(doc){
+    documentosEnv.push(doc)
   }
 
   async function handleSubmit(event) {
@@ -48,7 +61,7 @@ export default function Solicitar({ history }) {
     console.log(nome)
 
     try {
-      await api.post("/solicitacao", {
+      await api.post("/solicitacao/", {
         nome,
         matricula,
         grupo,
@@ -69,6 +82,51 @@ export default function Solicitar({ history }) {
         "Um erro na solicitação, verifique os dados informados e tente novamente!"
       );
     }
+  }
+
+  useEffect(() => {
+    setListaDeDocumentos(getDocumentosSelect(atividades, atividadeName))
+    if (atividadeName !== "") {
+      setTemAtividade(true)
+    }
+
+  }, [atividadeName, atividades])
+
+  useEffect(() => {
+    setAtividadeSelect(getAtividadesSelect(atividades, groupName))
+    if (groupName !== "") {
+      setTemGrupo(false)
+    }
+
+  }, [groupName, atividades])
+
+  const getAtividadesSelect = (array, groupName) => {
+    let lista = []
+    for (let index = 0; index < array.length; index++) {
+      if (array[index].grupo.nome === groupName) {
+        lista.push(array[index].grupo)
+      }
+    }
+    return lista
+  }
+
+  const getDocumentosSelect = (array, atividadeName) => {
+    let lista = []
+    for (let index = 0; index < array.length; index++) {
+      if (array[index].descricao === atividadeName) {
+        for (let j = 0; j < array[index].docs.length; j++) {
+          lista.push(array[index].docs[j])          
+        }
+        return lista
+      }
+    }
+  }
+
+  function handleGrupo(grupo) {
+    setGroupName(grupo)
+    console.log(grupo, atividades)
+    setGrupo(grupo)
+
   }
 
   return (
@@ -117,8 +175,9 @@ export default function Solicitar({ history }) {
               value={grupo}
               // required
               onChange={e => {
-                setGrupo(e.target.value);
+                handleGrupo(e.target.value)
               }}
+              required
             >
               <option disabled value=''>
                 Selecione um grupo
@@ -138,11 +197,13 @@ export default function Solicitar({ history }) {
               onChange={
                 setarDocumentos
               }
+              required
+              disabled={temGrupo}
             >
               <option value="" disabled>
                 Selecione uma atividade
           </option>
-              {_.map(atividades, (atividade, index) => {
+              {_.map(atividadesSelect, (atividade, index) => {
                 return <option value={atividade.id}>{atividade.nome}</option>;
               })}
             </select>
@@ -245,19 +306,29 @@ export default function Solicitar({ history }) {
           required
           onChange={event => setDescricaoAtividade(event.target.value)}
         />
-
         <label htmlFor="documento">Comprovante *</label>
-        {_.map(documentos, (documento, index) => {
-          return <input
-            id={documento.nome}
-            name={documento.nome}
-            type="file"
-            placeholder="Comprovante"
-            value={documento}
-            required
-            onChange={event => setDocumentosEnv(event.target.value)}
-          />;
-        })}
+        {!temAtividade ? (
+          <p> Selecione uma atividade...</p>
+        ) : (
+            <div>
+              {listaDeDocumentos.map((documento, index) => (
+                <div> 
+              <p>{documento.nome}</p>
+                  <input
+                  id={documento.nome}
+                  name={documento.nome}
+                  type="file"
+                  placeholder="Comprovante"
+                  //value={documento}
+                  required
+                  onChange={(event) => {addDoc(event.target.files[0])}}
+                />
+                  
+                </div>
+              ))}
+            </div>
+          )}
+
 
 
         <button type="submit" className="btn btn-add">
