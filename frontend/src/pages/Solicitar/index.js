@@ -79,7 +79,7 @@ export default function Solicitar({ history }) {
     _.forEach(solicitacao, (value, index)=>{
       form.append(index, value);
     })
-    form.append("anexos", documentosEnv)
+    form.append("anexo", documentosEnv)
 
     try {
       await api.post("/solicitacao/", form)
