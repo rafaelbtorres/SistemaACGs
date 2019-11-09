@@ -34,6 +34,7 @@ import br.sistema.sistemag2.repository.AtividadeRepository;
 import br.sistema.sistemag2.repository.CurriculoRepository;
 import br.sistema.sistemag2.repository.GrupoRepository;
 import br.sistema.sistemag2.repository.SolicitacaoRepository;
+import javax.validation.Valid;
 
 /**
  * SolicitacaoController
@@ -112,9 +113,9 @@ public class SolicitacaoController {
 
     @JsonIgnore
     @PostMapping("/")
-    public ResponseEntity postSolicitacao(@ModelAttribute SolicitacaoPostDTO solicitacao, @RequestParam("anexos") MultipartFile[] anexos)
+    public ResponseEntity postSolicitacao(@Valid @ModelAttribute SolicitacaoPostDTO solicitacao, @RequestParam("anexo") MultipartFile[] anexos)
             throws Exception {
-        // try {
+        // try {  
             
         Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
 
@@ -122,36 +123,38 @@ public class SolicitacaoController {
             return ResponseEntity.badRequest().body("A Atividade com o ID " + solicitacao.getIdAtividade() + " não foi encontrada");
         }
 
-        Solicitacao newsolicitacao = new Solicitacao();
-        Anexo newAnexo = new Anexo();
-        newsolicitacao.setAtividade(atividade.get());
-        newsolicitacao.setNomeAluno(solicitacao.getAluno());
-        newsolicitacao.setMatricula(solicitacao.getMatricula());
-        newsolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaSoli());
-        newsolicitacao.setDescricao(solicitacao.getDescricao());
-        newsolicitacao.setLocal(solicitacao.getLocal());
-        newsolicitacao.setProfRes(solicitacao.getProfRes());
+        Solicitacao newSolicitacao = new Solicitacao();
+
+        newSolicitacao.setAtividade(atividade.get());
+        newSolicitacao.setNomeAluno(solicitacao.getAluno());
+        newSolicitacao.setMatricula(solicitacao.getMatricula());
+        newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaSoli());
+        newSolicitacao.setDescricao(solicitacao.getDescricao());
+        newSolicitacao.setLocal(solicitacao.getLocal());
+        newSolicitacao.setProfRes(solicitacao.getProfRes());
 
         Date dataAtual = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date dataInicio = formato.parse(solicitacao.getDataInicio());
         Date dataFim = formato.parse(solicitacao.getDataFim());
-        newsolicitacao.setDataAtual(dataAtual);
-        newsolicitacao.setDataInicio(dataInicio);
-        newsolicitacao.setDataFim(dataFim);
+        newSolicitacao.setDataAtual(dataAtual);
+        newSolicitacao.setDataInicio(dataInicio);
+        newSolicitacao.setDataFim(dataFim);
 
-        newsolicitacao.setStatus("PENDENTE");
+        newSolicitacao.setStatus("PENDENTE");
+        Solicitacao retornableSolicitacao = solicitacaoRepository.save(newSolicitacao);
 
-        Solicitacao retornableSolicitacao = solicitacaoRepository.save(newsolicitacao);
 
-
-       for (int j = 0; j < anexos.length; j++) {
-           newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno()));
-           newAnexo.setDoc(atividade.get().getDocs().get(j));
-           anexoRepository.save(newAnexo);
-       }
+        for (int j = 0; j < anexos.length; j++) {
+            Anexo newAnexo = new Anexo();
+            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno()));
+            newAnexo.setDoc(atividade.get().getDocs().get(j));
+            newAnexo.setSolicitacao(retornableSolicitacao);
+            anexoRepository.save(newAnexo);
+        }
 
         return ResponseEntity.ok(retornableSolicitacao);
+
         // } catch (Exception e) {
         //     return ResponseEntity.ok("Não foi possível incluir a solicitação pois " + e.getMessage());
         // }

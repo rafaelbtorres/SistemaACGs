@@ -18,8 +18,8 @@ import lombok.Data;
 public class Anexo {
  
     @Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	 private long idAnexo;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long idAnexo;
 
     @ManyToOne
     private Solicitacao solicitacao;

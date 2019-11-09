@@ -31,13 +31,13 @@ public class Solicitacao{
 	@Size(min = 3)
 	private String nomeAluno;
 
-	@Range(min = 5, max = 10, message = "A matrícula é inválida.")
+	@Range(min = 5, message = "A matrícula é inválida.")
 	@NotNull(message = "A matrícula é obrigatória")
 	//@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
 	private long matricula;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
-	@FutureOrPresent
+	//@FutureOrPresent
 	private Date dataAtual;
 
 	@JsonFormat(pattern="yyyy-MM-dd")
@@ -59,8 +59,9 @@ public class Solicitacao{
 
 	@OneToMany(mappedBy = "solicitacao", cascade=CascadeType.ALL)
 	@JsonManagedReference
-	@NotNull(message = "É obrigatório anexar os arquivos comprobatórios")
+	//@NotNull(message = "É obrigatório anexar os arquivos comprobatórios")
 	private List<Anexo> anexos;
+        
 
 	@OneToOne(mappedBy = "solicitacao")
 	@JsonManagedReference
