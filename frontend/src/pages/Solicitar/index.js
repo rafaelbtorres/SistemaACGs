@@ -130,10 +130,16 @@ export default function Solicitar({ history }) {
     }
   }
 
-  function handleGrupo(grupo) {
-    setGroupName(grupo)
+  function testando(){
+    console.log(grupos, atividades, groupName, atividadesSelect)
+  }
+
+  function handleGrupo(grupoIndex) {
+    setGroupName(grupoIndex)
     //console.log(periodoAtividadeInicio)
-    setGrupo(grupo)
+    console.log(grupoIndex)
+    console.log("grupoobj", grupos[grupoIndex])
+    setGrupo(grupos[grupoIndex])
 
   }
 
@@ -159,7 +165,8 @@ export default function Solicitar({ history }) {
               onChange={event => setNome(event.target.value)}
             />
           </div>
-
+          <button onClick={testando}> sdasdsadasdas</button>
+          
           <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
 
             <label htmlFor="matricula">Matrícula *</label>
@@ -191,7 +198,7 @@ export default function Solicitar({ history }) {
                 Selecione um grupo
           </option>
               {_.map(grupos, (grupo, index) => {
-                return <option value={grupo.id}>{grupo.nome}</option>;
+                return <option value={index}>{grupo.nome}</option>;
               })}
             </select>
           </div>
@@ -211,7 +218,7 @@ export default function Solicitar({ history }) {
               <option value="" disabled>
                 Selecione uma atividade
           </option>
-              {_.map(atividadesSelect, (atividade, index) => {
+              {_.map(grupo.atividades, (atividade, index) => {
                 return <option value={atividade.id}>{atividade.nome}</option>;
               })}
             </select>
