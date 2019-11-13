@@ -80,7 +80,7 @@ export default function Dashboard({ history }) {
               <Td>{solicitacao.atividade.descricao}</Td>
               <Td>{solicitacao.status}</Td>
               <Td>
-                <Link to={"/avaliar"}>
+                <Link props={solicitacao.idSolicitacao} to={"/avaliar"}>
                   <button
                     type="button"
                     onClick={() =>

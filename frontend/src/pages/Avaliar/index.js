@@ -3,7 +3,7 @@ import api from "../../services/api";
 import { Input } from '@rocketseat/unform';
 
 
-export default function Avaliar({ history }) {
+export default function Avaliar({ history })  {
   //Dados da solicitacao exibidos
   const [nome, setNome] = useState("");
   const [matricula, setMatricula] = useState("");
@@ -78,6 +78,7 @@ export default function Avaliar({ history }) {
         Avalie aqui a solicitação de : <strong>{nome}</strong>, matrícula:{" "}
         <strong>{matricula}</strong>.
       </p>
+      idsol = { localStorage.getItem("solicitacaoId")}
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="data">Data</label>
