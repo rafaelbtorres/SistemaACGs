@@ -42,6 +42,8 @@ export default function Solicitar({ history }) {
     }
     loadGrupos()
   }, []);
+
+  
   // useEffect(() => {
   //   api.get("solicitacao/dados").then(response => {
   //   });
@@ -107,6 +109,16 @@ export default function Solicitar({ history }) {
 
   }, [groupName, atividades])
 
+  useEffect(() => {
+    async function loadGrupos() {
+      api.get(`/atividades/porGrupo/${grupo.id}`).then(response => {
+        //console.log(response.data)
+        setAtividadeSelect(response.data.atividades);
+      });
+    }
+    // loadGrupos()
+  }, [grupo]);
+
   const getAtividadesSelect = (array, groupName) => {
     let lista = []
     for (let index = 0; index < array.length; index++) {
@@ -117,29 +129,29 @@ export default function Solicitar({ history }) {
     return lista
   }
 
-  const getDocumentosSelect = (array, atividadeName) => {
-    let lista = []
-    for (let index = 0; index < array.length; index++) {
-      if (array[index].descricao === atividadeName) {
-        setAtividadeId(array[index].idAtividade.toString())
-        for (let j = 0; j < array[index].docs.length; j++) {
-          lista.push(array[index].docs[j])          
-        }
-        return lista
-      }
-    }
-  }
+  // const getDocumentosSelect = (array, atividadeName) => {
+  //   let lista = []
+  //   for (let index = 0; index < array.length; index++) {
+  //     if (array[index].descricao === atividadeName) {
+  //       setAtividadeId(array[index].idAtividade.toString())
+  //       for (let j = 0; j < array[index].docs.length; j++) {
+  //         lista.push(array[index].docs[j])          
+  //       }
+  //       return lista
+  //     }
+  //   }
+  // }
 
   function testando(){
     console.log(grupos, atividades, groupName, atividadesSelect)
   }
 
-  function handleGrupo(grupoIndex) {
-    setGroupName(grupoIndex)
-    //console.log(periodoAtividadeInicio)
-    console.log(grupoIndex)
-    console.log("grupoobj", grupos[grupoIndex])
-    setGrupo(grupos[grupoIndex])
+  function handleGrupo(grupo) {
+    // setGroupName(grupoIndex)
+    // //console.log(periodoAtividadeInicio)
+    // console.log(grupoIndex)
+    // console.log("grupoobj", grupos[grupoIndex])
+    setGrupo(grupo)
 
   }
 
@@ -164,9 +176,7 @@ export default function Solicitar({ history }) {
               required
               onChange={event => setNome(event.target.value)}
             />
-          </div>
-          <button onClick={testando}> sdasdsadasdas</button>
-          
+          </div>          
           <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
 
             <label htmlFor="matricula">Matrícula *</label>
@@ -198,7 +208,7 @@ export default function Solicitar({ history }) {
                 Selecione um grupo
           </option>
               {_.map(grupos, (grupo, index) => {
-                return <option value={index}>{grupo.nome}</option>;
+                return <option value={grupo}>{grupo.nome}</option>;
               })}
             </select>
           </div>
@@ -218,7 +228,7 @@ export default function Solicitar({ history }) {
               <option value="" disabled>
                 Selecione uma atividade
           </option>
-              {_.map(grupo.atividades, (atividade, index) => {
+              {_.map(A YGUSD, (atividade, index) => {
                 return <option value={atividade.id}>{atividade.nome}</option>;
               })}
             </select>
