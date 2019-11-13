@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import api from "../../services/api";
 import _ from "lodash";
-import { Input } from '@rocketseat/unform';
+import { Input } from "@rocketseat/unform";
 
 export default function Solicitar({ history }) {
   // listas de grupos e atividades
@@ -13,8 +13,6 @@ export default function Solicitar({ history }) {
   // dados para criar a solicitação
   const [nome, setNome] = useState("");
   const [matricula, setMatricula] = useState("");
-  const [grupo, setGrupo] = useState("");
-  const [atividade, setAtividade] = useState("");
   const [nomeResponsavel, setNomeResponsavel] = useState("");
   const [localAtividade, setLocalAtividade] = useState("");
   const [periodoAtividadeInicio, setPeriodoAtividadeInicio] = useState("");
@@ -24,13 +22,12 @@ export default function Solicitar({ history }) {
   const [descricaoAtividade, setDescricaoAtividade] = useState("");
   const [data, setData] = useState("");
   let documentosEnv = [];
-  const [temGrupo, setTemGrupo] = useState(true);
-  const [atividadesSelect, setAtividadeSelect] = useState([]);
-  const [groupName, setGroupName] = useState("");
-  const [temAtividade, setTemAtividade] = useState(false);
-  const [atividadeName, setAtividadeName] = useState("");
-  const [listaDeDocumentos, setListaDeDocumentos] = useState([]);
-  const [atividadeId, setAtividadeId] = useState("")
+
+  const [grupo, setGrupo] = useState();
+  const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
+
+  const [atividade, setAtividade] = useState();
+  const [selectedAtividadeIndex, setSelectedAtividadeIndex] = useState("");
 
   useEffect(() => {
     async function loadGrupos() {
@@ -40,28 +37,27 @@ export default function Solicitar({ history }) {
         setAtividades(response.data.atividades);
       });
     }
-    loadGrupos()
+    loadGrupos();
   }, []);
 
-  
   // useEffect(() => {
   //   api.get("solicitacao/dados").then(response => {
   //   });
   // }, [grupos, grupo]);
 
-  const setarDocumentos = event => {
-    setAtividade(event.target.value);
-    setAtividadeName(event.target.value)
+  const _handleAtividadeChange = event => {
+    setSelectedAtividadeIndex(event.target.value);
+    setAtividade(atividades[event.target.value]);
     //setDocumentos(event.target.value.docsNecessarios)
-  }
+  };
 
-  function addDoc(doc){
-    documentosEnv.push(doc)
+  function addDoc(doc) {
+    documentosEnv.push(doc);
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(nome)
+    console.log(nome);
 
     var solicitacao = {
       aluno: nome,
@@ -69,22 +65,21 @@ export default function Solicitar({ history }) {
       dataInicio: periodoAtividadeInicio,
       dataFim: periodoAtividadeFinal,
       cargaHorariaSoli: cargaHorariaSolicitada,
-      idAtividade: atividadeId,
+      idAtividade: atividade.idAtividade,
       cargaHoraria: cargaHorariaAtividade,
       profRes: nomeResponsavel,
       descricao: descricaoAtividade,
       local: localAtividade
+    };
 
-    }
-
-    var form = new FormData()
-    _.forEach(solicitacao, (value, index)=>{
+    var form = new FormData();
+    _.forEach(solicitacao, (value, index) => {
       form.append(index, value);
-    })
-    form.append("anexo", documentosEnv)
+    });
+    form.append("anexo", documentosEnv);
 
     try {
-      await api.post("/solicitacao/", form)
+      await api.post("/solicitacao/", form);
       history.push("/");
     } catch (e) {
       alert(
@@ -93,41 +88,47 @@ export default function Solicitar({ history }) {
     }
   }
 
-  useEffect(() => {
-    setListaDeDocumentos(getDocumentosSelect(atividades, atividadeName))
-    if (atividadeName !== "") {
-      setTemAtividade(true)
-    }
+  // useEffect(() => {
+  //   setListaDeDocumentos(getDocumentosSelect(atividades, atividadeName));
+  //   if (atividadeName !== "") {
+  //     setTemAtividade(true);
+  //   }
+  // }, [atividadeName, atividades]);
 
-  }, [atividadeName, atividades])
-
-  useEffect(() => {
-    setAtividadeSelect(getAtividadesSelect(atividades, groupName))
-    if (groupName !== "") {
-      setTemGrupo(false)
-    }
-
-  }, [groupName, atividades])
+  // useEffect(() => {
+  //   setAtividadeSelect(getAtividadesSelect(atividades, groupName));
+  //   if (groupName !== "") {
+  //     setTemGrupo(false);
+  //   }
+  // }, [groupName, atividades]);
 
   useEffect(() => {
+    console.log("agr chegamos");
     async function loadGrupos() {
-      api.get(`/atividades/porGrupo/${grupo.id}`).then(response => {
-        //console.log(response.data)
-        setAtividadeSelect(response.data.atividades);
-      });
+      if (grupo != null)
+        api
+          .get(`/atividades/porGrupo/${grupo.idGrupo}`)
+          .then(response => {
+            console.log("ATIVIDADES", response.data);
+            setAtividades(response.data);
+          })
+          .catch(e => {
+            console.log("RESPOSE ERROR", e.response);
+            // alert("erro ao buscar as atividades");
+          });
     }
-    // loadGrupos()
+    loadGrupos();
   }, [grupo]);
 
   const getAtividadesSelect = (array, groupName) => {
-    let lista = []
+    let lista = [];
     for (let index = 0; index < array.length; index++) {
       if (array[index].grupo.nome === groupName) {
-        lista.push(array[index].grupo)
+        lista.push(array[index].grupo);
       }
     }
-    return lista
-  }
+    return lista;
+  };
 
   // const getDocumentosSelect = (array, atividadeName) => {
   //   let lista = []
@@ -135,24 +136,21 @@ export default function Solicitar({ history }) {
   //     if (array[index].descricao === atividadeName) {
   //       setAtividadeId(array[index].idAtividade.toString())
   //       for (let j = 0; j < array[index].docs.length; j++) {
-  //         lista.push(array[index].docs[j])          
+  //         lista.push(array[index].docs[j])
   //       }
   //       return lista
   //     }
   //   }
   // }
 
-  function testando(){
-    console.log(grupos, atividades, groupName, atividadesSelect)
-  }
-
-  function handleGrupo(grupo) {
+  function _handleGrupoChange(grupoIndex) {
     // setGroupName(grupoIndex)
     // //console.log(periodoAtividadeInicio)
     // console.log(grupoIndex)
     // console.log("grupoobj", grupos[grupoIndex])
-    setGrupo(grupo)
-
+    console.log("grupo", grupoIndex, grupos[grupoIndex]);
+    setGrupo(grupos[grupoIndex]);
+    setSelectedGrupoIndex(grupoIndex);
   }
 
   return (
@@ -163,9 +161,16 @@ export default function Solicitar({ history }) {
       </p>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
-
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="nome">Nome *</label>
             <input
               id="nome"
@@ -176,9 +181,10 @@ export default function Solicitar({ history }) {
               required
               onChange={event => setNome(event.target.value)}
             />
-          </div>          
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
-
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="matricula">Matrícula *</label>
             <input
               id="matricula"
@@ -191,53 +197,68 @@ export default function Solicitar({ history }) {
             />
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="grupo">Grupo *</label>
             <select
               id="grupo"
               name="grupo"
-              value={grupo}
+              value={selectedGrupoIndex}
               // required
               onChange={e => {
-                handleGrupo(e.target.value)
+                _handleGrupoChange(e.target.value);
               }}
               required
             >
-              <option disabled value=''>
+              <option disabled selected>
                 Selecione um grupo
-          </option>
+              </option>
               {_.map(grupos, (grupo, index) => {
-                return <option value={grupo}>{grupo.nome}</option>;
+                return <option value={index}>{grupo.nome}</option>;
               })}
             </select>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="atividade">Atividade *</label>
             <select
               id="atividade"
               name="atividade"
               // required
-              value={atividade}
-              onChange={
-                setarDocumentos
-              }
+              value={selectedAtividadeIndex}
+              onChange={_handleAtividadeChange}
               required
-              disabled={temGrupo}
+              disabled={grupo == null}
             >
               <option value="" disabled>
                 Selecione uma atividade
-          </option>
-              {_.map(A YGUSD, (atividade, index) => {
-                return <option value={atividade.id}>{atividade.nome}</option>;
+              </option>
+              {_.map(atividades, (atividade, index) => {
+                return <option value={index}>{atividade.descricao}</option>;
               })}
             </select>
-
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="nomeResponsavel">Professor(a) responsável </label>
             <input
               id="nomeResponsavel"
@@ -248,7 +269,9 @@ export default function Solicitar({ history }) {
               onChange={event => setNomeResponsavel(event.target.value)}
             />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="localAtividade">Local da Atividade </label>
             <input
               id="localAtividade"
@@ -260,9 +283,19 @@ export default function Solicitar({ history }) {
             />
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
-            <label htmlFor="periodoAtividadeInicio">Data inicial da atividade *</label>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
+            <label htmlFor="periodoAtividadeInicio">
+              Data inicial da atividade *
+            </label>
             <input
               id="periodoAtividadeInicio"
               name="periodoAtividadeInicio"
@@ -273,8 +306,12 @@ export default function Solicitar({ history }) {
               onChange={event => setPeriodoAtividadeInicio(event.target.value)}
             />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
-            <label htmlFor="periodoAtividadeFinal">Data final da atividade *</label>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
+            <label htmlFor="periodoAtividadeFinal">
+              Data final da atividade *
+            </label>
             <input
               id="periodoAtividadeFinal"
               name="periodoAtividadeFinal"
@@ -286,11 +323,19 @@ export default function Solicitar({ history }) {
             />
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="cargaHorariaAtividade">
               Carga-horária realizada *
-        </label>
+            </label>
             <input
               id="cargaHorariaAtividade"
               name="cargaHorariaAtividade"
@@ -301,10 +346,12 @@ export default function Solicitar({ history }) {
               onChange={event => setCargaHorariaAtividade(event.target.value)}
             />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
             <label htmlFor="cargaHorariaSolicitada">
               Carga-horária solicitada *
-        </label>
+            </label>
             <input
               id="cargaHorariaSolicitada"
               name="cargaHorariaSolicitada"
@@ -317,11 +364,11 @@ export default function Solicitar({ history }) {
           </div>
         </div>
 
-
         <label htmlFor="descricaoAtividade">Descrição da atividade *</label>
-        <Input multiline
+        <Input
+          multiline
           style={{
-            height: "100px",
+            height: "100px"
           }}
           id="descricaoAtividade"
           name="descricaoAtividade"
@@ -332,39 +379,35 @@ export default function Solicitar({ history }) {
           onChange={event => setDescricaoAtividade(event.target.value)}
         />
         <label htmlFor="documento">Comprovante *</label>
-        {!temAtividade ? (
+        {atividade == null ? (
           <p> Selecione uma atividade...</p>
         ) : (
-            <div>
-              {listaDeDocumentos.map((documento, index) => (
-                <div> 
-              <p>{documento.nome}</p>
-                  <input
+          <div>
+            {_.map(atividade.docs, (documento, index) => (
+              <div>
+                <p>{documento.nome}</p>
+                <input
                   id={documento.nome}
                   name={documento.nome}
                   type="file"
                   placeholder="Comprovante"
                   //value={documento}
                   required
-                  onChange={(event) => {addDoc(event.target.files[0])}}
+                  onChange={event => {
+                    addDoc(event.target.files[0]);
+                  }}
                 />
-                  
-                </div>
-              ))}
-            </div>
-          )}
-
-
+              </div>
+            ))}
+          </div>
+        )}
 
         <button type="submit" className="btn btn-add">
           Solicitar
         </button>
-
       </form>
       <Link to="/">
-        <button className="btn btn-add" >
-          Voltar
-        </button>
+        <button className="btn btn-add">Voltar</button>
       </Link>
     </>
   );

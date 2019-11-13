@@ -3,6 +3,8 @@ package br.sistema.sistemag2.repository;
 import br.sistema.sistemag2.models.Atividade;
 import br.sistema.sistemag2.models.Grupo;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 /**

@@ -11,7 +11,7 @@ export default function Routes() {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route path="/solicitar" component={Solicitar} />
-        <Route path="/avaliar" component={Avaliar} />
+        <Route path="/avaliar/:id" component={Avaliar} />
         <Redirect from="*" to="/" />
       </Switch>
     </BrowserRouter>
