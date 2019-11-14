@@ -21,7 +21,7 @@ export default function Solicitar({ history }) {
   const [cargaHorariaSolicitada, setCargaHorariaSolicitada] = useState("");
   const [descricaoAtividade, setDescricaoAtividade] = useState("");
   const [data, setData] = useState("");
-  let documentosEnv = [];
+  const [documentosEnv, setDocumentosEnv] = useState({});
 
   const [grupo, setGrupo] = useState();
   const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
@@ -51,13 +51,141 @@ export default function Solicitar({ history }) {
     //setDocumentos(event.target.value.docsNecessarios)
   };
 
-  function addDoc(doc) {
-    documentosEnv.push(doc);
+  function addDoc(event, nomeArquivo) {
+    console.log(event.target.id)
+    if (!event || !event.target || !event.target.files || event.target.files.length === 0) {
+      return
+    }
+
+    const name = event.target.files[0].name
+    const lastDot = name.lastIndexOf('.')
+    const ext = name.substring(lastDot + 1).toLowerCase()
+
+    if (ext !== 'pdf' && ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png' && ext !== 'zip') {
+      const arquivoTemp = Object.keys(documentosEnv).reduce((object, key) => {
+        if (key !== nomeArquivo) {
+          console.log('not deleting', key, nomeArquivo)
+          object[key] = documentosEnv[key]
+        }
+        return object
+      }, {})
+      console.log(arquivoTemp)
+      setDocumentosEnv(arquivoTemp)
+
+      alert('Tipo de arquivo não permitido')
+      return
+    }
+    if (documentosEnv.length === 0) {
+      const fileData = {}
+      fileData[nomeArquivo] = ({
+        idDoc: event.target.id,
+        file: event.target.files[0]
+      })
+      setDocumentosEnv({ ...documentosEnv, ...fileData })
+      return
+    } else {
+      let index
+      for (index = 0; index < documentosEnv.length; index++) {
+        if (documentosEnv[index].idDoc === event.target.id) {
+          documentosEnv[index].file = event.target.files[0]
+          return
+        }
+      }
+      const fileData = {}
+      fileData[nomeArquivo] = ({
+        idDoc: event.target.id,
+        file: event.target.files[0]
+      })
+      setDocumentosEnv({ ...documentosEnv, ...fileData })
+    }
+    console.log(documentosEnv)
+  }
+
+  const validarNome = (nome) => {
+    var regName = /^[a-zA-Z\s]*$/;
+
+    if (!regName.test(nome)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  const validarMatricula = (numero) => {
+    var size = numero.toString().length
+    if (size === 10) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const validarDateInicioFim = (dataInicio, dataFim) => {
+    var varDateIncio = new Date(dataInicio);
+    var varDateFim = new Date(dataFim);
+    varDateIncio.setHours(0, 0, 0, 0)
+    varDateFim.setHours(0, 0, 0, 0)
+
+    if (varDateIncio < varDateFim) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const validarData = (dataInicio) => {
+    var varData = new Date(dataInicio);
+    var hoje = new Date()
+    varData.setHours(0, 0, 0, 0)
+    hoje.setHours(0, 0, 0, 0)
+
+    if (varData > hoje) {
+      return false
+    } else {
+      return true
+    }
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(nome);
+    console.log(documentosEnv)
+
+    if (!validarNome(nome)) {
+      alert(
+        "Nome Inválido!"
+      )
+      return
+    }
+    if (!validarNome(nomeResponsavel)) {
+      alert(
+        "Nome do Professor Inválido!"
+      )
+      return
+    }
+    if (!validarMatricula(matricula)) {
+      alert(
+        "Número de Matrícula Inválido!"
+      )
+      return
+    }
+    if (documentosEnv.length === 0 || documentosEnv.length < atividade.docs.length) {
+      alert(
+        "Você precisa anexar o(s) arquivo(s) necessário(s)!"
+      )
+      return
+    }
+    if (!validarData(periodoAtividadeInicio) || !validarData(periodoAtividadeFinal)) {
+      alert(
+        "As datas não podem ser maior que a data de hoje!"
+      )
+      return
+    }
+    if (validarDateInicioFim(periodoAtividadeInicio, periodoAtividadeFinal)) {
+      alert(
+        "A data de início não pode ser maior que a data de fim!"
+      )
+      return
+    }
 
     var solicitacao = {
       aluno: nome,
@@ -76,16 +204,30 @@ export default function Solicitar({ history }) {
     _.forEach(solicitacao, (value, index) => {
       form.append(index, value);
     });
-    form.append("anexo", documentosEnv);
+    _.forEach(documentosEnv, (value) => {
+      form.append("anexo", value)
+    })
 
-    try {
-      await api.post("/solicitacao/", form);
-      history.push("/");
-    } catch (e) {
-      alert(
-        "Um erro na solicitação, verifique os dados informados e tente novamente!"
-      );
-    }
+    console.log(documentosEnv)
+    console.log(form)
+
+    // try {
+    //   const resp = await api.post("/solicitacao/", form);
+    //   if (resp.status === 200) {
+    //     alert(
+    //       "Solicitação realizada com sucesso!"
+    //     )
+    //   } else {
+    //     alert(
+    //       "A solicitação não pode ser realizada!"
+    //     )
+    //   }
+    //   history.push("/");
+    // } catch (e) {
+    //   alert(
+    //     "Um erro na solicitação, verifique os dados informados e tente novamente!"
+    //   );
+    // }
   }
 
   // useEffect(() => {
@@ -382,25 +524,25 @@ export default function Solicitar({ history }) {
         {atividade == null ? (
           <p> Selecione uma atividade...</p>
         ) : (
-          <div>
-            {_.map(atividade.docs, (documento, index) => (
-              <div>
-                <p>{documento.nome}</p>
-                <input
-                  id={documento.nome}
-                  name={documento.nome}
-                  type="file"
-                  placeholder="Comprovante"
-                  //value={documento}
-                  required
-                  onChange={event => {
-                    addDoc(event.target.files[0]);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+            <div>
+              {_.map(atividade.docs, (documento, index) => (
+                <div>
+                  <p>{documento.nome}</p>
+                  <input
+                    id={documento.idDocNecessario}
+                    name={documento.nome}
+                    type="file"
+                    placeholder="Comprovante"
+                    //value={documento}
+                    required
+                    onChange={(event) => {
+                      addDoc(event, documento.nome);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
         <button type="submit" className="btn btn-add">
           Solicitar
