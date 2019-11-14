@@ -205,29 +205,31 @@ export default function Solicitar({ history }) {
       form.append(index, value);
     });
     _.forEach(documentosEnv, (value) => {
-      form.append("anexo", value)
+      form.append("anexo", value.file)
     })
-
+    for (var pair of form.entries()) {
+      console.log('form',pair[0], pair[1]); 
+  }
     console.log(documentosEnv)
     console.log(form)
 
-    // try {
-    //   const resp = await api.post("/solicitacao/", form);
-    //   if (resp.status === 200) {
-    //     alert(
-    //       "Solicitação realizada com sucesso!"
-    //     )
-    //   } else {
-    //     alert(
-    //       "A solicitação não pode ser realizada!"
-    //     )
-    //   }
-    //   history.push("/");
-    // } catch (e) {
-    //   alert(
-    //     "Um erro na solicitação, verifique os dados informados e tente novamente!"
-    //   );
-    // }
+    try {
+      const resp = await api.post("/solicitacao/", form);
+      if (resp.status === 200) {
+        alert(
+          "Solicitação realizada com sucesso!"
+        )
+      } else {
+        alert(
+          "A solicitação não pode ser realizada!"
+        )
+      }
+      history.push("/");
+    } catch (e) {
+      alert(
+        "Um erro na solicitação, verifique os dados informados e tente novamente!"
+      );
+    }
   }
 
   // useEffect(() => {
