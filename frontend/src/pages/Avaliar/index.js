@@ -56,6 +56,12 @@ export default function Avaliar({ history }) {
     getData();
   });
 
+  var avaliacao = {
+    deferimentoResultado,
+    parecerCoordenador,
+    cargaHorariaAtribuida
+  };
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -148,6 +154,8 @@ export default function Avaliar({ history }) {
               type="text"
               //placeholder={solicitacao.atividade.grupo.nome}
               //value={solicitacao.atividade.grupo.nome}
+              disabled
+              required
             />
           </div>
           <div
@@ -160,6 +168,8 @@ export default function Avaliar({ history }) {
               type="text"
               placeholder={solicitacao.atividade}
               value={solicitacao.atividade}
+              disabled
+              required
             />
           </div>
         </div>
@@ -319,6 +329,7 @@ export default function Avaliar({ history }) {
                 onChange={event => setDeferimentoResultado(event.target.value)}
               />
             </div>
+            
             <div
               style={{
                 display: "flex",
@@ -331,6 +342,47 @@ export default function Avaliar({ history }) {
                 type="radio"
                 name="deferimentoResultado"
                 value="Indeferido"
+                required
+                onChange={event => setDeferimentoResultado(event.target.value)}
+              />
+            </div>
+          </div>
+          <p>Alterar grupo e atividade.</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between"
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%"
+              }}
+            >
+              <label>Sim</label>
+              <input
+                type="radio"
+                name="deferimentoResultado"
+                value="sim"
+                required
+                onChange={event => setDeferimentoResultado(event.target.value)}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%"
+              }}
+            >
+              <label>Não</label>
+              <input
+                type="radio"
+                name="deferimentoResultado"
+                value="nao"
                 required
                 onChange={event => setDeferimentoResultado(event.target.value)}
               />

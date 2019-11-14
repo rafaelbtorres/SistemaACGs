@@ -208,8 +208,8 @@ export default function Solicitar({ history }) {
       form.append("anexo", value.file)
     })
     for (var pair of form.entries()) {
-      console.log('form',pair[0], pair[1]); 
-  }
+      console.log('form', pair[0], pair[1]);
+    }
     console.log(documentosEnv)
     console.log(form)
 
@@ -231,20 +231,6 @@ export default function Solicitar({ history }) {
       );
     }
   }
-
-  // useEffect(() => {
-  //   setListaDeDocumentos(getDocumentosSelect(atividades, atividadeName));
-  //   if (atividadeName !== "") {
-  //     setTemAtividade(true);
-  //   }
-  // }, [atividadeName, atividades]);
-
-  // useEffect(() => {
-  //   setAtividadeSelect(getAtividadesSelect(atividades, groupName));
-  //   if (groupName !== "") {
-  //     setTemGrupo(false);
-  //   }
-  // }, [groupName, atividades]);
 
   useEffect(() => {
     console.log("agr chegamos");
@@ -274,24 +260,7 @@ export default function Solicitar({ history }) {
     return lista;
   };
 
-  // const getDocumentosSelect = (array, atividadeName) => {
-  //   let lista = []
-  //   for (let index = 0; index < array.length; index++) {
-  //     if (array[index].descricao === atividadeName) {
-  //       setAtividadeId(array[index].idAtividade.toString())
-  //       for (let j = 0; j < array[index].docs.length; j++) {
-  //         lista.push(array[index].docs[j])
-  //       }
-  //       return lista
-  //     }
-  //   }
-  // }
-
   function _handleGrupoChange(grupoIndex) {
-    // setGroupName(grupoIndex)
-    // //console.log(periodoAtividadeInicio)
-    // console.log(grupoIndex)
-    // console.log("grupoobj", grupos[grupoIndex])
     console.log("grupo", grupoIndex, grupos[grupoIndex]);
     setGrupo(grupos[grupoIndex]);
     setSelectedGrupoIndex(grupoIndex);
@@ -356,7 +325,6 @@ export default function Solicitar({ history }) {
               id="grupo"
               name="grupo"
               value={selectedGrupoIndex}
-              // required
               onChange={e => {
                 _handleGrupoChange(e.target.value);
               }}
@@ -377,7 +345,6 @@ export default function Solicitar({ history }) {
             <select
               id="atividade"
               name="atividade"
-              // required
               value={selectedAtividadeIndex}
               onChange={_handleAtividadeChange}
               required
@@ -535,7 +502,6 @@ export default function Solicitar({ history }) {
                     name={documento.nome}
                     type="file"
                     placeholder="Comprovante"
-                    //value={documento}
                     required
                     onChange={(event) => {
                       addDoc(event, documento.nome);
