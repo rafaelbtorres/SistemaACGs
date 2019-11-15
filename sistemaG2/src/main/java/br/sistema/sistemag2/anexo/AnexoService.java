@@ -11,7 +11,7 @@ public interface AnexoService {
     void init();
 
 
-    String store(MultipartFile file, String nome) throws Exception;
+    String store(MultipartFile file, String nome, long matricula, long id) throws Exception;
 
     Stream<Path> loadAll();
 

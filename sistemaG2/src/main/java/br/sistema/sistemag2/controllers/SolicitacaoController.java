@@ -93,23 +93,6 @@ public class SolicitacaoController {
         return ResponseEntity.ok(retornableSolicitacao);
     }
 
-    @PostMapping("/salvaAnexo") // Salva um anexo
-    public String postAnexo(@RequestParam("file") MultipartFile file, String nome) throws Exception {
-
-        return anexoService.store(file, nome);
-
-    }
-
-    @PostMapping("/salvaAnexos") // Salva varios anexos
-    public ArrayList postAnexos(@RequestParam("file") MultipartFile[] files, String nome) throws Exception {
-        ArrayList<String> filesName = new ArrayList<>();
-        String nomeCaminho;
-        for (MultipartFile string : files) {
-            nomeCaminho = anexoService.store(string, nome);
-            filesName.add(nomeCaminho);
-        }
-        return filesName;
-    }
 
     @JsonIgnore
     @PostMapping("/")
@@ -147,7 +130,7 @@ public class SolicitacaoController {
 
         for (int j = 0; j < anexos.length; j++) {
             Anexo newAnexo = new Anexo();
-            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno(), solicitacao.getMatricula(), retornableSolicitacao.id));
+            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno(), solicitacao.getMatricula(), newSolicitacao.getIdSolicitacao()));
             newAnexo.setDoc(atividade.get().getDocs().get(j));
             newAnexo.setSolicitacao(retornableSolicitacao);
             anexoRepository.save(newAnexo);
