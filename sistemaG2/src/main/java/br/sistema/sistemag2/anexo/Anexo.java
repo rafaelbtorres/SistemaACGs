@@ -30,7 +30,7 @@ public class Anexo implements AnexoService {
 
 
     @Override
-    public String store(MultipartFile file, String nome) throws IOException, NoSuchAlgorithmException {
+    public String store(MultipartFile file, String nome, long matricula, long idSolicitacao) throws IOException, NoSuchAlgorithmException {
         Random generator = new Random();
         String fileName;
         try {
@@ -38,7 +38,7 @@ public class Anexo implements AnexoService {
                 throw new AnexoException("Falha ao salvar arquivo vazio" + file.getOriginalFilename());
             }
 
-            fileName = nome + "_" + generator.nextInt(30000) + "_" + file.getOriginalFilename();
+            fileName = idSolicitacao + "_" + nome + "_" + matricula + "_" + file.getOriginalFilename();
             Files.copy(file.getInputStream(), this.rootLocation.resolve(fileName));
         } catch (IOException e) {
             throw new AnexoException("Falha ao armazenar " + file.getOriginalFilename(), e);
