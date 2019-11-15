@@ -62,7 +62,7 @@ export default function Avaliar({ history }) {
     }
     loadGrupos();
   }, []);
-  
+
   useEffect(() => {
     async function getData() {
       const response = await api
@@ -186,8 +186,8 @@ export default function Avaliar({ history }) {
               id="grupo"
               name="grupo"
               type="text"
-              //placeholder={solicitacao.atividade.grupo.nome}
-              //value={solicitacao.atividade.grupo.nome}
+              placeholder={solicitacao.atividade.grupo}
+              value={solicitacao.atividade.grupo}
               disabled
               required
             />
