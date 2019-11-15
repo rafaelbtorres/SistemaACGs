@@ -3,6 +3,7 @@ import api from "../../services/api";
 import { useParams } from "react-router-dom";
 import { Input } from "@rocketseat/unform";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 
 export default function Avaliar({ history }) {
   //Dados da solicitacao exibidos
@@ -24,10 +25,44 @@ export default function Avaliar({ history }) {
 
   //Dados da avaliação
   const [nomeCoordenador, setNomeCoordenador] = useState("");
+  const [mudarGrupoAtividade, setMudarGrupoAtividade] = useState("");
   const [deferimentoResultado, setDeferimentoResultado] = useState("");
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
 
+ // listas de grupos e atividades
+ const [grupos, setGrupos] = useState([]);
+ const [atividades, setAtividades] = useState([]);
+
+  const [grupo, setGrupo] = useState();
+  const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
+
+  const [atividade, setAtividade] = useState();
+  const [selectedAtividadeIndex, setSelectedAtividadeIndex] = useState("");
+
+  const _handleAtividadeChange = event => {
+    setSelectedAtividadeIndex(event.target.value);
+    setAtividade(atividades[event.target.value]);
+    //setDocumentos(event.target.value.docsNecessarios)
+  };
+
+  function _handleGrupoChange(grupoIndex) {
+    console.log("grupo", grupoIndex, grupos[grupoIndex]);
+    setGrupo(grupos[grupoIndex]);
+    setSelectedGrupoIndex(grupoIndex);
+  }
+
+  useEffect(() => {
+    async function loadGrupos() {
+      api.get("solicitacao/dados").then(response => {
+        //console.log(response.data)
+        setGrupos(response.data.grupos);
+        setAtividades(response.data.atividades);
+      });
+    }
+    loadGrupos();
+  }, []);
+  
   useEffect(() => {
     async function getData() {
       const response = await api
@@ -54,7 +89,7 @@ export default function Avaliar({ history }) {
     }
 
     getData();
-  });
+  }, [id]);
 
   var avaliacao = {
     deferimentoResultado,
@@ -92,7 +127,6 @@ export default function Avaliar({ history }) {
         Avalie aqui a solicitação de : <strong>{solicitacao.nomeAluno}</strong>,
         matrícula: <strong>{solicitacao.matricula}</strong>.
       </p>
-      idsol = {id}
       <form onSubmit={handleSubmit}>
         <label htmlFor="data">Data</label>
         <input
@@ -329,7 +363,7 @@ export default function Avaliar({ history }) {
                 onChange={event => setDeferimentoResultado(event.target.value)}
               />
             </div>
-            
+
             <div
               style={{
                 display: "flex",
@@ -365,10 +399,10 @@ export default function Avaliar({ history }) {
               <label>Sim</label>
               <input
                 type="radio"
-                name="deferimentoResultado"
+                name="Alterar"
                 value="sim"
                 required
-                onChange={event => setDeferimentoResultado(event.target.value)}
+                onChange={event => setMudarGrupoAtividade(event.target.value)}
               />
             </div>
             <div
@@ -381,12 +415,62 @@ export default function Avaliar({ history }) {
               <label>Não</label>
               <input
                 type="radio"
-                name="deferimentoResultado"
+                name="Alterar"
                 value="nao"
                 required
-                onChange={event => setDeferimentoResultado(event.target.value)}
+                onChange={event => setMudarGrupoAtividade(event.target.value)}
               />
             </div>
+            {(mudarGrupoAtividade === "sim") && <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between"
+              }}
+            >
+              <div
+                style={{ display: "flex", flexDirection: "column", width: "48%" }}
+              >
+                <label htmlFor="grupo">Grupo *</label>
+                <select
+                  id="grupo"
+                  name="grupo"
+                  value={selectedGrupoIndex}
+                  onChange={e => {
+                    _handleGrupoChange(e.target.value);
+                  }}
+                  required
+                >
+                  <option disabled selected>
+                    Selecione um grupo
+              </option>
+                  {_.map(grupos, (grupo, index) => {
+                    return <option value={index}>{grupo.nome}</option>;
+                  })}
+                </select>
+              </div>
+              <div
+                style={{ display: "flex", flexDirection: "column", width: "48%" }}
+              >
+                <label htmlFor="atividade">Atividade *</label>
+                <select
+                  id="atividade"
+                  name="atividade"
+                  value={selectedAtividadeIndex}
+                  onChange={_handleAtividadeChange}
+                  required
+                  disabled={grupo == null}
+                >
+                  <option value="" disabled>
+                    Selecione uma atividade
+              </option>
+                  {_.map(atividades, (atividade, index) => {
+                    return <option value={index}>{atividade.descricao}</option>;
+                  })}
+                </select>
+              </div>
+            </div>}
+            {(mudarGrupoAtividade === "nao") && <div>bb  aa</div>}
           </div>
           <div
             style={{

@@ -1,0 +1,10 @@
+INSERT INTO `curriculo` (`id_curriculo`, `ano`, `status`) VALUES ('1', '2010', b'1'), ('2', '2018', b'1');
+
+INSERT INTO `grupo` (`id_grupo`, `nome`, `curriculo_id_curriculo`) VALUES ('1', 'Grupo 1', '1'), ('2', 'Grupo 2', '1');
+
+INSERT INTO `atividade` (`id_atividade`, `carga_horaria`, `descricao`, `detalhamento`, `grupo_id_grupo`) VALUES ('1', '12', 'Atividade 1', 'Atividade 1 detalhamento', '1'), ('2', '12', 'Atividade 2', 'Atividade 2 detalhamento', '1');
+
+INSERT INTO `docs_necessarios` (`id_doc_necessario`, `nome`) VALUES ('1', 'Atestado 1'), ('2', 'Atestado 2');
+
+INSERT INTO `atividade_has_doc` (`id_atividade`, `id_doc_necessario`) VALUES ('1', '1'), ('2', '2');
+
