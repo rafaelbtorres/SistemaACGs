@@ -147,7 +147,7 @@ public class SolicitacaoController {
 
         for (int j = 0; j < anexos.length; j++) {
             Anexo newAnexo = new Anexo();
-            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno()));
+            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno(), solicitacao.getMatricula(), retornableSolicitacao.id));
             newAnexo.setDoc(atividade.get().getDocs().get(j));
             newAnexo.setSolicitacao(retornableSolicitacao);
             anexoRepository.save(newAnexo);
