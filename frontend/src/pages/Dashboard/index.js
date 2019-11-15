@@ -8,12 +8,13 @@ import "./index.css";
 import api from "../../services/api";
 
 export default function Dashboard({ history }) {
-
   const [solicitacoes, setSolicitacoes] = useState([]);
 
   //Pega as solicitacoes utilizando o verbo get do http
   useEffect(() => {
-    api.get("/solicitacao/listar").then(response => setSolicitacoes(response.data));
+    api
+      .get("/solicitacao/listar")
+      .then(response => setSolicitacoes(response.data));
   }, []);
 
   function handleSubmitToDelete(solicitacaoId) {
@@ -22,7 +23,9 @@ export default function Dashboard({ history }) {
         "Você deseja mesmo deletar esta solicitação?"
       );
       if (userChoice) {
-        const response = await api.delete("solicitacao/deleta/" + solicitacaoId);
+        const response = await api.delete(
+          "solicitacao/deleta/" + solicitacaoId
+        );
 
         if (response.status === 200) {
           const response = await api.get("/solicitacao/listar");
@@ -37,7 +40,7 @@ export default function Dashboard({ history }) {
   }
 
   function handleSubmitToDeleteAvaliacao(idAvaliacao) {
-    console.log(idAvaliacao)
+    console.log(idAvaliacao);
     async function deletarAvaliacao() {
       var userChoice = window.confirm(
         "Você deseja mesmo deletar esta avaliação?"
@@ -80,27 +83,30 @@ export default function Dashboard({ history }) {
               <Td>{solicitacao.atividade.descricao}</Td>
               <Td>{solicitacao.status}</Td>
               <Td>
-                <Link props={solicitacao.idSolicitacao} to={"/avaliar"}>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      localStorage.setItem("solicitacaoId", solicitacao.idSolicitacao)
-                    }
-                    className="btn-edit"
-                  >
-                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                <Link
+                  props={solicitacao.idSolicitacao}
+                  to={`/avaliar/${solicitacao.idSolicitacao}`}
+                >
+                  <button type="button" onClick={() => {}} className="btn-edit">
+                    <i className="fa fa-plus" aria-hidden="true"></i>
                   </button>
                 </Link>
                 <button
                   type="button"
-                  onClick={() => handleSubmitToDelete(solicitacao.idSolicitacao)}
-                  className="btn-delete"
+                  onClick={() =>
+                    handleSubmitToDeleteAvaliacao(
+                      solicitacao.avaliacao.idAvaliacao
+                    )
+                  }
+                  className="btn-delete-avaliacao"
                 >
-                  <i className="fa fa-trash" aria-hidden="true"></i>
+                  <i className="fa fa-minus" aria-hidden="true"></i>
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleSubmitToDeleteAvaliacao(solicitacao.avaliacao.idAvaliacao)}
+                  onClick={() =>
+                    handleSubmitToDelete(solicitacao.idSolicitacao)
+                  }
                   className="btn-delete"
                 >
                   <i className="fa fa-trash" aria-hidden="true"></i>
