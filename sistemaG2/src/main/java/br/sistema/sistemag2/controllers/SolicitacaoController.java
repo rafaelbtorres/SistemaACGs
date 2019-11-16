@@ -101,30 +101,12 @@ public class SolicitacaoController {
         // try {  
             
         Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
-        Solicitacao newSolicitacao = new Solicitacao();
 
         if (!atividade.isPresent()) {
             return ResponseEntity.badRequest().body("A Atividade com o ID " + solicitacao.getIdAtividade() + " não foi encontrada");
         }
 
-
-        if (anexos.length < atividade.get().getDocs().size()){
-            return ResponseEntity.badRequest().body("Você precisa anexar todos os comprovantes");
-        }
-        
-
-        if(atividade.get().isPrecisaCalcular()){
-            newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaRealizada()*atividade.get().getCargaHoraria());
-        } else {
-            newSolicitacao.setCargaHorariaSoli(atividade.get().getCargaHoraria());
-        }
-        newSolicitacao.setCargaHorariaRealizada(solicitacao.getCargaHorariaRealizada());
-
-
-
-
-
-
+        Solicitacao newSolicitacao = new Solicitacao();
 
         newSolicitacao.setAtividade(atividade.get());
         newSolicitacao.setNomeAluno(solicitacao.getAluno());
