@@ -30,9 +30,6 @@ public class Atividade {
 	private String detalhamento;
 
 	@NotEmpty
-	private boolean precisaCalcular;
-
-	@NotEmpty
 	@Size(max = 250)
 	private String descricao;
 
