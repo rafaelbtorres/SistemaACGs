@@ -79,8 +79,7 @@ public class SolicitacaoController {
 
         DadosSolicitacaoDTO infos = new DadosSolicitacaoDTO();
         infos.setAtividades(atividadeRepository.findAll());
-
-        // infos.setCurriculo(curriculoRepository.findAll());
+        infos.setCurriculo(curriculoRepository.findAll());
         infos.setGrupos(grupoRepository.findAll());
 
         return infos;
