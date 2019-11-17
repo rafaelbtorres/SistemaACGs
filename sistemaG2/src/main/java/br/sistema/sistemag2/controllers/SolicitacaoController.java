@@ -32,6 +32,7 @@ import br.sistema.sistemag2.models.Solicitacao;
 import br.sistema.sistemag2.repository.AnexoRepository;
 import br.sistema.sistemag2.repository.AtividadeRepository;
 import br.sistema.sistemag2.repository.CurriculoRepository;
+import br.sistema.sistemag2.repository.DocsRepository;
 import br.sistema.sistemag2.repository.GrupoRepository;
 import br.sistema.sistemag2.repository.SolicitacaoRepository;
 import javax.validation.Valid;
@@ -54,6 +55,8 @@ public class SolicitacaoController {
     GrupoRepository grupoRepository;
     @Autowired
     CurriculoRepository curriculoRepository;
+    @Autowired
+    DocsRepository docsRepository;
     private final AnexoService anexoService;
 
     @Autowired
@@ -74,14 +77,15 @@ public class SolicitacaoController {
     }
 
     @GetMapping(value = "/dados") // Lista de atividades, grupo e curriculo no formato JSON - //
-                                  // localhost:8080/solicitacao/infos/
+                             
     public DadosSolicitacaoDTO getInfos() {
 
         DadosSolicitacaoDTO infos = new DadosSolicitacaoDTO();
         infos.setAtividades(atividadeRepository.findAll());
-
-        // infos.setCurriculo(curriculoRepository.findAll());
+        infos.setDocsNecessarios(docsRepository.findAll());
+        infos.setCurriculo(curriculoRepository.findAll());
         infos.setGrupos(grupoRepository.findAll());
+
 
         return infos;
     }
