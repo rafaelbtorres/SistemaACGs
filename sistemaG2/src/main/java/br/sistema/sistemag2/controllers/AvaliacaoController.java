@@ -71,7 +71,6 @@ public class AvaliacaoController {
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
 
      try {
-      //  if(solicitacaoRepository.findById(id).isPresent())
         if(avaliacao.isDeferido()){
             assert avaliada != null;
             avaliada.setStatus(Status.DEFERIDO.toString());
@@ -112,28 +111,10 @@ public class AvaliacaoController {
         return ResponseEntity.ok(retornableAvaliacao);
     }
 
-    @GetMapping(value = "/dados/{id}") // Busca dados para avaliacao
-    public HashMap<Solicitacao,List<String>> getInfos(@PathVariable long id) {
-        // Busca no banco pelo id
-
-        Solicitacao retornableSolicitacao = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
-
-        Iterable<Anexo> anexos = anexoRepository.findAll();
-
-        List<String> anexosDaSolicitacao = new ArrayList<>();
-
-        HashMap<Solicitacao,List<String>> retorno = new HashMap<>();
-
-        for(Anexo anexo: anexos){
-            if(anexo.getSolicitacao().equals(retornableSolicitacao)){
-                anexosDaSolicitacao.add(anexo.getNome());
-
-            }
-        }
-
-        retorno.put(retornableSolicitacao, anexosDaSolicitacao);
-
-        return retorno;
+    @GetMapping(value = "/infos/{id}")
+    public ResponseEntity<Optional<Solicitacao>> getInfos(@PathVariable long id) {
+        Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
+        return ResponseEntity.ok(retornableSolicitacao);
     }
 
 
