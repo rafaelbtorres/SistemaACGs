@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,7 +69,7 @@ public class AvaliacaoController {
      */
     @JsonIgnore
     @PostMapping("/{id}")
-    public ResponseEntity postAvaliacao(@ModelAttribute AvaliacaoDTO avaliacao, @PathVariable long id){
+    public ResponseEntity postAvaliacao(@RequestBody AvaliacaoDTO avaliacao, @PathVariable long id){
 
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
@@ -95,10 +96,10 @@ public class AvaliacaoController {
             if(newavaliacao.isPrecisouDeCorrecao()){
                 avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
             }else{
-                avaliada.setStatus(Status.DEFERIDO.toString());
+                avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
             }
         }else{
-            avaliada.setStatus(Status.INDEFERIDO.toString());
+            avaliada.setStatus(Status.INDEFERIDO.toString() + avaliacao.getParecer());
         }
         avaliada.setIdSolicitacao(id);
 

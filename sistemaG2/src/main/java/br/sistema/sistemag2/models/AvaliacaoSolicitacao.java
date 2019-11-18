@@ -27,37 +27,37 @@ import lombok.Data;
 public class AvaliacaoSolicitacao {
 
     @Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long idAvaliacao;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long idAvaliacao;
 
     private String justificativa;//obrigatório if indeferido
 
-	@NotEmpty
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private Date dataAvaliacao;//atual
+    //@NotEmpty
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date dataAvaliacao;//atual
 
-	@Positive
-	private long cargaHorariaAtribuida;//obrigatório if deferido
+    //@Positive
+    private long cargaHorariaAtribuida;//obrigatório if deferido
 
-	@OneToOne
-	@JsonBackReference
-	@NotNull(message = "Solicitação inválida.")
-        private Solicitacao solicitacao;
+    @OneToOne
+    @JsonBackReference
+    @NotNull(message = "Solicitação inválida.")
+    private Solicitacao solicitacao;
         
-        @OneToOne
-        private Grupo solicitado;
+    @OneToOne
+    private Grupo solicitado;
         
-        @OneToOne
-        private Atividade solicitada;
+    @OneToOne
+    private Atividade solicitada;
         
-        private boolean precisouDeCorrecao;
+    private boolean precisouDeCorrecao;
 
-        @NotEmpty
-        private String nomeCoordenador;
+    //@NotEmpty
+    private String nomeCoordenador;
         
-	public AvaliacaoSolicitacao(){}
+    public AvaliacaoSolicitacao(){}
 
-	public void ValidaDeferimento () throws Exception {
+    public void ValidaDeferimento () throws Exception {
 		if (this.solicitacao.getStatus().equalsIgnoreCase(("DEFERIDO"))) {
 			if(this.cargaHorariaAtribuida <=0){
 				throw new Exception("Carga horaria não pode nula");
