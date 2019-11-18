@@ -8,6 +8,8 @@ import _ from "lodash";
 export default function Avaliar({ history }) {
   const [solicitacao, setSolicitacao] = useState({});
 
+  const [anexos, setAnexos] = useState({});
+
   const { id } = useParams("id");
 
   //Dados da avaliação
@@ -61,10 +63,11 @@ export default function Avaliar({ history }) {
         .get("/solicitacao/busca/" + id)
         .then(r => {
           console.log(r);
-          setSolicitacao(r.data);
-          setatividadeDaSolicitacao(r.data.atividade.descricao);
-          setgrupoDaSolicitacao(r.data.atividade.grupo.nome);
-          setIdAtividade(r.data.atividade.idAtividade);
+          setSolicitacao(r.data.solicitacao);
+          setatividadeDaSolicitacao(r.data.solicitacao.atividade.descricao);
+          setgrupoDaSolicitacao(r.data.solicitacao.atividade.grupo.nome);
+          setIdAtividade(r.data.solicitacao.atividade.idAtividade);
+          setAnexos(r.data.anexosDaSsolicitacao);
           return;
         })
         .catch(e => console.log(e.response));
@@ -324,14 +327,29 @@ export default function Avaliar({ history }) {
           ))}
         </div>
 
-        <input
+        {/* <input
           id="documento"
           name="documento"
           type="file"
-          placeholder={solicitacao.anexos}
-          value={solicitacao.anexos}
+          placeholder={anexos}//r.data.anexosDaSolicitacao
+          value={anexos}
           disabled
-        />
+        /> */}
+
+        <div>
+            {_.map(atividadeDaSolicitacao.docs, (documento, index) => (
+              <div>
+                <p>{documento.nome}</p>
+                <input
+                  id={documento.idDocNecessario}
+                  name={documento.nome}
+                  type="file"
+                  placeholder="{anexos.name}"
+                />
+              </div>
+            ))}
+          </div>
+
         <div className="content2">
           <p>Status do deferimento</p>
           <div
