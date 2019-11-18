@@ -60,59 +60,58 @@ public class AvaliacaoController {
     }
 
     @JsonIgnore
-    @PostMapping("/{id}") //Envia nova avaliação
+    @PostMapping("/{id}")
     public ResponseEntity postAvaliacao(@ModelAttribute AvaliacaoDTO avaliacao, @PathVariable long id){
 
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
         Optional<Atividade> atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
+        String status = avaliada.getStatus();
+        if (status.equals("Deferido") || status.equals("Indeferido")) {
+            return ResponseEntity.badRequest().body("Essa avaliação da foi avaliada");
+        }
+
      try {
         if (avaliada.getStatus().equals("Deferido") || avaliada.getStatus().equals("Indeferido")) {
             return ResponseEntity.badRequest().body("Essa avaliação ja foi avaliada");
-        }       
-        //Armazena os solicitados na avaliação para manter o histórico
+        }
+
         newavaliacao.setSolicitada(avaliada.getAtividade());
         newavaliacao.setSolicitado(avaliada.getAtividade().getGrupo());
-        
+
         if(!avaliada.getAtividade().equals(atividade.get())){
             newavaliacao.setPrecisouDeCorrecao(true);
         }
-        
+
         if(avaliacao.isDeferido()){
-            assert avaliada != null;
             if(newavaliacao.isPrecisouDeCorrecao()){
                 avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
             }else{
                 avaliada.setStatus(Status.DEFERIDO.toString());
             }
         }else{
-            assert avaliada != null;
             avaliada.setStatus(Status.INDEFERIDO.toString());
         }
         avaliada.setIdSolicitacao(id);
-        
-        //Atualiza atividade Correta na solicitação
+
         avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
-        
         newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
         newavaliacao.setNomeCoordenador(avaliacao.getNomeCoordenador());
-;
         newavaliacao.ValidaDeferimento();
         }catch (Exception e){
             return  ResponseEntity.ok(("Houve um erro ao realizar a avaliação " + e.getMessage()));
         }
-
         AvaliacaoSolicitacao retornableAvaliacao = avaliacaoRepository.save(newavaliacao);
 
         return ResponseEntity.ok(retornableAvaliacao);
     }
 
-    @DeleteMapping(value = "/{id}") // Busca no banco pelo ID
+    @DeleteMapping(value = "/{id}") 
     public @ResponseBody ResponseEntity deleteAvaliacaobyId(@PathVariable long id) {
         Optional<AvaliacaoSolicitacao> retornableAvaliacao = avaliacaoRepository.findById(id);
         if(retornableAvaliacao.isPresent()) {
@@ -132,7 +131,7 @@ public class AvaliacaoController {
     }
 
 
-    @GetMapping("/anexos/{filename:.+}") // Busca um anexo a partir do nome, só chamar isso para cada anexo na view, ele mostra o pdf no navegador
+    @GetMapping("/anexos/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
 
