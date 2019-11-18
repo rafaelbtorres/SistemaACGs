@@ -46,7 +46,6 @@ export default function Solicitar({ history }) {
   }, []);
 
   function addDoc(event, nomeArquivo) {
-    console.log(event.target.id);
     if (
       !event ||
       !event.target ||
@@ -69,12 +68,10 @@ export default function Solicitar({ history }) {
     ) {
       const arquivoTemp = Object.keys(documentosEnv).reduce((object, key) => {
         if (key !== nomeArquivo) {
-          console.log("not deleting", key, nomeArquivo);
           object[key] = documentosEnv[key];
         }
         return object;
       }, {});
-      console.log(arquivoTemp);
       setDocumentosEnv(arquivoTemp);
 
       alert("Tipo de arquivo não permitido");
@@ -82,10 +79,10 @@ export default function Solicitar({ history }) {
     }
     if (documentosEnv.length === 0) {
       const fileData = {};
-      fileData[nomeArquivo] = {
+      fileData[nomeArquivo] = ({
         idDoc: event.target.id,
         file: event.target.files[0]
-      };
+      });
       setDocumentosEnv({ ...documentosEnv, ...fileData });
       return;
     } else {
@@ -97,16 +94,15 @@ export default function Solicitar({ history }) {
         }
       }
       const fileData = {};
-      fileData[nomeArquivo] = {
+      fileData[nomeArquivo] = ({
         idDoc: event.target.id,
         file: event.target.files[0]
-      };
+      });
       setDocumentosEnv({ ...documentosEnv, ...fileData });
     }
-    console.log(documentosEnv);
   }
 
-  const validarNome = nome => {
+  const validarNome = (nome) => {
     var regName = /^[a-zA-Z\s]*$/;
 
     if (!regName.test(nome)) {
@@ -116,7 +112,7 @@ export default function Solicitar({ history }) {
     }
   };
 
-  const validarMatricula = numero => {
+  const validarMatricula = (numero) => {
     var size = numero.toString().length;
     if (size === 10 || size === 9) {
       return true;
@@ -138,7 +134,7 @@ export default function Solicitar({ history }) {
     }
   };
 
-  const validarData = dataInicio => {
+  const validarData = (dataInicio) => {
     var varData = new Date(dataInicio);
     var hoje = new Date();
     varData.setHours(0, 0, 0, 0);
@@ -153,7 +149,6 @@ export default function Solicitar({ history }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(documentosEnv);
 
     if (!validarNome(nome)) {
       alert("Nome Inválido!");
@@ -185,13 +180,19 @@ export default function Solicitar({ history }) {
       alert("A data de início não pode ser maior que a data de fim!");
       return;
     }
-
+    console.log("cargaHoraria", cargaHorariaAtividade)
     let horas;
-    if (cargaHorariaAtividade !== "0") {
+    if (cargaHorariaAtividade) {
+      console.log('entrou1')
       horas = parseInt(cargaHorariaAtividade) * atividade.cargaHoraria;
     } else {
       horas = atividade.cargaHoraria;
+
+      console.log('entrou2')
     }
+    
+    console.log(atividade.cargaHoraria)
+    console.log(horas)
 
     var solicitacao = {
       aluno: nome,
@@ -199,7 +200,6 @@ export default function Solicitar({ history }) {
       dataInicio: periodoAtividadeInicio,
       dataFim: periodoAtividadeFinal,
       idAtividade: atividade.idAtividade,
-      cargaHoraria: cargaHorariaAtividade,
       cargaHorariaSoli: horas,
       profRes: nomeResponsavel,
       descricao: descricaoAtividade,
@@ -210,23 +210,23 @@ export default function Solicitar({ history }) {
     _.forEach(solicitacao, (value, index) => {
       form.append(index, value);
     });
-    _.forEach(documentosEnv, value => {
+    _.forEach(documentosEnv, (value) => {
       form.append("anexo", value.file);
     });
-    for (var pair of form.entries()) {
-      console.log("form", pair[0], pair[1]);
-    }
-    console.log(documentosEnv);
-    console.log(form);
+    // for (var pair of form.entries()) {
+    //   console.log("form", pair[0], pair[1]);
+    // }
+    // console.log(documentosEnv);
+    // console.log(form);
 
     try {
       const resp = await api.post("/solicitacao/", form);
       if (resp.status === 200) {
         alert("Solicitação realizada com sucesso!");
+        history.push("/");
       } else {
         alert("A solicitação não pode ser realizada!");
       }
-      history.push("/");
     } catch (e) {
       alert(
         "Um erro na solicitação, verifique os dados informados e tente novamente!" +
@@ -241,7 +241,7 @@ export default function Solicitar({ history }) {
         api
           .get(`/atividades/porGrupo/${grupo.idGrupo}`)
           .then(response => {
-            console.log("ATIVIDADES", response.data);
+            // console.log("ATIVIDADES", response.data);
             setAtividades(response.data);
           })
           .catch(e => {
@@ -253,7 +253,7 @@ export default function Solicitar({ history }) {
   }, [grupo]);
 
   useEffect(() => {
-    console.log("grupos", grupos);
+    // console.log("grupos", grupos);
     setGruposCurriculo(getGroupos(grupos, curriculoId));
   }, [grupos, curriculoId]);
 
@@ -265,12 +265,12 @@ export default function Solicitar({ history }) {
         gruposLista.push(array[index]);
       }
     }
-    console.log("gruposLista metodo", gruposLista);
+    // console.log("gruposLista metodo", gruposLista);
     return gruposLista;
   };
 
   const handleCurriculoChange = event => {
-    console.log("idCurriculo", event.target.value);
+    // console.log("idCurriculo", event.target.value);
     setCurriculoId(event.target.value);
     setSelectedCurriculo(event.target.value);
   };
@@ -361,9 +361,7 @@ export default function Solicitar({ history }) {
                 Selecione...
               </option>
               {_.map(curriculos, (curriculo, index) => {
-                return (
-                  <option value={curriculo.idCurriculo}>{curriculo.ano}</option>
-                );
+                return <option value={curriculo.idCurriculo}>{curriculo.ano}</option>
               })}
             </select>
           </div>
@@ -562,7 +560,7 @@ export default function Solicitar({ history }) {
                   type="file"
                   placeholder="Comprovante"
                   required
-                  onChange={event => {
+                  onChange={(event) => {
                     addDoc(event, documento.nome);
                   }}
                 />
