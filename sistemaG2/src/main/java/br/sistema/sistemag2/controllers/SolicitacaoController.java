@@ -117,7 +117,7 @@ public class SolicitacaoController {
         newSolicitacao.setMatricula(solicitacao.getMatricula());
         newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaSoli());
         if(atividade.get().isPrecisaCalcular()){
-            newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaSoli() * atividade.get().getCargaHoraria());
+            newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHoraria() * atividade.get().getCargaHoraria());
         }else{
             newSolicitacao.setCargaHorariaSoli(atividade.get().getCargaHoraria());
         }
