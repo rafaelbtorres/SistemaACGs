@@ -27,7 +27,7 @@ button.btn-delete:hover {
 }
 
 button.btn-delete-avaliacao:hover {
-  background: #53cf48;
+  background: #ac9a39;
 }
 
 button.btn-delete {
@@ -52,7 +52,7 @@ button.btn-delete-avaliacao {
   padding: 0 15px;
   font-size: 16px;
   font-weight: bold;
-  background: #53cf48;
+  background: #ddb23b;
   color: #fff;
   cursor: pointer;
   margin-right: 1%;

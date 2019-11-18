@@ -59,63 +59,98 @@ export default function Dashboard({ history }) {
     deletarAvaliacao();
   }
 
-  return (
-    <>
-      <Link to="/solicitar">
-        <button className="btn btn-new-solicitacao">Nova Solicitação</button>
-      </Link>
+  function formatarData(data) {
+    var splitData = data.split("-")
+    var dataFormatada = splitData[2] + "/" + splitData[1] + "/" + splitData[0]
+    return dataFormatada
+  }
 
-      <Table className="example">
-        <Thead>
-          <Tr>
-            <Th>Matricula</Th>
-            <Th>Grupo</Th>
-            <Th>Atividade</Th>
-            <Th>Status</Th>
-            <Th>Data</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {solicitacoes.map(solicitacao => (
-            <Tr key={solicitacao.idSolicitacao}>
-              <Td>{solicitacao.matricula}</Td>
-              <Td>{solicitacao.atividade.grupo.nome}</Td>
-              <Td>{solicitacao.atividade.descricao}</Td>
-              <Td>{solicitacao.status}</Td>
-              <Td>
-                <Link
-                  props={solicitacao.idSolicitacao}
-                  to={`/avaliar/${solicitacao.idSolicitacao}`}
-                >
-                  <button type="button" onClick={() => {}} className="btn-edit">
-                    <i className="fa fa-plus" aria-hidden="true"></i>
-                  </button>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitToDeleteAvaliacao(
-                      solicitacao.avaliacao.idAvaliacao
-                    )
-                  }
-                  className="btn-delete-avaliacao"
-                >
-                  <i className="fa fa-minus" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitToDelete(solicitacao.idSolicitacao)
-                  }
-                  className="btn-delete"
-                >
-                  <i className="fa fa-trash" aria-hidden="true"></i>
-                </button>
-              </Td>
+  return (
+    <div style={{
+      display: "flex",
+      flexDirection: "column"
+    }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end"
+        }}
+      >
+        <Link to="/solicitar">
+          <button style={{ width: "100%" }} className="btn btn-new-solicitacao">Nova Solicitação</button>
+        </Link>
+      </div>
+      <hr style={{ width: "100%" }} ></hr>
+      <div>
+        <Table className="example">
+          <Thead>
+            <Tr>
+              <Th style={{ width: "10%" }}>Matricula</Th>
+              <Th style={{ width: "10%" }}>Grupo</Th>
+              <Th>Atividade</Th>
+              <Th>Status</Th>
+              <Th style={{ width: "10%" }}>Data</Th>
+              <Th>Ações</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </>
+          </Thead>
+          <Tbody>
+            {solicitacoes.map(solicitacao => (
+              <Tr key={solicitacao.idSolicitacao}>
+                <Td>{solicitacao.matricula}</Td>
+                <Td>{solicitacao.atividade.grupo.nome}</Td>
+                <Td>{solicitacao.atividade.descricao}</Td>
+                <Td>{solicitacao.status}</Td>
+                <Td>{formatarData(solicitacao.dataAtual)}</Td>
+                <Td>
+                  {solicitacao.status === "PENDENTE" ? (
+                    <div>
+                      <Link
+                        props={solicitacao.idSolicitacao}
+                        to={`/avaliar/${solicitacao.idSolicitacao}`}
+                      >
+                        <button type="button" onClick={() => { }} className="btn-edit">
+                          <i className="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleSubmitToDelete(solicitacao.idSolicitacao)
+                        }
+                        className="btn-delete"
+                      >
+                        <i className="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  ) : (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleSubmitToDeleteAvaliacao(
+                            solicitacao.avaliacao.idAvaliacao
+                          )
+                        }
+                        className="btn-delete-avaliacao"
+                      >
+                        <i className="fa fa-minus" aria-hidden="true"></i>
+                      </button>
+                    )}
+                    <Link
+                        props={solicitacao.idSolicitacao}
+                        to={`/visualizar/${solicitacao.idSolicitacao}`}
+                      >
+                        <button type="button" onClick={() => { }} className="btn-delete-avaliacao">
+                          <i style={{color: "black"}} className="" aria-hidden="true"></i>
+                        </button>
+                      </Link>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </div>
+    </ div>
   );
 }
