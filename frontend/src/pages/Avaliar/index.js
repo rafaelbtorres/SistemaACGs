@@ -19,6 +19,15 @@ export default function Avaliar({ history }) {
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
 
+  const [radio, setRadio] = useState('');
+  const [radioInfo, setRadioInfo] = useState('');
+  const [mostraObs, setMostraObs] = useState(false);
+  const [mostraHoras, setMostaHoras] = useState(false);
+  const [mudaInfo, setMudaInfo] = useState(false);
+  const [deferido, setDeferido] = useState(false);
+  const [mostraButton, setMostraButton] = useState(false);
+  const [respInfo, setRespInfo] = useState('');
+
   const [idAtividade, setIdAtividade] = useState([]);
 
   const [atividadeDaSolicitacao, setatividadeDaSolicitacao] = useState([]);
@@ -33,6 +42,67 @@ export default function Avaliar({ history }) {
 
   const [atividade, setAtividade] = useState();
   const [selectedAtividadeIndex, setSelectedAtividadeIndex] = useState("");
+
+  const [avaliacao, setAvaliacao] = useState({
+    idAtividade: "",
+    cargaHorariaAtribuida: "",
+    parecer: "",
+    deferido: "",
+    nomeCoordenador: "",
+    idSolicitacao: ""
+  })
+
+  // var avaliacao = {
+  //   cargaHorariaAtribuida: parseInt(cargaHorariaAtribuida),
+  //   idSolicitacao: parseInt(localStorage.getItem("solicitacaoId")),
+  //   idAtividade: parseInt(idAtividade),//tem q ser atividade só pra vir a modificada
+  //   parecer: parecerCoordenador,
+  //   deferido: deferimentoResultado,
+  //   nomeCoordenador: ""
+  // };
+
+  const handleAvaliacao = () => event => {
+    setAvaliacao({ ...avaliacao, [event.target.id]: event.target.value });
+}
+
+  const handleDeferido = event => {
+    setDeferido(true)
+    setMostaHoras(true);
+    setMostraObs(true);
+    setMostraButton(true)
+    if(respInfo === 'yes') {
+      setMudaInfo(true)
+    }
+    setAvaliacao({ ...avaliacao, deferido: "true" })
+  };
+
+  function  handleMudaInfo(resp) {
+    if(resp === 'sim') {
+        setRespInfo('sim')
+        setMudaInfo(true)
+    }
+    if(resp === 'não') {
+      setRespInfo('não')
+      setMudaInfo(false)
+    }
+  }
+
+  const handleIndefirido = event => {
+    setDeferido(false)
+    setMostraObs(true);
+    setMostaHoras(false);
+    setMudaInfo(false)
+    setMostraButton(true)
+    setAvaliacao({ ...avaliacao, deferido: "false" })
+  };
+
+  const handleMudaRadio = event => {
+    setRadio(event.target.value);
+  };
+
+  const handleRadioInfo = event => {
+    setRadioInfo(event.target.value);
+  };
 
   const _handleAtividadeChange = event => {
     setSelectedAtividadeIndex(event.target.value);
@@ -67,7 +137,7 @@ export default function Avaliar({ history }) {
           setatividadeDaSolicitacao(r.data.solicitacao.atividade.descricao);
           setgrupoDaSolicitacao(r.data.solicitacao.atividade.grupo.nome);
           setIdAtividade(r.data.solicitacao.atividade.idAtividade);
-          setAnexos(r.data.anexosDaSsolicitacao);
+          setAnexos(r.data.anexosDaSolicitacao);
           return;
         })
         .catch(e => console.log(e.response));
@@ -76,14 +146,7 @@ export default function Avaliar({ history }) {
     getData();
   }, [id]);
 
-  var avaliacao = {
-    cargaHorariaAtribuida: parseInt(cargaHorariaAtribuida),
-    idSolicitacao: parseInt(localStorage.getItem("solicitacaoId")),
-    idAtividade: parseInt(idAtividade),//tem q ser atividade só pra vir a modificada
-    parecer: parecerCoordenador,
-    deferido: deferimentoResultado,
-    nomeCoordenador: ""
-  };
+
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -112,15 +175,6 @@ export default function Avaliar({ history }) {
         matrícula: <strong>{solicitacao.matricula}</strong>.
       </p>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="data">Data</label>
-        <input
-          id="data"
-          name="data"
-          type="text"
-          placeholder={solicitacao.dataAtual}
-          value={solicitacao.dataAtual}
-          disabled
-        />
         <div
           style={{
             display: "flex",
@@ -131,7 +185,7 @@ export default function Avaliar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="nome">Nome *</label>
+            <label htmlFor="nome">Nome </label>
             <input
               id="nome"
               name="nome"
@@ -144,7 +198,7 @@ export default function Avaliar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="matricula">Matrícula *</label>
+            <label htmlFor="matricula">Matrícula </label>
             <input
               id="matricula"
               name="matricula"
@@ -165,7 +219,7 @@ export default function Avaliar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="grupo">Grupo *</label>
+            <label htmlFor="grupo">Grupo </label>
             <input
               id="grupo"
               name="grupo"
@@ -179,7 +233,7 @@ export default function Avaliar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="atividade">Atividade *</label>
+            <label htmlFor="atividade">Atividade </label>
             <input
               id="atividade"
               name="atividade"
@@ -236,7 +290,7 @@ export default function Avaliar({ history }) {
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
             <label htmlFor="periodoAtividadeInicio">
-              Período da atividade *
+              Período da atividade 
             </label>
             <input
               id="periodoAtividadeInicio"
@@ -271,15 +325,15 @@ export default function Avaliar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="cargaHorariaAtividade">
-              Carga-horária da atividade *
+            <label htmlFor="data">
+              Data do Pedido
             </label>
             <input
-              id="cargaHorariaAtividade"
-              name="cargaHorariaAtividade"
-              type="number"
-              placeholder={solicitacao.cargaHorariaSoli}
-              value={solicitacao.cargaHorariaSoli}
+              id="data"
+              name="data"
+              type="text"
+              placeholder={solicitacao.dataAtual}
+              value={solicitacao.dataAtual}
               disabled
             />
           </div>
@@ -287,7 +341,7 @@ export default function Avaliar({ history }) {
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
             <label htmlFor="cargaHorariaSolicitada">
-              Carga-horária solicitada *
+              Carga-horária solicitada 
             </label>
             <input
               id="cargaHorariaSolicitada"
@@ -299,7 +353,7 @@ export default function Avaliar({ history }) {
             />
           </div>
         </div>
-        <label htmlFor="descricaoAtividade">Descrição da atividade *</label>
+        <label htmlFor="descricaoAtividade">Descrição da atividade </label>
         <Input
           multiline
           style={{
@@ -312,21 +366,25 @@ export default function Avaliar({ history }) {
           value={solicitacao.descricao}
           disabled
         />
-        <label htmlFor="documento">Comprovantes:</label>
-
+        <label style={{ marginTop: 10}} htmlFor="documento">Comprovantes:</label>
         <div>
           {_.map(anexos, (anexo, index) => (
             <div>
               <p>{anexo.doc.nome}</p>
-              <button
+              <button className="btn btn-add" style={{ marginTop: 3, width: "25%" }}
                 id={anexo.idAnexo}
                 name={anexo.nome}
                 placeholder={anexo.nome}
-                //onClick
-                onChange={event => {
-                  //openDoc(event, documento.nome);
+                onClick={event => {
+                  window.open(
+                    `http://localhost:2222/avaliacao/file/${anexo.nome}`,
+                    '_blank',
+                    'noopener'
+                );
                 }}
-              />
+              >
+                Comprovante {index + 1}
+              </button>
             </div>
           ))}
         </div>
@@ -341,23 +399,26 @@ export default function Avaliar({ history }) {
         /> */}
 
         <div className="content2">
-          <p>Status do deferimento</p>
+          <p style={{color: 'white'}}><strong>Status do deferimento: </strong></p>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "flex-start"
             }}
           >
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%"
+                minWidth: "25%",
+                marginTop: 10,
+                marginLeft: "3%"
               }}
             >
-              <label>Deferido</label>
+              <label style={{color: 'white'}}>Deferido</label>
               <input
+                style={{marginBottom: 0, height: "auto"}}
                 type="radio"
                 name="deferimentoResultado"
                 value="Deferido"
@@ -365,16 +426,17 @@ export default function Avaliar({ history }) {
                 onChange={event => setDeferimentoResultado(true)}
               />
             </div>
-
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%"
+                marginTop: 10,
+                marginLeft: "3%"
               }}
             >
-              <label>Indeferido</label>
+              <label style={{color: 'white'}}>Indeferido</label>
               <input
+                style={{marginBottom: 0, height: "auto"}}
                 type="radio"
                 name="deferimentoResultado"
                 value="Indeferido"
@@ -383,23 +445,27 @@ export default function Avaliar({ history }) {
               />
             </div>
           </div>
-          <p>Alterar grupo e atividade.</p>
+          <hr style={{color: 'white', margin: 10}} />
+          <p style={{color: 'white'}}><strong>Alterar grupo e atividade</strong></p>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "flex-start"
             }}
           >
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%"
+                marginTop: 10,
+                marginLeft: "3%",
+                minWidth: "25%",
               }}
             >
-              <label>Sim</label>
+              <label style={{color: 'white'}}>Sim</label>
               <input
+                style={{marginBottom: 0, height: "auto"}}
                 type="radio"
                 name="Alterar"
                 value="sim"
@@ -411,11 +477,13 @@ export default function Avaliar({ history }) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%"
+                marginTop: 10,
+                marginLeft: "3%"
               }}
             >
-              <label>Não</label>
+              <label style={{color: 'white'}}>Não</label>
               <input
+                style={{marginBottom: 0, height: "auto"}}
                 type="radio"
                 name="Alterar"
                 value="nao"
@@ -438,7 +506,7 @@ export default function Avaliar({ history }) {
                     width: "48%"
                   }}
                 >
-                  <label htmlFor="grupo">Grupo *</label>
+                  <label style={{color: 'white'}} htmlFor="grupo">Grupo </label>
                   <select
                     id="grupo"
                     name="grupo"
@@ -463,7 +531,7 @@ export default function Avaliar({ history }) {
                     width: "48%"
                   }}
                 >
-                  <label htmlFor="atividade">Atividade *</label>
+                  <label style={{color: 'white'}} htmlFor="atividade">Atividade </label>
                   <select
                     id="atividade"
                     name="atividade"
@@ -497,10 +565,11 @@ export default function Avaliar({ history }) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%"
+                width: "100%",
+                marginTop: 15
               }}
             >
-              <label htmlFor="parecerCoordenador">Justificativa *</label>
+              <label style={{color: 'white'}} htmlFor="parecerCoordenador">Justificativa </label>
               <Input
                 multiline
                 style={{
@@ -520,14 +589,15 @@ export default function Avaliar({ history }) {
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
+              marginTop: 15
             }}
           >
             <div
               style={{ display: "flex", flexDirection: "column", width: "48%" }}
             >
-              <label htmlFor="cargaHorariaAtribuida">
-                Carga Horária Atribuida *
+              <label style={{color: 'white'}} htmlFor="cargaHorariaAtribuida">
+                Carga Horária Atribuida 
               </label>
               <input
                 id="cargaHorariaAtribuida"
@@ -542,7 +612,7 @@ export default function Avaliar({ history }) {
             <div
               style={{ display: "flex", flexDirection: "column", width: "48%" }}
             >
-              <label htmlFor="parecerCoordenador">Coordenador *</label>
+              <label style={{color: 'white'}} htmlFor="parecerCoordenador">Coordenador </label>
               <input
                 id="nomeCoordenador"
                 name="nomeCoordenador"
@@ -555,13 +625,21 @@ export default function Avaliar({ history }) {
             </div>
           </div>
         </div>
-        <button type="submit" className="btn btn-add">
-          Avaliar
-        </button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+            <button type="submit" style={{ width: "48%"}} className="btn btn-add">
+              Avaliar
+            </button>
+            <Link to="/" style={{ width: "48%"}} >
+              <button className="btn btn-add">Voltar</button>
+            </Link>
+        </div>
+        
       </form>
-      <Link to="/">
-        <button className="btn btn-add">Voltar</button>
-      </Link>
     </>
   );
 }
