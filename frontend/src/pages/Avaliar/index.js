@@ -6,21 +6,8 @@ import { Link } from "react-router-dom";
 import _ from "lodash";
 
 export default function Avaliar({ history }) {
-  //Dados da solicitacao exibidos
   const [solicitacao, setSolicitacao] = useState({});
-  // const [nome, setNome] = useState("");
-  // const [matricula, setMatricula] = useState("");
-  // const [grupo, setGrupo] = useState("");
-  // const [atividade, setAtividade] = useState("");
-  // const [nomeResponsavel, setNomeResponsavel] = useState("");
-  // const [localAtividade, setLocalAtividade] = useState("");
-  // const [periodoAtividadeInicio, setPeriodoAtividadeInicio] = useState("");
-  // const [periodoAtividadeFinal, setPeriodoAtividadeFinal] = useState("");
-  // const [cargaHorariaAtividade, setCargaHorariaAtividade] = useState("");
-  // const [cargaHorariaSolicitada, setCargaHorariaSolicitada] = useState("");
-  // const [descricaoAtividade, setDescricaoAtividade] = useState("");
-  // const [data, setData] = useState("");
-  // const [documento, setDocumento] = useState("");
+
   const { id } = useParams("id");
 
   //Dados da avaliação
@@ -30,9 +17,12 @@ export default function Avaliar({ history }) {
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
 
- // listas de grupos e atividades
- const [grupos, setGrupos] = useState([]);
- const [atividades, setAtividades] = useState([]);
+  const [atividadeDaSolicitacao, setatividadeDaSolicitacao] = useState([]);
+  const [grupoDaSolicitacao, setgrupoDaSolicitacao] = useState([]);
+
+  // listas de grupos e atividades
+  const [grupos, setGrupos] = useState([]);
+  const [atividades, setAtividades] = useState([]);
 
   const [grupo, setGrupo] = useState();
   const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
@@ -70,22 +60,12 @@ export default function Avaliar({ history }) {
         .then(r => {
           console.log(r);
           setSolicitacao(r.data);
+          setatividadeDaSolicitacao(r.data.atividade.descricao);
+          setgrupoDaSolicitacao(r.data.atividade.grupo.nome);
+
           return;
         })
         .catch(e => console.log(e.response));
-      // setNome(response.data.nome);
-      // setMatricula(response.data.matricula);
-      // setGrupo(response.data.grupo);
-      // setAtividade(response.data.atividade);
-      // setNomeResponsavel(response.data.nomeResponsavel);
-      // setLocalAtividade(response.data.localAtividade);
-      // setPeriodoAtividadeInicio(response.data.periodoAtividadeInicio);
-      // setPeriodoAtividadeFinal(response.data.periodoAtividadeFinal);
-      // setCargaHorariaAtividade(response.data.cargaHorariaAtividade);
-      // setCargaHorariaSolicitada(response.data.cargaHorariaSolicitada);
-      // setDescricaoAtividade(response.data.descricaoAtividade);
-      // setData(response.data.data);
-      // setDocumento(response.data.documento);
     }
 
     getData();
@@ -186,8 +166,8 @@ export default function Avaliar({ history }) {
               id="grupo"
               name="grupo"
               type="text"
-              placeholder={solicitacao.atividade.grupo}
-              value={solicitacao.atividade.grupo}
+              placeholder={grupoDaSolicitacao}
+              value={grupoDaSolicitacao}
               disabled
               required
             />
@@ -200,8 +180,8 @@ export default function Avaliar({ history }) {
               id="atividade"
               name="atividade"
               type="text"
-              placeholder={solicitacao.atividade}
-              value={solicitacao.atividade}
+              placeholder={atividadeDaSolicitacao}
+              value={atividadeDaSolicitacao}
               disabled
               required
             />
@@ -421,56 +401,68 @@ export default function Avaliar({ history }) {
                 onChange={event => setMudarGrupoAtividade(event.target.value)}
               />
             </div>
-            {(mudarGrupoAtividade === "sim") && <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between"
-              }}
-            >
+            {mudarGrupoAtividade === "sim" && (
               <div
-                style={{ display: "flex", flexDirection: "column", width: "48%" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between"
+                }}
               >
-                <label htmlFor="grupo">Grupo *</label>
-                <select
-                  id="grupo"
-                  name="grupo"
-                  value={selectedGrupoIndex}
-                  onChange={e => {
-                    _handleGrupoChange(e.target.value);
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "48%"
                   }}
-                  required
                 >
-                  <option disabled selected>
-                    Selecione um grupo
-              </option>
-                  {_.map(grupos, (grupo, index) => {
-                    return <option value={index}>{grupo.nome}</option>;
-                  })}
-                </select>
-              </div>
-              <div
-                style={{ display: "flex", flexDirection: "column", width: "48%" }}
-              >
-                <label htmlFor="atividade">Atividade *</label>
-                <select
-                  id="atividade"
-                  name="atividade"
-                  value={selectedAtividadeIndex}
-                  onChange={_handleAtividadeChange}
-                  required
-                  disabled={grupo == null}
+                  <label htmlFor="grupo">Grupo *</label>
+                  <select
+                    id="grupo"
+                    name="grupo"
+                    value={selectedGrupoIndex}
+                    onChange={e => {
+                      _handleGrupoChange(e.target.value);
+                    }}
+                    required
+                  >
+                    <option disabled selected>
+                      Selecione um grupo
+                    </option>
+                    {_.map(grupos, (grupo, index) => {
+                      return <option value={index}>{grupo.nome}</option>;
+                    })}
+                  </select>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "48%"
+                  }}
                 >
-                  <option value="" disabled>
-                    Selecione uma atividade
-              </option>
-                  {_.map(atividades, (atividade, index) => {
-                    return <option value={index}>{atividade.descricao}</option>;
-                  })}
-                </select>
+                  <label htmlFor="atividade">Atividade *</label>
+                  <select
+                    id="atividade"
+                    name="atividade"
+                    value={selectedAtividadeIndex}
+                    onChange={_handleAtividadeChange}
+                    required
+                    disabled={grupo == null}
+                  >
+                    <option value="" disabled>
+                      Selecione uma atividade
+                    </option>
+                    {_.map(atividades, (atividade, index) => {
+                      return (
+                        <option value={index}>{atividade.descricao}</option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
-            </div>}
-            {(mudarGrupoAtividade === "nao") && <div>bb  aa</div>}
+            )}
+            {mudarGrupoAtividade === "nao" && <div>bb aa</div>}
           </div>
           <div
             style={{
