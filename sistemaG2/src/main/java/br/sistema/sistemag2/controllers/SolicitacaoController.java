@@ -102,15 +102,24 @@ public class SolicitacaoController {
     @PostMapping("/")
     public ResponseEntity postSolicitacao(@Valid @ModelAttribute SolicitacaoPostDTO solicitacao, @RequestParam("anexo") MultipartFile[] anexos)
             throws Exception {
-        // try {  
-            
+
+        Solicitacao newSolicitacao = new Solicitacao();
+
+        // try {
+
         Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
 
         if (!atividade.isPresent()) {
             return ResponseEntity.badRequest().body("A Atividade com o ID " + solicitacao.getIdAtividade() + " não foi encontrada");
         }
 
-        Solicitacao newSolicitacao = new Solicitacao();
+        if(atividade.get().isPrecisaCalcular()){
+            newSolicitacao.setCargaHorariaSoli(solicitacao.getCargaHorariaRealizada()*atividade.get().getCargaHoraria());
+        } else {
+            newSolicitacao.setCargaHorariaSoli(atividade.get().getCargaHoraria());
+        }
+        newSolicitacao.setCargaHorariaRealizada(solicitacao.getCargaHorariaRealizada());
+
 
         newSolicitacao.setAtividade(atividade.get());
         newSolicitacao.setNomeAluno(solicitacao.getAluno());

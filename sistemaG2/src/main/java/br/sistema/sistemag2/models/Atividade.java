@@ -33,6 +33,9 @@ public class Atividade {
 	@Size(max = 250)
 	private String descricao;
 
+	@NotEmpty
+	private boolean precisaCalcular;
+
 	@ManyToOne
 	private Grupo grupo;
 		
