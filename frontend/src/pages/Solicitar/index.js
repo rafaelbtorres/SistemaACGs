@@ -374,6 +374,7 @@ export default function Solicitar({ history }) {
               name="grupo"
               value={selectedGrupoIndex}
               disabled={selectedCurriculo == null}
+              width={10}
               onChange={e => {
                 _handleGrupoChange(e.target.value);
               }}
@@ -389,8 +390,21 @@ export default function Solicitar({ history }) {
           </div>
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          ></div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
           >
             <label htmlFor="atividade">Atividade *</label>
+            
             <select
               id="atividade"
               name="atividade"
@@ -399,7 +413,7 @@ export default function Solicitar({ history }) {
               required
               disabled={grupo == null}
             >
-              <option value="" disabled>
+              <option  value="" disabled>
                 Selecione uma atividade
               </option>
               {_.map(atividades, (atividade, index) => {
@@ -408,6 +422,7 @@ export default function Solicitar({ history }) {
             </select>
           </div>
         </div>
+
 
         <div
           style={{
