@@ -74,7 +74,12 @@ public class AvaliacaoController {
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
-        Optional<Atividade> atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
+        Optional<Atividade> atividade;
+        if(avaliacao.getIdAtividade()!=0){
+            atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
+        }else{
+            atividade = atividadeRepository.findById(avaliada.getAtividade().getIdAtividade());
+        }
         String status = avaliada.getStatus();
         if (status.equals("Deferido") || status.equals("Indeferido")) {
             return ResponseEntity.badRequest().body("Essa avaliação da foi avaliada");
