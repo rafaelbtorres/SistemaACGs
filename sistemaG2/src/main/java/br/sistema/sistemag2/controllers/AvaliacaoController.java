@@ -19,6 +19,7 @@ import br.sistema.sistemag2.repository.CurriculoRepository;
 import br.sistema.sistemag2.repository.GrupoRepository;
 import br.sistema.sistemag2.repository.SolicitacaoRepository;
 import br.sistema.sistemag2.anexo.AnexoService;
+import br.sistema.sistemag2.models.Atividade;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -69,8 +70,11 @@ public class AvaliacaoController {
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
-
+        Optional<Atividade> atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
      try {
+        if (avaliada.getStatus().equals("Deferido") || avaliada.getStatus().equals("Indeferido")) {
+            return ResponseEntity.badRequest().body("Essa avaliação ja foi avaliada");
+        }
         if(avaliacao.isDeferido()){
             assert avaliada != null;
             avaliada.setStatus(Status.DEFERIDO.toString());
@@ -79,7 +83,7 @@ public class AvaliacaoController {
             avaliada.setStatus(Status.INDEFERIDO.toString());
         }
         avaliada.setIdSolicitacao(id);
-        avaliada.setAtividade(avaliacao.getSolicitacao().getAtividade());
+        avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
 
         newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
@@ -88,7 +92,7 @@ public class AvaliacaoController {
         newavaliacao.setJustificativa(avaliacao.getParecer());
 
 
-            newavaliacao.ValidaDeferimento();
+        newavaliacao.ValidaDeferimento();
         }catch (Exception e){
             return  ResponseEntity.ok(("Houve um erro ao realizar a avaliação " + e.getMessage()));
         }
