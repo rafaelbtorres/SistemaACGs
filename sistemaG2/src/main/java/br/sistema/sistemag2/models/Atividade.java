@@ -46,6 +46,9 @@ public class Atividade {
         {@JoinColumn(name="id_doc_necessario")})
 	List<DocsNecessarios> docs;
 
+	@NotEmpty
+	private boolean precisaCalcular;
+
 
 
 }

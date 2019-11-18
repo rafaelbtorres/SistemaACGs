@@ -8,7 +8,8 @@ export default function Solicitar({ history }) {
   // listas de grupos e atividades
   const [grupos, setGrupos] = useState([]);
   const [atividades, setAtividades] = useState([]);
-  const [documentos, setDocumentos] = useState([]);
+  const [curriculos, setCurriculos] = useState([]);
+  const [gruposCurriculo, setGruposCurriculo] = useState([]);
 
   // dados para criar a solicitação
   const [nome, setNome] = useState("");
@@ -22,11 +23,14 @@ export default function Solicitar({ history }) {
   const [descricaoAtividade, setDescricaoAtividade] = useState("");
   const [data, setData] = useState("");
   const [documentosEnv, setDocumentosEnv] = useState({});
+  const [precisaCalcular, setPrecisaCalcular] = useState(false)
 
+  const [curriculoId, setCurriculoId] = useState();
   const [grupo, setGrupo] = useState();
+  const [atividade, setAtividade] = useState({});
   const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
+  const [selectedCurriculo, setSelectedCurriculo] = useState();
 
-  const [atividade, setAtividade] = useState();
   const [selectedAtividadeIndex, setSelectedAtividadeIndex] = useState("");
 
   useEffect(() => {
@@ -35,21 +39,11 @@ export default function Solicitar({ history }) {
         //console.log(response.data)
         setGrupos(response.data.grupos);
         setAtividades(response.data.atividades);
+        setCurriculos(response.data.curriculo);
       });
     }
     loadGrupos();
   }, []);
-
-  // useEffect(() => {
-  //   api.get("solicitacao/dados").then(response => {
-  //   });
-  // }, [grupos, grupo]);
-
-  const _handleAtividadeChange = event => {
-    setSelectedAtividadeIndex(event.target.value);
-    setAtividade(atividades[event.target.value]);
-    //setDocumentos(event.target.value.docsNecessarios)
-  };
 
   function addDoc(event, nomeArquivo) {
     console.log(event.target.id)
@@ -113,7 +107,7 @@ export default function Solicitar({ history }) {
 
   const validarMatricula = (numero) => {
     var size = numero.toString().length
-    if (size === 10) {
+    if (size === 10 || size === 9) {
       return true
     } else {
       return false
@@ -187,14 +181,21 @@ export default function Solicitar({ history }) {
       return
     }
 
+    let horas
+    if(cargaHorariaAtividade !== '0'){
+      horas = parseInt(cargaHorariaAtividade) * atividade.cargaHoraria
+    } else {
+      horas = atividade.cargaHoraria
+    }
+
     var solicitacao = {
       aluno: nome,
       matricula: matricula,
       dataInicio: periodoAtividadeInicio,
       dataFim: periodoAtividadeFinal,
-      cargaHorariaSoli: cargaHorariaSolicitada,
       idAtividade: atividade.idAtividade,
       cargaHoraria: cargaHorariaAtividade,
+      cargaHorariaSoli: horas,
       profRes: nomeResponsavel,
       descricao: descricaoAtividade,
       local: localAtividade
@@ -233,7 +234,6 @@ export default function Solicitar({ history }) {
   }
 
   useEffect(() => {
-    console.log("agr chegamos");
     async function loadGrupos() {
       if (grupo != null)
         api
@@ -250,21 +250,42 @@ export default function Solicitar({ history }) {
     loadGrupos();
   }, [grupo]);
 
-  const getAtividadesSelect = (array, groupName) => {
-    let lista = [];
-    for (let index = 0; index < array.length; index++) {
-      if (array[index].grupo.nome === groupName) {
-        lista.push(array[index].grupo);
+  useEffect(() => {
+    console.log('grupos', grupos)
+    setGruposCurriculo(getGroupos(grupos, curriculoId))
+  }, [grupos, curriculoId])
+
+  const getGroupos = (array, idCurr) => {
+    let gruposLista = []
+    let index
+    for (index = 0; index < array.length; index++) {
+      if (array[index].curriculo.idCurriculo === parseInt(idCurr)) {
+        gruposLista.push(array[index])
       }
     }
-    return lista;
-  };
+    console.log('gruposLista metodo', gruposLista)
+    return gruposLista
+  }
+
+  const handleCurriculoChange = event => {
+    console.log('idCurriculo', event.target.value)
+    setCurriculoId(event.target.value);
+    setSelectedCurriculo(event.target.value);
+  }
 
   function _handleGrupoChange(grupoIndex) {
     console.log("grupo", grupoIndex, grupos[grupoIndex]);
     setGrupo(grupos[grupoIndex]);
     setSelectedGrupoIndex(grupoIndex);
   }
+
+
+  const _handleAtividadeChange = event => {
+    setPrecisaCalcular(atividades[event.target.value].precisaCalcular)
+    setSelectedAtividadeIndex(event.target.value);
+    setAtividade(atividades[event.target.value]);
+    //setDocumentos(event.target.value.docsNecessarios)
+  };
 
   return (
     <>
@@ -318,22 +339,46 @@ export default function Solicitar({ history }) {
           }}
         >
           <div
-            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+            style={{ display: "flex", flexDirection: "column", width: "23%" }}
+          >
+            <label htmlFor="curriculoSelect">Currículo *</label>
+            <select
+              id="curriculoSelect"
+              name="curriculo"
+              value={selectedCurriculo}
+              onChange={handleCurriculoChange}
+              required
+              inputProps={{
+                name: 'curriculo',
+                id: 'curriculoSelect',
+              }} >
+              >
+              <option disabled selected>
+                Selecione...
+              </option>
+              {_.map(curriculos, (curriculo, index) => {
+                return <option value={curriculo.idCurriculo}>{curriculo.ano}</option>;
+              })}
+            </select>
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "23%" }}
           >
             <label htmlFor="grupo">Grupo *</label>
             <select
               id="grupo"
               name="grupo"
               value={selectedGrupoIndex}
+              disabled={selectedCurriculo == null}
               onChange={e => {
                 _handleGrupoChange(e.target.value);
               }}
               required
             >
               <option disabled selected>
-                Selecione um grupo
+                Selecione...
               </option>
-              {_.map(grupos, (grupo, index) => {
+              {_.map(gruposCurriculo, (grupo, index) => {
                 return <option value={index}>{grupo.nome}</option>;
               })}
             </select>
@@ -451,9 +496,10 @@ export default function Solicitar({ history }) {
               id="cargaHorariaAtividade"
               name="cargaHorariaAtividade"
               type="number"
+              disabled={!precisaCalcular}
               placeholder="Carga-horária da atividade"
               value={cargaHorariaAtividade}
-              required
+              required={!precisaCalcular}
               onChange={event => setCargaHorariaAtividade(event.target.value)}
             />
           </div>
@@ -465,12 +511,18 @@ export default function Solicitar({ history }) {
             </label>
             <input
               id="cargaHorariaSolicitada"
+              disabled
               name="cargaHorariaSolicitada"
               type="number"
-              placeholder="Carga-horária solicitada"
-              value={cargaHorariaSolicitada}
-              required
-              onChange={event => setCargaHorariaSolicitada(event.target.value)}
+              value={
+                atividade.precisaCalcular ?
+                  atividade ?
+                    cargaHorariaAtividade ?
+                      parseInt(cargaHorariaAtividade) * parseInt(atividade.cargaHoraria) :
+                    0 :
+                  "" :
+                atividade.cargaHoraria
+              }
             />
           </div>
         </div>

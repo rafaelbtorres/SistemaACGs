@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 /frontend/node_modules
+**/anexos
 
 ### STS ###
 .apt_generated
