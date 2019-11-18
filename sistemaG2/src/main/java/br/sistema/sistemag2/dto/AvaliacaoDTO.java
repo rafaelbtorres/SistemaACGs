@@ -14,5 +14,6 @@ public class AvaliacaoDTO {
     private long idAtividade;
     private String parecer;
     private boolean deferido;
+    private String nomeCoordenador;
 
 }

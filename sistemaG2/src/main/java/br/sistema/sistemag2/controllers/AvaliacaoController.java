@@ -102,6 +102,7 @@ public class AvaliacaoController {
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
+        newavaliacao.setNomeCoordenador(avaliacao.getNomeCoordenador());
 ;
         newavaliacao.ValidaDeferimento();
         }catch (Exception e){

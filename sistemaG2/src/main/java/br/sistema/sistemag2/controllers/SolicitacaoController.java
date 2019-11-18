@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.sistema.sistemag2.anexo.AnexoService;
 import br.sistema.sistemag2.dto.DadosSolicitacaoDTO;
+import br.sistema.sistemag2.dto.SolicitacaoGetDTO;
 import br.sistema.sistemag2.dto.SolicitacaoPostDTO;
 import br.sistema.sistemag2.models.Anexo;
 import br.sistema.sistemag2.models.Atividade;
@@ -35,6 +35,9 @@ import br.sistema.sistemag2.repository.CurriculoRepository;
 import br.sistema.sistemag2.repository.DocsRepository;
 import br.sistema.sistemag2.repository.GrupoRepository;
 import br.sistema.sistemag2.repository.SolicitacaoRepository;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.List;
 import javax.validation.Valid;
 
 /**
@@ -91,10 +94,20 @@ public class SolicitacaoController {
     }
 
     @GetMapping(value = "/busca/{id}") // Busca uma solicitação
-    public @ResponseBody ResponseEntity<Optional<Solicitacao>> getSolicitacaobyId(@PathVariable long id) {
+    public @ResponseBody ResponseEntity getSolicitacaobyId(@PathVariable long id) {
         // Busca no banco pelo id
         Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
-        return ResponseEntity.ok(retornableSolicitacao);
+        Iterable<Anexo> anexos = anexoRepository.findAll();
+        List<Anexo> anexosDaSolicitacao = new ArrayList();
+        for(Anexo anexo: anexos){
+            if(anexo.getSolicitacao().equals(retornableSolicitacao.get())){
+                anexosDaSolicitacao.add(anexo);
+            }
+        }
+        SolicitacaoGetDTO dto = new SolicitacaoGetDTO();
+        dto.setAnexosDaSolicitacao(anexosDaSolicitacao);
+        dto.setSolicitacao(retornableSolicitacao.get());
+        return ResponseEntity.ok(dto);
     }
 
 
@@ -136,10 +149,14 @@ public class SolicitacaoController {
         newSolicitacao.setStatus("PENDENTE");
         Solicitacao retornableSolicitacao = solicitacaoRepository.save(newSolicitacao);
 
+        String nome;
+        MessageDigest m=MessageDigest.getInstance("MD5");
+        BigInteger hash = new BigInteger(1, m.digest(solicitacao.getAluno().getBytes()));
+        nome = hash.toString(16);
 
         for (int j = 0; j < anexos.length; j++) {
             Anexo newAnexo = new Anexo();
-            newAnexo.setNome(anexoService.store(anexos[j], solicitacao.getAluno(), solicitacao.getMatricula(), retornableSolicitacao.getIdSolicitacao()));
+            newAnexo.setNome(anexoService.store(anexos[j], nome, solicitacao.getMatricula(), retornableSolicitacao.getIdSolicitacao()));
             newAnexo.setDoc(atividade.get().getDocs().get(j));
             newAnexo.setSolicitacao(retornableSolicitacao);
             anexoRepository.save(newAnexo);
@@ -159,11 +176,11 @@ public class SolicitacaoController {
         try {
             if(retornableSolicitacao.get().getStatus().equalsIgnoreCase("PENDENTE")){
                 solicitacaoRepository.deleteById(id);
-            return ResponseEntity.ok("Solicitação apagada com sucesso!");
+                return ResponseEntity.ok("Solicitação apagada com sucesso!");
             }
-            return ResponseEntity.ok("Não é possível deletar a solicitação pois seu status é " + retornableSolicitacao.get().getStatus());
+            return ResponseEntity.badRequest().body("Não é possível deletar a solicitação pois seu status é " + retornableSolicitacao.get().getStatus());
         } catch (Exception e) {
-            return ResponseEntity.ok("Não foi possível excluir a solicitação!");
+            return ResponseEntity.badRequest().body("Não foi possível excluir a solicitação!");
         }
     }
 

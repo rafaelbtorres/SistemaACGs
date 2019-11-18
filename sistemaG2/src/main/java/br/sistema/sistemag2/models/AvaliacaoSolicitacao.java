@@ -52,6 +52,9 @@ public class AvaliacaoSolicitacao {
         
         private boolean precisouDeCorrecao;
 
+        @NotEmpty
+        private String nomeCoordenador;
+        
 	public AvaliacaoSolicitacao(){}
 
 	public void ValidaDeferimento () throws Exception {
