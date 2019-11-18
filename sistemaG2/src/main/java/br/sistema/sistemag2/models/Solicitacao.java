@@ -36,9 +36,6 @@ public class Solicitacao{
 	//@Pattern(regexp = "[0-9]?[0-9]?0?[1||2][0-9]*$")
 	private long matricula;
 
-	@NotEmpty
-	private long CargaHorariaRealizada;
-
 	@JsonFormat(pattern="yyyy-MM-dd")
 	//@FutureOrPresent
 	private Date dataAtual;
