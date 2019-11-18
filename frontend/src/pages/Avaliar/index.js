@@ -36,7 +36,7 @@ export default function Avaliar({ history }) {
 
   const _handleAtividadeChange = event => {
     setSelectedAtividadeIndex(event.target.value);
-    setAtividade(atividades[event.target.value]);
+    setAtividade(atividades[event.target.value].getIdAtividade());
     //setDocumentos(event.target.value.docsNecessarios)
   };
 
@@ -79,7 +79,7 @@ export default function Avaliar({ history }) {
   var avaliacao = {
     cargaHorariaAtribuida: cargaHorariaAtribuida,
     idSolicitacao: localStorage.getItem("solicitacaoId"),
-    idAtividade: idAtividade,
+    idAtividade: idAtividade,//tem q ser atividade só pra vir a modificada
     parecer: parecerCoordenador,
     deferido: deferimentoResultado
   };
@@ -311,44 +311,33 @@ export default function Avaliar({ history }) {
           value={solicitacao.descricao}
           disabled
         />
-        <label htmlFor="documento">Comprovante *</label>
+        <label htmlFor="documento">Comprovantes:</label>
 
         <div>
-          {_.map(solicitacao.docs, (documento, index) => (
+          {_.map(anexos, (anexo, index) => (
             <div>
-              <p>{documento.nome}</p>
+              <p>{anexo.doc.nome}</p>
               <button
-                id={documento.idDocNecessario}
-                name={documento.nome}
-                placeholder={documento.nome}
+                id={anexo.idAnexo}
+                name={anexo.nome}
+                placeholder={anexo.nome}
                 //onClick
+                onChange={event => {
+                  //openDoc(event, documento.nome);
+                }}
               />
             </div>
           ))}
         </div>
 
         {/* <input
-          id="documento"
-          name="documento"
+          id="anexo"
+          name="anexo"
           type="file"
-          placeholder={anexos}//r.data.anexosDaSolicitacao
-          value={anexos}
+          placeholder={anexo.nome}
+          value={anexo.nome}
           disabled
         /> */}
-
-        <div>
-            {_.map(atividadeDaSolicitacao.docs, (documento, index) => (
-              <div>
-                <p>{documento.nome}</p>
-                <input
-                  id={documento.idDocNecessario}
-                  name={documento.nome}
-                  type="file"
-                  placeholder="{anexos.name}"
-                />
-              </div>
-            ))}
-          </div>
 
         <div className="content2">
           <p>Status do deferimento</p>
@@ -372,7 +361,7 @@ export default function Avaliar({ history }) {
                 name="deferimentoResultado"
                 value="Deferido"
                 required
-                onChange={event => setDeferimentoResultado(event.target.value)}
+                onChange={event => setDeferimentoResultado(true)}
               />
             </div>
 
@@ -389,7 +378,7 @@ export default function Avaliar({ history }) {
                 name="deferimentoResultado"
                 value="Indeferido"
                 required
-                onChange={event => setDeferimentoResultado(event.target.value)}
+                onChange={event => setDeferimentoResultado(false)}
               />
             </div>
           </div>
@@ -414,7 +403,7 @@ export default function Avaliar({ history }) {
                 name="Alterar"
                 value="sim"
                 required
-                onChange={event => setMudarGrupoAtividade(event.target.value)}
+                onChange={event => setMudarGrupoAtividade(true)}
               />
             </div>
             <div
@@ -430,7 +419,7 @@ export default function Avaliar({ history }) {
                 name="Alterar"
                 value="nao"
                 required
-                onChange={event => setMudarGrupoAtividade(event.target.value)}
+                onChange={event => setMudarGrupoAtividade(false)}
               />
             </div>
             {mudarGrupoAtividade === "sim" && (
