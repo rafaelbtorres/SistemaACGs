@@ -74,15 +74,7 @@ public class AvaliacaoController {
      try {
         if (avaliada.getStatus().equals("Deferido") || avaliada.getStatus().equals("Indeferido")) {
             return ResponseEntity.badRequest().body("Essa avaliação ja foi avaliada");
-        }
-        if(avaliacao.isDeferido()){
-            assert avaliada != null;
-            avaliada.setStatus(Status.DEFERIDO.toString());
-        }else{
-            assert avaliada != null;
-            avaliada.setStatus(Status.INDEFERIDO.toString());
-        }
-        
+        }       
         //Armazena os solicitados na avaliação para manter o histórico
         newavaliacao.setSolicitada(avaliada.getAtividade());
         newavaliacao.setSolicitado(avaliada.getAtividade().getGrupo());
@@ -91,7 +83,17 @@ public class AvaliacaoController {
             newavaliacao.setPrecisouDeCorrecao(true);
         }
         
+        if(avaliacao.isDeferido()){
+            assert avaliada != null;
+            if(newavaliacao.isPrecisouDeCorrecao()){
+                avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+            }
+        }else{
+            assert avaliada != null;
+            avaliada.setStatus(Status.INDEFERIDO.toString());
+        }
         avaliada.setIdSolicitacao(id);
+        
         //Atualiza atividade Correta na solicitação
         avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
@@ -100,7 +102,7 @@ public class AvaliacaoController {
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
-
+;
         newavaliacao.ValidaDeferimento();
         }catch (Exception e){
             return  ResponseEntity.ok(("Houve um erro ao realizar a avaliação " + e.getMessage()));
