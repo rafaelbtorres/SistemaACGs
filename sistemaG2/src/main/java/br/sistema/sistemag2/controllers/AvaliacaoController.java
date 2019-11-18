@@ -1,14 +1,10 @@
 package br.sistema.sistemag2.controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.sistema.sistemag2.dto.AvaliacaoDTO;
-import br.sistema.sistemag2.models.Anexo;
 import br.sistema.sistemag2.models.AvaliacaoSolicitacao;
 import br.sistema.sistemag2.models.Solicitacao;
 import br.sistema.sistemag2.models.Status;
@@ -28,9 +24,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +61,7 @@ public class AvaliacaoController {
 
     @JsonIgnore
     @PostMapping("/{id}") //Envia nova avaliação
-    public ResponseEntity postAvaliacao(@RequestBody AvaliacaoDTO avaliacao, @PathVariable long id){
+    public ResponseEntity postAvaliacao(@ModelAttribute AvaliacaoDTO avaliacao, @PathVariable long id){
 
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
@@ -87,6 +83,8 @@ public class AvaliacaoController {
             assert avaliada != null;
             if(newavaliacao.isPrecisouDeCorrecao()){
                 avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+            }else{
+                avaliada.setStatus(Status.DEFERIDO.toString());
             }
         }else{
             assert avaliada != null;
