@@ -77,11 +77,12 @@ export default function Avaliar({ history }) {
   }, [id]);
 
   var avaliacao = {
-    cargaHorariaAtribuida: cargaHorariaAtribuida,
-    idSolicitacao: localStorage.getItem("solicitacaoId"),
-    idAtividade: idAtividade,//tem q ser atividade só pra vir a modificada
+    cargaHorariaAtribuida: parseInt(cargaHorariaAtribuida),
+    idSolicitacao: parseInt(localStorage.getItem("solicitacaoId")),
+    idAtividade: parseInt(idAtividade),//tem q ser atividade só pra vir a modificada
     parecer: parecerCoordenador,
-    deferido: deferimentoResultado
+    deferido: deferimentoResultado,
+    nomeCoordenador: ""
   };
 
   async function handleSubmit(event) {
