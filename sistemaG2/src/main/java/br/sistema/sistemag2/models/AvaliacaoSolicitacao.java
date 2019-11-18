@@ -14,6 +14,9 @@ import javax.validation.constraints.Positive;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.sistema.sistemag2.models.Atividade;
+import br.sistema.sistemag2.models.Grupo;
+
 import lombok.Data;
 
 /**
@@ -41,8 +44,10 @@ public class AvaliacaoSolicitacao {
 	@NotNull(message = "Solicitação inválida.")
         private Solicitacao solicitacao;
         
+        @OneToOne
         private Grupo solicitado;
         
+        @OneToOne
         private Atividade solicitada;
         
         private boolean precisouDeCorrecao;
