@@ -1,6 +1,5 @@
 package br.sistema.sistemag2.controllers;
 
-import br.sistema.sistemag2.models.Atividade;
 import br.sistema.sistemag2.models.Grupo;
 import br.sistema.sistemag2.repository.AtividadeRepository;
 import br.sistema.sistemag2.repository.GrupoRepository;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
