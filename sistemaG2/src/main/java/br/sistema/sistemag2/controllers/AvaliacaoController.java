@@ -110,7 +110,18 @@ public class AvaliacaoController {
 
         avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
-        newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
+        
+        if(newavaliacao.horaNegativaouZero(avaliacao.getCargaHorariaAtribuida())){
+            if(!avaliacao.isDeferido()){
+                newavaliacao.setCargaHorariaAtribuida(0);
+            }else{
+                return  ResponseEntity.badRequest().body("É necessário atribir pelo menos uma hora a solicitações deferidas ");
+            }
+        }else if(avaliacao.isDeferido()){
+            newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
+        }else{
+            return  ResponseEntity.badRequest().body("Não deve-se atribir carga horária em solicitações indeferidas ");
+        }
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
