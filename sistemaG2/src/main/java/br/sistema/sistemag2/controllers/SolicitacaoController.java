@@ -150,9 +150,13 @@ public class SolicitacaoController {
 
     @DeleteMapping(value = "/deleta/{id}") //deleta uma solicitacao
     ResponseEntity deleteSolicitacaobyId(@PathVariable long id) {
+        Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
         try {
-            solicitacaoRepository.deleteById(id);
-            return ResponseEntity.ok("Excluído com sucesso!");
+            if(retornableSolicitacao.get().getStatus().equalsIgnoreCase("PENDENTE")){
+                solicitacaoRepository.deleteById(id);
+            return ResponseEntity.ok("Solicitação apagada com sucesso!");
+            }
+            return ResponseEntity.ok("Não é possível deletar a solicitação pois seu status é " + retornableSolicitacao.get().getStatus());
         } catch (Exception e) {
             return ResponseEntity.ok("Não foi possível excluir a solicitação!");
         }
