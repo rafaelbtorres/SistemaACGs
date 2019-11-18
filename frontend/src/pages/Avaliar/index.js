@@ -36,6 +36,7 @@ export default function Avaliar({ history }) {
   // listas de grupos e atividades
   const [grupos, setGrupos] = useState([]);
   const [atividades, setAtividades] = useState([]);
+  const [idSolicitacao, setIdSolicitacao] = useState()
 
   const [grupo, setGrupo] = useState();
   const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
@@ -63,29 +64,30 @@ export default function Avaliar({ history }) {
 
   const handleAvaliacao = () => event => {
     setAvaliacao({ ...avaliacao, [event.target.id]: event.target.value });
-}
+  }
+
+
+  function handleMudaInfo(resp) {
+    if (resp === 'sim') {
+      setRespInfo('sim')
+      setMudaInfo(true)
+    }
+    if (resp === 'não') {
+      setRespInfo('não')
+      setMudaInfo(false)
+    }
+  }
 
   const handleDeferido = event => {
     setDeferido(true)
     setMostaHoras(true);
     setMostraObs(true);
     setMostraButton(true)
-    if(respInfo === 'yes') {
+    if (respInfo === 'sim') {
       setMudaInfo(true)
     }
     setAvaliacao({ ...avaliacao, deferido: "true" })
   };
-
-  function  handleMudaInfo(resp) {
-    if(resp === 'sim') {
-        setRespInfo('sim')
-        setMudaInfo(true)
-    }
-    if(resp === 'não') {
-      setRespInfo('não')
-      setMudaInfo(false)
-    }
-  }
 
   const handleIndefirido = event => {
     setDeferido(false)
@@ -96,22 +98,14 @@ export default function Avaliar({ history }) {
     setAvaliacao({ ...avaliacao, deferido: "false" })
   };
 
-  const handleMudaRadio = event => {
-    setRadio(event.target.value);
-  };
-
-  const handleRadioInfo = event => {
-    setRadioInfo(event.target.value);
-  };
-
   const _handleAtividadeChange = event => {
     setSelectedAtividadeIndex(event.target.value);
-    setAtividade(atividades[event.target.value].getIdAtividade());
-    //setDocumentos(event.target.value.docsNecessarios)
+    setAtividade(atividades[event.target.value]);
+    setAvaliacao({...avaliacao, idAtividade: atividade.idAtividade})
   };
 
   function _handleGrupoChange(grupoIndex) {
-    console.log("grupo", grupoIndex, grupos[grupoIndex]);
+    setSelectedAtividadeIndex("");
     setGrupo(grupos[grupoIndex]);
     setSelectedGrupoIndex(grupoIndex);
   }
@@ -128,6 +122,8 @@ export default function Avaliar({ history }) {
   }, []);
 
   useEffect(() => {
+    setIdSolicitacao(id)
+    setAvaliacao({ ...avaliacao, idSolicitacao: id })
     async function getData() {
       const response = await api
         .get("/solicitacao/busca/" + id)
@@ -146,26 +142,43 @@ export default function Avaliar({ history }) {
     getData();
   }, [id]);
 
+  useEffect(() => {
+    async function loadGrupos() {
+      if (grupo != null)
+        api
+          .get(`/atividades/porGrupo/${grupo.idGrupo}`)
+          .then(response => {
+            // console.log("ATIVIDADES", response.data);
+            setAtividades(response.data);
+          })
+          .catch(e => {
+            console.log("RESPOSE ERROR", e.response);
+            // alert("erro ao buscar as atividades");
+          });
+    }
+    loadGrupos();
+  }, [grupo]);
 
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log(avaliacao)
 
-    try {
-      const response = await api.post(
-        "/avaliacao/" + localStorage.getItem("solicitacaoId"),
-        avaliacao
-      );
+    // try {
+    //   const response = await api.post(
+    //     `/avaliacao/${idSolicitacao}`,
+    //     avaliacao
+    //   );
 
-      if (response.status === 200) {
-        history.push("/");
-      }
-    } catch (e) {
-      alert(
-        "Ocorreu um erro na avaliação verifique os dados informados e tente novamente !",
-        e
-      );
-    }
+    //   if (response.status === 200) {
+    //     history.push("/");
+    //   }
+    // } catch (e) {
+    //   alert(
+    //     "Ocorreu um erro na avaliação verifique os dados informados e tente novamente !",
+    //     e
+    //   );
+    // }
   }
 
   return (
@@ -290,7 +303,7 @@ export default function Avaliar({ history }) {
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
             <label htmlFor="periodoAtividadeInicio">
-              Período da atividade 
+              Período da atividade
             </label>
             <input
               id="periodoAtividadeInicio"
@@ -341,7 +354,7 @@ export default function Avaliar({ history }) {
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
             <label htmlFor="cargaHorariaSolicitada">
-              Carga-horária solicitada 
+              Carga-horária solicitada
             </label>
             <input
               id="cargaHorariaSolicitada"
@@ -366,7 +379,7 @@ export default function Avaliar({ history }) {
           value={solicitacao.descricao}
           disabled
         />
-        <label style={{ marginTop: 10}} htmlFor="documento">Comprovantes:</label>
+        <label style={{ marginTop: 10 }} htmlFor="documento">Comprovantes:</label>
         <div>
           {_.map(anexos, (anexo, index) => (
             <div>
@@ -380,7 +393,7 @@ export default function Avaliar({ history }) {
                     `http://localhost:2222/avaliacao/anexos/${anexo.nome}`,
                     '_blank',
                     'noopener'
-                );
+                  );
                 }}
               >
                 Comprovante {index + 1}
@@ -389,238 +402,250 @@ export default function Avaliar({ history }) {
           ))}
         </div>
 
-        {/* <input
-          id="anexo"
-          name="anexo"
-          type="file"
-          placeholder={anexo.nome}
-          value={anexo.nome}
-          disabled
-        /> */}
+
+
+
+
 
         <div className="content2">
-          <p style={{color: 'white'}}><strong>Status do deferimento: </strong></p>
+          <p style={{ color: 'white' }}><strong>Status do deferimento: </strong></p>
           <div
             style={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               justifyContent: "flex-start"
             }}
           >
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                minWidth: "25%",
-                marginTop: 10,
-                marginLeft: "3%"
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center"
               }}
             >
-              <label style={{color: 'white'}}>Deferido</label>
-              <input
-                style={{marginBottom: 0, height: "auto"}}
-                type="radio"
-                name="deferimentoResultado"
-                value="Deferido"
-                required
-                onChange={event => setDeferimentoResultado(true)}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: 10,
-                marginLeft: "3%"
-              }}
-            >
-              <label style={{color: 'white'}}>Indeferido</label>
-              <input
-                style={{marginBottom: 0, height: "auto"}}
-                type="radio"
-                name="deferimentoResultado"
-                value="Indeferido"
-                required
-                onChange={event => setDeferimentoResultado(false)}
-              />
-            </div>
-          </div>
-          <hr style={{color: 'white', margin: 10}} />
-          <p style={{color: 'white'}}><strong>Alterar grupo e atividade</strong></p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start"
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: 10,
-                marginLeft: "3%",
-                minWidth: "25%",
-              }}
-            >
-              <label style={{color: 'white'}}>Sim</label>
-              <input
-                style={{marginBottom: 0, height: "auto"}}
-                type="radio"
-                name="Alterar"
-                value="sim"
-                required
-                onChange={event => setMudarGrupoAtividade(true)}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: 10,
-                marginLeft: "3%"
-              }}
-            >
-              <label style={{color: 'white'}}>Não</label>
-              <input
-                style={{marginBottom: 0, height: "auto"}}
-                type="radio"
-                name="Alterar"
-                value="nao"
-                required
-                onChange={event => setMudarGrupoAtividade(false)}
-              />
-            </div>
-            {mudarGrupoAtividade === "sim" && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  minWidth: "15%",
+                  marginTop: 10,
+                  marginLeft: "3%"
+                }}
+              >
+                <label style={{ color: 'white' }}>Deferido</label>
+                <input
+                  style={{ marginBottom: 0, height: "auto" }}
+                  type="radio"
+                  name="deferimentoResultado"
+                  value={radio}
+                  onChange={handleDeferido}
+                  required
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: 10,
+                  marginLeft: "3%",
+                  minWidth: "25%",
+                }}
+              >
+                <label style={{ color: 'white' }}>Indeferido</label>
+                <input
+                  style={{ marginBottom: 0, height: "auto" }}
+                  type="radio"
+                  name="deferimentoResultado"
+                  value="Indeferido"
+                  required
+                  onChange={handleIndefirido}
+                />
+              </div>
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
+                  marginTop: 15,
+                  width: "50%"
                 }}
               >
                 <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "48%"
-                  }}
+                  style={{ flexDirection: "column", width: "100%", marginLeft: 10, display: mostraHoras === true ? "flex" : "none" }}
                 >
-                  <label style={{color: 'white'}} htmlFor="grupo">Grupo </label>
-                  <select
-                    id="grupo"
-                    name="grupo"
-                    value={selectedGrupoIndex}
-                    onChange={e => {
-                      _handleGrupoChange(e.target.value);
-                    }}
-                    required
-                  >
-                    <option disabled selected>
-                      Selecione um grupo
-                    </option>
-                    {_.map(grupos, (grupo, index) => {
-                      return <option value={index}>{grupo.nome}</option>;
-                    })}
-                  </select>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "48%"
-                  }}
-                >
-                  <label style={{color: 'white'}} htmlFor="atividade">Atividade </label>
-                  <select
-                    id="atividade"
-                    name="atividade"
-                    value={selectedAtividadeIndex}
-                    onChange={_handleAtividadeChange}
-                    required
-                    disabled={grupo == null}
-                  >
-                    <option value="" disabled>
-                      Selecione uma atividade
-                    </option>
-                    {_.map(atividades, (atividade, index) => {
-                      return (
-                        <option value={index}>{atividade.descricao}</option>
-                      );
-                    })}
-                  </select>
+                  <label style={{ color: 'white' }} htmlFor="cargaHorariaAtribuida">
+                    Carga Horária Atribuida
+              </label>
+                  <input
+                    id="cargaHorariaAtribuida"
+                    name="cargaHorariaAtribuida"
+                    type="number"
+                    placeholder="Carga Horária Atribuida"
+                    value={avaliacao.cargaHorariaAtribuida}
+                    required={mostraHoras}
+                    onChange={event => setAvaliacao({ ...avaliacao, cargaHorariaAtribuida: event.target.value })}
+                  />
                 </div>
               </div>
-            )}
-            {mudarGrupoAtividade === "nao" && <div></div>}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
+            </div>
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                marginTop: 15
+                flexDirection: "row",
+                justifyContent: "space-between"
               }}
             >
-              <label style={{color: 'white'}} htmlFor="parecerCoordenador">Justificativa </label>
-              <Input
-                multiline
+              <div
                 style={{
-                  height: "100px"
+                  display: mostraObs === true ? "flex" : "none",
+                  flexDirection: "column",
+                  width: "100%",
+                  marginTop: 15
                 }}
-                id="parecerCoordenador"
-                name="parecerCoordenador"
-                type="text"
-                placeholder="Parecer do Coordenador"
-                value={parecerCoordenador}
-                required
-                onChange={event => setParecerCoordenador(event.target.value)}
-              />
+              >
+                <label style={{ color: 'white' }} htmlFor="parecerCoordenador">Justificativa </label>
+                <Input
+                  multiline
+                  style={{
+                    height: "100px"
+                  }}
+                  id="parecerCoordenador"
+                  name="parecerCoordenador"
+                  type="text"
+                  placeholder="Parecer do Coordenador"
+                  value={avaliacao.parecer}
+                  required={!mostraHoras}
+                  onChange={event => setAvaliacao({ ...avaliacao, parecer: event.target.value })}
+                />
+              </div>
             </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 15
-            }}
-          >
+            <div >
+              <div style={{
+                display: mostraHoras === true ? "flex" : "none",
+                flexDirection: "column",
+                justifyContent: "flex-start"
+              }}>
+                <p style={{ color: 'white' }}><strong>Alterar grupo e atividade?</strong></p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start"
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginTop: 10,
+                      marginLeft: "3%",
+                      minWidth: "25%",
+                    }}
+                  >
+                    <label style={{ color: 'white' }}>Sim</label>
+                    <input
+                      style={{ marginBottom: 0, height: "auto" }}
+                      type="radio"
+                      name="Alterar"
+                      value="sim"
+                      onChange={(e) => { handleMudaInfo('sim') }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginTop: 10,
+                      marginLeft: "3%"
+                    }}
+                  >
+                    <label style={{ color: 'white' }}>Não</label>
+                    <input
+                      style={{ marginBottom: 0, height: "auto" }}
+                      type="radio"
+                      name="Alterar"
+                      value="nao"
+                      onChange={(e) => { handleMudaInfo('não') }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: mudaInfo === true ? "flex" : "none", marginTop: 10 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "100%"
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "35%"
+                      }}
+                    >
+                      <label style={{ color: 'white' }} htmlFor="grupo">Grupo </label>
+                      <select
+                        id="grupo"
+                        name="grupo"
+                        value={selectedGrupoIndex}
+                        onChange={e => {
+                          _handleGrupoChange(e.target.value);
+                        }}
+                        required={mudaInfo}
+                      >
+                        <option disabled selected>
+                          Selecione um grupo
+                    </option>
+                        {_.map(grupos, (grupo, index) => {
+                          return <option value={index}>{grupo.nome}</option>;
+                        })}
+                      </select>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "60%"
+                      }}
+                    >
+                      <label style={{ color: 'white' }} htmlFor="atividade">Atividade </label>
+                      <select
+                        id="atividade"
+                        name="atividade"
+                        value={selectedAtividadeIndex}
+                        onChange={_handleAtividadeChange}
+                        required={mudaInfo}
+                        disabled={grupo == null}
+                      >
+                        <option value="" disabled>
+                          Selecione uma atividade
+                        </option>
+                        {_.map(atividades, (atividade, index) => {
+                          return (
+                            <option value={index}>{atividade.descricao}</option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               style={{ display: "flex", flexDirection: "column", width: "48%" }}
             >
-              <label style={{color: 'white'}} htmlFor="cargaHorariaAtribuida">
-                Carga Horária Atribuida 
-              </label>
-              <input
-                id="cargaHorariaAtribuida"
-                name="cargaHorariaAtribuida"
-                type="number"
-                placeholder="Carga Horária Atribuida"
-                value={cargaHorariaAtribuida}
-                required
-                onChange={event => setCargaHorariaAtribuida(event.target.value)}
-              />
-            </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", width: "48%" }}
-            >
-              <label style={{color: 'white'}} htmlFor="parecerCoordenador">Coordenador </label>
+              <label style={{ color: 'white' }} htmlFor="parecerCoordenador">Coordenador </label>
               <input
                 id="nomeCoordenador"
                 name="nomeCoordenador"
                 type="text"
                 placeholder="Nome do Coordenador"
-                value={nomeCoordenador}
+                value={avaliacao.nomeCoordenador}
                 required
-                onChange={event => setNomeCoordenador(event.target.value)}
+                onChange={event => setAvaliacao({ ...avaliacao, nomeCoordenador: event.target.value })}
               />
             </div>
           </div>
@@ -629,16 +654,17 @@ export default function Avaliar({ history }) {
           style={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "center"
+            alignItems: "center",
+            justifyContent: "center"
           }}>
-            <button type="submit" style={{ width: "48%"}} className="btn btn-add">
-              Avaliar
-            </button>
-            <Link to="/" style={{ width: "48%"}} >
-              <button className="btn btn-add">Voltar</button>
-            </Link>
+          <Link to="/" style={{ width: "48%" }} >
+            <button className="btn btn-add">Voltar</button>
+          </Link>
+          <button type="submit" style={{ width: "48%", display: mostraButton === true ? "block" : "none" }} className="btn btn-add">
+            Avaliar
+          </button>
         </div>
-        
+
       </form>
     </>
   );
