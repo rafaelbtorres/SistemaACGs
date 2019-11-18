@@ -141,8 +141,8 @@ export default function Dashboard({ history }) {
                         props={solicitacao.idSolicitacao}
                         to={`/visualizar/${solicitacao.idSolicitacao}`}
                       >
-                        <button type="button" onClick={() => { }} className="btn-delete-avaliacao">
-                          <i style={{color: "black"}} className="" aria-hidden="true"></i>
+                        <button type="button" onClick={() => { }} className="btn-visualizar">
+                          <i style={{color: "black"}} className="far fa-eye" aria-hidden="true"></i>
                         </button>
                       </Link>
                 </Td>

@@ -12,6 +12,20 @@ button.btn-edit {
   margin-right: 1%;
 }
 
+button.btn-visualizar {
+  border: 0;
+  border-radius: 2px;
+  /* width: 35px; */
+  height: 35px;
+  padding: 0 13.4px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #dcebe5;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  margin-right: 1%;
+}
+
 th,
 td {
   padding: 5px;
@@ -20,6 +34,10 @@ td {
 
 button.btn-edit:hover {
   background: #08aed8;
+}
+
+button.btn-visualizar:hover {
+  background: #b1d4c4;
 }
 
 button.btn-delete:hover {
