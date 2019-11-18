@@ -39,7 +39,13 @@ public class AvaliacaoSolicitacao {
 	@OneToOne
 	@JsonBackReference
 	@NotNull(message = "Solicitação inválida.")
-    private Solicitacao solicitacao;
+        private Solicitacao solicitacao;
+        
+        private Grupo solicitado;
+        
+        private Atividade solicitada;
+        
+        private boolean precisouDeCorrecao;
 
 	public AvaliacaoSolicitacao(){}
 

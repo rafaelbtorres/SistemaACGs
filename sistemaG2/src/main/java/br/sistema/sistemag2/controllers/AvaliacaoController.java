@@ -82,15 +82,24 @@ public class AvaliacaoController {
             assert avaliada != null;
             avaliada.setStatus(Status.INDEFERIDO.toString());
         }
+        
+        //Armazena os solicitados na avaliação para manter o histórico
+        newavaliacao.setSolicitada(avaliada.getAtividade());
+        newavaliacao.setSolicitado(avaliada.getAtividade().getGrupo());
+        
+        if(!avaliada.getAtividade().equals(atividade.get())){
+            newavaliacao.setPrecisouDeCorrecao(true);
+        }
+        
         avaliada.setIdSolicitacao(id);
+        //Atualiza atividade Correta na solicitação
         avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
-
+        
         newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());
-
 
         newavaliacao.ValidaDeferimento();
         }catch (Exception e){
@@ -103,13 +112,13 @@ public class AvaliacaoController {
     }
 
     @DeleteMapping(value = "/{id}") // Busca no banco pelo ID
-    public @ResponseBody ResponseEntity<Optional<AvaliacaoSolicitacao>> deleteAvaliacaobyId(@PathVariable long id) {
+    public @ResponseBody ResponseEntity deleteAvaliacaobyId(@PathVariable long id) {
         Optional<AvaliacaoSolicitacao> retornableAvaliacao = avaliacaoRepository.findById(id);
-        avaliacaoRepository.deleteById(id);
         if(retornableAvaliacao.isPresent()) {
+            avaliacaoRepository.deleteById(id);
             retornableAvaliacao.get().getSolicitacao().setStatus(Status.PENDENTE.toString());
         } else {
-            throw new ExceptionInInitializerError();
+            return ResponseEntity.ok("Não existe esta avaliação");
         }
         solicitacaoRepository.save(retornableAvaliacao.get().getSolicitacao());
         return ResponseEntity.ok(retornableAvaliacao);
