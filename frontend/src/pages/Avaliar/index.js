@@ -21,8 +21,9 @@ export default function Avaliar({ history }) {
 
   const [radio, setRadio] = useState('');
   const [radioInfo, setRadioInfo] = useState('');
-  const [mostraObs, setMostraObs] = useState(false);
   const [mostraHoras, setMostaHoras] = useState(false);
+  const [mostraObs, setMostraObs] = useState(false);
+  const [requiredObs, setRequiredObs] = useState(false);
   const [mudaInfo, setMudaInfo] = useState(false);
   const [deferido, setDeferido] = useState(false);
   const [mostraButton, setMostraButton] = useState(false);
@@ -83,6 +84,7 @@ export default function Avaliar({ history }) {
     setMostaHoras(true);
     setMostraObs(true);
     setMostraButton(true)
+    setRequiredObs(false)
     if (respInfo === 'sim') {
       setMudaInfo(true)
     }
@@ -95,13 +97,15 @@ export default function Avaliar({ history }) {
     setMostaHoras(false);
     setMudaInfo(false)
     setMostraButton(true)
+    setRequiredObs(true)
     setAvaliacao({ ...avaliacao, deferido: "false" })
   };
 
   const _handleAtividadeChange = event => {
     setSelectedAtividadeIndex(event.target.value);
-    setAtividade(atividades[event.target.value]);
-    setAvaliacao({...avaliacao, idAtividade: atividade.idAtividade})
+    setAtividade(atividades[parseInt(event.target.value)]);
+    
+    setAvaliacao({...avaliacao, idAtividade: atividades[parseInt(event.target.value)].idAtividade.toString()})
   };
 
   function _handleGrupoChange(grupoIndex) {
@@ -164,21 +168,29 @@ export default function Avaliar({ history }) {
     event.preventDefault();
     console.log(avaliacao)
 
-    // try {
-    //   const response = await api.post(
-    //     `/avaliacao/${idSolicitacao}`,
-    //     avaliacao
-    //   );
+    var data = {
+      cargaHorariaAtribuida: avaliacao.cargaHorariaAtribuida,
+      idAtividade: avaliacao.idAtividade,
+      parecer: avaliacao.parecer,
+      deferido: avaliacao.deferido,
+      nomeCoordenador: avaliacao.nomeCoordenador
+    }
+    
+    try {
+      const response = await api.post(`/avaliacao/${idSolicitacao}`, data
+        );
+        console.log(response)
 
-    //   if (response.status === 200) {
-    //     history.push("/");
-    //   }
-    // } catch (e) {
-    //   alert(
-    //     "Ocorreu um erro na avaliação verifique os dados informados e tente novamente !",
-    //     e
-    //   );
-    // }
+      if (response.status === 200) {
+        alert("Avaliação Realizada com Sucesso!")
+        history.push("/");
+      }
+    } catch (e) {
+      alert(
+        "Ocorreu um erro na avaliação verifique os dados informados e tente novamente !",
+        e
+      );
+    }
   }
 
   return (
@@ -201,7 +213,7 @@ export default function Avaliar({ history }) {
             <label htmlFor="nome">Nome </label>
             <input
               id="nome"
-              name="nome"
+              name="nomeAluno"
               type="text"
               placeholder={solicitacao.nomeAluno}
               value={solicitacao.nomeAluno}
@@ -382,7 +394,7 @@ export default function Avaliar({ history }) {
         <label style={{ marginTop: 10 }} htmlFor="documento">Comprovantes:</label>
         <div>
           {_.map(anexos, (anexo, index) => (
-            <div>
+            <div key={index}>
               <p>{anexo.doc.nome}</p>
               <button className="btn btn-add" style={{ marginTop: 3, width: "25%" }}
                 id={anexo.idAnexo}
@@ -515,7 +527,7 @@ export default function Avaliar({ history }) {
                   type="text"
                   placeholder="Parecer do Coordenador"
                   value={avaliacao.parecer}
-                  required={!mostraHoras}
+                  required={requiredObs}
                   onChange={event => setAvaliacao({ ...avaliacao, parecer: event.target.value })}
                 />
               </div>
