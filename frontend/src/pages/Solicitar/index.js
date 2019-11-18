@@ -274,16 +274,18 @@ export default function Solicitar({ history }) {
   }
 
   function _handleGrupoChange(grupoIndex) {
-    console.log("grupo", grupoIndex, grupos[grupoIndex]);
+    setSelectedAtividadeIndex('')
+    setCargaHorariaAtividade('')
     setGrupo(grupos[grupoIndex]);
     setSelectedGrupoIndex(grupoIndex);
   }
 
 
   const _handleAtividadeChange = event => {
-    setPrecisaCalcular(atividades[event.target.value].precisaCalcular)
+    setPrecisaCalcular(false)
     setSelectedAtividadeIndex(event.target.value);
     setAtividade(atividades[event.target.value]);
+    setPrecisaCalcular(atividades[event.target.value].precisaCalcular)
     //setDocumentos(event.target.value.docsNecessarios)
   };
 
