@@ -186,7 +186,7 @@ export default function Avaliar({ history }) {
               id="grupo"
               name="grupo"
               type="text"
-              placeholder={solicitacao.atividade.grupo.nome}
+              placeholder={solicitacao.atividade.grupo}
               value={solicitacao.atividade.grupo}
               disabled
               required
@@ -200,7 +200,7 @@ export default function Avaliar({ history }) {
               id="atividade"
               name="atividade"
               type="text"
-              placeholder={solicitacao.atividade.descricao}
+              placeholder={solicitacao.atividade}
               value={solicitacao.atividade}
               disabled
               required
