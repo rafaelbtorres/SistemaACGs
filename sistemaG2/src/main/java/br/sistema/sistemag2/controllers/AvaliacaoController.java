@@ -74,7 +74,12 @@ public class AvaliacaoController {
         AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
-        Optional<Atividade> atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
+        Optional<Atividade> atividade;
+        if(avaliacao.getIdAtividade()!=0){
+            atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
+        }else{
+            atividade = atividadeRepository.findById(avaliada.getAtividade().getIdAtividade());
+        }
         String status = avaliada.getStatus();
         if (status.equals("Deferido") || status.equals("Indeferido")) {
             return ResponseEntity.badRequest().body("Essa avaliação da foi avaliada");
@@ -99,13 +104,24 @@ public class AvaliacaoController {
                 avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
             }
         }else{
-            avaliada.setStatus(Status.INDEFERIDO.toString() + avaliacao.getParecer());
+            avaliada.setStatus(Status.INDEFERIDO.toString() + " MOTIVO: " + avaliacao.getParecer());
         }
         avaliada.setIdSolicitacao(id);
 
         avaliada.setAtividade(atividade.get());
         solicitacaoRepository.save(avaliada);
-        newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
+        
+        if(newavaliacao.horaNegativaouZero(avaliacao.getCargaHorariaAtribuida())){
+            if(!avaliacao.isDeferido()){
+                newavaliacao.setCargaHorariaAtribuida(0);
+            }else{
+                return  ResponseEntity.badRequest().body("É necessário atribir pelo menos uma hora a solicitações deferidas ");
+            }
+        }else if(avaliacao.isDeferido()){
+            newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
+        }else{
+            return  ResponseEntity.badRequest().body("Não deve-se atribir carga horária em solicitações indeferidas ");
+        }
         newavaliacao.setDataAvaliacao(dataAtual);
         newavaliacao.setSolicitacao(avaliada);
         newavaliacao.setJustificativa(avaliacao.getParecer());

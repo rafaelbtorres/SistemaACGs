@@ -32,7 +32,7 @@ public class AvaliacaoSolicitacao {
 
     private String justificativa;//obrigatório if indeferido
 
-    //@NotEmpty
+    @NotEmpty
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dataAvaliacao;//atual
 
@@ -52,7 +52,7 @@ public class AvaliacaoSolicitacao {
         
     private boolean precisouDeCorrecao;
 
-    //@NotEmpty
+    @NotEmpty
     private String nomeCoordenador;
         
     public AvaliacaoSolicitacao(){}
@@ -68,6 +68,7 @@ public class AvaliacaoSolicitacao {
 			}
 		}
 	}
-
-    
+    public boolean horaNegativaouZero(long ch){
+        return ch <=0;
+    }
 }
