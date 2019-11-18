@@ -112,7 +112,7 @@ public class AvaliacaoController {
         newavaliacao.setNomeCoordenador(avaliacao.getNomeCoordenador());
         newavaliacao.ValidaDeferimento();
         }catch (Exception e){
-            return  ResponseEntity.ok(("Houve um erro ao realizar a avaliação " + e.getMessage()));
+            return  ResponseEntity.badRequest().body("Houve um erro ao realizar a avaliação " + e.getMessage());
         }
         AvaliacaoSolicitacao retornableAvaliacao = avaliacaoRepository.save(newavaliacao);
 
