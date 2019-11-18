@@ -73,6 +73,7 @@ export default function Dashboard({ history }) {
             <Th>Atividade</Th>
             <Th>Status</Th>
             <Th>Data</Th>
+            <Th>Ação</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -82,6 +83,7 @@ export default function Dashboard({ history }) {
               <Td>{solicitacao.atividade.grupo.nome}</Td>
               <Td>{solicitacao.atividade.descricao}</Td>
               <Td>{solicitacao.status}</Td>
+              <Td>{solicitacao.dataAtual}</Td>
               <Td>
                 <Link
                   props={solicitacao.idSolicitacao}
