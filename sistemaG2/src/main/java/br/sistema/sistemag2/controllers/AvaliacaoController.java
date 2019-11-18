@@ -104,7 +104,7 @@ public class AvaliacaoController {
                 avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
             }
         }else{
-            avaliada.setStatus(Status.INDEFERIDO.toString() + avaliacao.getParecer());
+            avaliada.setStatus(Status.INDEFERIDO.toString() + " MOTIVO: " + avaliacao.getParecer());
         }
         avaliada.setIdSolicitacao(id);
 
