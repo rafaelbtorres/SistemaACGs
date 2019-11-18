@@ -1,6 +1,5 @@
 package br.sistema.sistemag2.dto;
 
-import br.sistema.sistemag2.models.Solicitacao;
 import lombok.Data;
 
 /**

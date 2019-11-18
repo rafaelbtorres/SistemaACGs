@@ -68,6 +68,10 @@ public class SolicitacaoController {
 
     }
 
+    /**
+     * Pega todas as solicitações no banco.
+     * @return Retorna todas as solicitações em formato JSON.
+     */
     @GetMapping(value = "/listar") // Lista de solicitações no formato JSON - localhost:8080/solicitacao/
     public ResponseEntity<Iterable<Solicitacao> > getSolitacoes() {
         // try {
@@ -80,7 +84,12 @@ public class SolicitacaoController {
     }
 
     @GetMapping(value = "/dados") // Lista de atividades, grupo e curriculo no formato JSON - //
-                             
+
+
+    /**
+     * Retorna as informações dos Grupos, Atividades e Documentos Necessários.
+     * @return Todas as informações em um formato JSON.
+     */
     public DadosSolicitacaoDTO getInfos() {
 
         DadosSolicitacaoDTO infos = new DadosSolicitacaoDTO();
@@ -93,6 +102,11 @@ public class SolicitacaoController {
         return infos;
     }
 
+    /**
+     * Método de retorno de uma solicitação especifica, buscada pelo seu ID.
+     * @param id
+     * @return Retorna a solicitação selecionada.
+     */
     @GetMapping(value = "/busca/{id}") // Busca uma solicitação
     public @ResponseBody ResponseEntity getSolicitacaobyId(@PathVariable long id) {
         // Busca no banco pelo id
@@ -110,12 +124,19 @@ public class SolicitacaoController {
         return ResponseEntity.ok(dto);
     }
 
-
+    /**
+     * Método de salvamento de solicitação de ACG. Serve para inclusão no banco das informações da solicitação ACG,
+     * bem como seus anexos e a atividade/grupo escolhida.
+     * @param solicitacao
+     * @param anexos
+     * @return Retorna um OK caso a operação seja efetuada com sucesso. Em caso de erro retorna um error.
+     * @throws Exception
+     */
     @JsonIgnore
     @PostMapping("/")
     public ResponseEntity postSolicitacao(@Valid @ModelAttribute SolicitacaoPostDTO solicitacao, @RequestParam("anexo") MultipartFile[] anexos)
             throws Exception {
-        // try {  
+        // try {
             
         Optional<Atividade> atividade = atividadeRepository.findById(solicitacao.getIdAtividade());
 
@@ -165,6 +186,11 @@ public class SolicitacaoController {
 
     }
 
+    /**
+     * Deleta a solicitação escolhida
+     * @param id
+     * @return Retorna um OK caso a seja deletado com sucesso. Em caso de erro retorna um error.
+     */
     @DeleteMapping(value = "/deleta/{id}") //deleta uma solicitacao
     ResponseEntity deleteSolicitacaobyId(@PathVariable long id) {
         Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);

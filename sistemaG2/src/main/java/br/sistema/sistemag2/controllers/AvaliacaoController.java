@@ -59,6 +59,13 @@ public class AvaliacaoController {
         this.storageService = storageService;
     }
 
+
+    /**
+     * Metodo de salvamento da avaliação. Serve para como inclusão da avaliação de uma solicitação no banco de dados.
+     * @param avaliacao
+     * @param id
+     * @return Retorna um Ok em caso de sucesso. Em caso de erro retorna um error.
+     */
     @JsonIgnore
     @PostMapping("/{id}")
     public ResponseEntity postAvaliacao(@ModelAttribute AvaliacaoDTO avaliacao, @PathVariable long id){
@@ -111,6 +118,11 @@ public class AvaliacaoController {
         return ResponseEntity.ok(retornableAvaliacao);
     }
 
+    /**
+     * Deleta a avaliação escolhida.
+     * @param id
+     * @return Retorna um OK caso a seja deletado com sucesso. Em caso de erro retorna um error.
+    */
     @DeleteMapping(value = "/{id}") 
     public @ResponseBody ResponseEntity deleteAvaliacaobyId(@PathVariable long id) {
         Optional<AvaliacaoSolicitacao> retornableAvaliacao = avaliacaoRepository.findById(id);
@@ -124,13 +136,23 @@ public class AvaliacaoController {
         return ResponseEntity.ok(retornableAvaliacao);
     }
 
+
+    /**
+     * Busca no banco pelo id
+     * @param id
+     * @return Retorna as informações da solicitacão em caso de sucesso. Em caso de erro retorna um error.
+    */
     @GetMapping(value = "/infos/{id}")
     public ResponseEntity<Optional<Solicitacao>> getInfos(@PathVariable long id) {
         Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
         return ResponseEntity.ok(retornableSolicitacao);
     }
 
-
+    /**
+     * Pega um anexo a partir do nome do anexo.
+     * @param filename
+     * @return
+    */
     @GetMapping("/anexos/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
