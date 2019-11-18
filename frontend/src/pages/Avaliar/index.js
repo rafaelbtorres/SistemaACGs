@@ -17,6 +17,8 @@ export default function Avaliar({ history }) {
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
 
+  const [idAtividade, setIdAtividade] = useState([]);
+
   const [atividadeDaSolicitacao, setatividadeDaSolicitacao] = useState([]);
   const [grupoDaSolicitacao, setgrupoDaSolicitacao] = useState([]);
 
@@ -62,7 +64,7 @@ export default function Avaliar({ history }) {
           setSolicitacao(r.data);
           setatividadeDaSolicitacao(r.data.atividade.descricao);
           setgrupoDaSolicitacao(r.data.atividade.grupo.nome);
-
+          setIdAtividade(r.data.atividade.idAtividade);
           return;
         })
         .catch(e => console.log(e.response));
@@ -72,9 +74,11 @@ export default function Avaliar({ history }) {
   }, [id]);
 
   var avaliacao = {
-    deferimentoResultado,
-    parecerCoordenador,
-    cargaHorariaAtribuida
+    cargaHorariaAtribuida: cargaHorariaAtribuida,
+    idSolicitacao: localStorage.getItem("solicitacaoId"),
+    idAtividade: idAtividade,
+    parecer: parecerCoordenador,
+    deferido: deferimentoResultado
   };
 
   async function handleSubmit(event) {
@@ -82,12 +86,8 @@ export default function Avaliar({ history }) {
 
     try {
       const response = await api.post(
-        "/avaliacoes/" + localStorage.getItem("solicitacaoId"),
-        {
-          deferimentoResultado,
-          parecerCoordenador,
-          cargaHorariaAtribuida
-        }
+        "/avaliacao/" + localStorage.getItem("solicitacaoId"),
+        avaliacao
       );
 
       if (response.status === 200) {
@@ -309,7 +309,21 @@ export default function Avaliar({ history }) {
           disabled
         />
         <label htmlFor="documento">Comprovante *</label>
-        Essa parte precisa ser implementada para abrir um modal com o documento
+
+        <div>
+          {_.map(solicitacao.docs, (documento, index) => (
+            <div>
+              <p>{documento.nome}</p>
+              <button
+                id={documento.idDocNecessario}
+                name={documento.nome}
+                placeholder={documento.nome}
+                //onClick
+              />
+            </div>
+          ))}
+        </div>
+
         <input
           id="documento"
           name="documento"
@@ -462,7 +476,7 @@ export default function Avaliar({ history }) {
                 </div>
               </div>
             )}
-            {mudarGrupoAtividade === "nao" && <div>bb aa</div>}
+            {mudarGrupoAtividade === "nao" && <div></div>}
           </div>
           <div
             style={{
