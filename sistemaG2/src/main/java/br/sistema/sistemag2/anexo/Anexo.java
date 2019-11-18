@@ -44,7 +44,7 @@ public class Anexo implements AnexoService {
             throw new AnexoException("Falha ao armazenar " + file.getOriginalFilename(), e);
         }
 
-        return this.rootLocation.toString() + "-" + fileName;
+        return fileName;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Anexo implements AnexoService {
         try {
             Files.createDirectory(rootLocation);
         } catch (IOException e) {
-            throw new AnexoException("Não foi possível concluir a solicitação", e);
+            //throw new AnexoException("já existe a pasta", e);
         }
     }
 }

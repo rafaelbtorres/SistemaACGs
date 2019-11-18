@@ -146,12 +146,12 @@ public class SolicitacaoController {
 
         String nome;
         MessageDigest m=MessageDigest.getInstance("MD5");
-        BigInteger hash = new BigInteger(1, m.digest(solicitacao.getAluno().getBytes()));
-        nome = hash.toString(16);
-
+       
         for (int j = 0; j < anexos.length; j++) {
+            BigInteger hash = new BigInteger(1, m.digest(solicitacao.getAluno().getBytes()));
+            nome = hash.toString(16);
             Anexo newAnexo = new Anexo();
-            newAnexo.setNome(anexoService.store(anexos[j], nome, solicitacao.getMatricula(), retornableSolicitacao.getIdSolicitacao()));
+            newAnexo.setNome(anexoService.store(anexos[j], nome+j, solicitacao.getMatricula(), retornableSolicitacao.getIdSolicitacao()));
             newAnexo.setDoc(atividade.get().getDocs().get(j));
             newAnexo.setSolicitacao(retornableSolicitacao);
             anexoRepository.save(newAnexo);

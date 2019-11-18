@@ -18,10 +18,9 @@ public class Sistemag2Application {
 		SpringApplication.run(Sistemag2Application.class, args);
 	}
 
-	@Bean
+    @Bean
     CommandLineRunner init(AnexoService anexoService) {
         return (args) -> {
-            anexoService.deleteAll();
             anexoService.init();
         };
     }

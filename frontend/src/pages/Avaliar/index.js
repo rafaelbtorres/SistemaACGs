@@ -377,7 +377,7 @@ export default function Avaliar({ history }) {
                 placeholder={anexo.nome}
                 onClick={event => {
                   window.open(
-                    `http://localhost:2222/avaliacao/file/${anexo.nome}`,
+                    `http://localhost:2222/avaliacao/anexos/${anexo.nome}`,
                     '_blank',
                     'noopener'
                 );
