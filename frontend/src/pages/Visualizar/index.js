@@ -131,8 +131,10 @@ export default function Visualizar({ history }) {
               required
             />
           </div>
-          <div
-            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          
+        </div>
+        <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
           >
             <label htmlFor="atividade">Atividade </label>
             <input
@@ -145,7 +147,6 @@ export default function Visualizar({ history }) {
               required
             />
           </div>
-        </div>
         <div
           style={{
             display: "flex",
@@ -334,6 +335,10 @@ export default function Visualizar({ history }) {
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", width: "65%", justifyContent: "space-around" }}>
+                    
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", width: "65%", justifyContent: "space-around" }}>
                     <p style={{ display: "flex", color: "white" }}>
                       <strong>Grupo e Atividade Atribuídos: </strong>
                     </p>
@@ -351,7 +356,9 @@ export default function Visualizar({ history }) {
                           disabled
                         />
                       </div>
-                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                    </div>
+                  </div>
+                <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
                         <label style={{ color: "white" }} htmlFor="atividade">
                           Atividade:{" "}
                         </label>
@@ -364,9 +371,6 @@ export default function Visualizar({ history }) {
                           disabled
                         />
                       </div>
-                    </div>
-                  </div>
-                </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
                   <div style={{ display: "flex", flexDirection: "column", width: "97.5%", marginTop: 10 }}>
                     <label style={{ color: "white" }} htmlFor="parecerCoordenador">
