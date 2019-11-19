@@ -7,26 +7,19 @@ import _ from "lodash";
 
 export default function Visualizar({ history }) {
   const [solicitacao, setSolicitacao] = useState({});
+
   const [anexos, setAnexos] = useState({});
 
   const { id } = useParams("id");
 
+  const [temAvaliacao, setTemAvaliacao] = useState(false);
+  const [precisouDecorrecao, setPrecisouDecorrecao] = useState(true);
   //Dados da avaliação
   const [nomeCoordenador, setNomeCoordenador] = useState("");
   const [mudarGrupoAtividade, setMudarGrupoAtividade] = useState("");
   const [deferimentoResultado, setDeferimentoResultado] = useState("");
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
-
-  const [radio, setRadio] = useState('');
-  const [radioInfo, setRadioInfo] = useState('');
-  const [mostraHoras, setMostaHoras] = useState(false);
-  const [mostraObs, setMostraObs] = useState(false);
-  const [requiredObs, setRequiredObs] = useState(false);
-  const [mudaInfo, setMudaInfo] = useState(false);
-  const [deferido, setDeferido] = useState(false);
-  const [mostraButton, setMostraButton] = useState(false);
-  const [respInfo, setRespInfo] = useState('');
 
   const [idAtividade, setIdAtividade] = useState([]);
 
@@ -36,7 +29,7 @@ export default function Visualizar({ history }) {
   // listas de grupos e atividades
   const [grupos, setGrupos] = useState([]);
   const [atividades, setAtividades] = useState([]);
-  const [idSolicitacao, setIdSolicitacao] = useState()
+  const [idSolicitacao, setIdSolicitacao] = useState();
 
   const [grupo, setGrupo] = useState();
   const [selectedGrupoIndex, setSelectedGrupoIndex] = useState();
@@ -51,72 +44,11 @@ export default function Visualizar({ history }) {
     deferido: "",
     nomeCoordenador: "",
     idSolicitacao: ""
-  })
-
-  // var avaliacao = {
-  //   cargaHorariaAtribuida: parseInt(cargaHorariaAtribuida),
-  //   idSolicitacao: parseInt(localStorage.getItem("solicitacaoId")),
-  //   idAtividade: parseInt(idAtividade),//tem q ser atividade só pra vir a modificada
-  //   parecer: parecerCoordenador,
-  //   deferido: deferimentoResultado,
-  //   nomeCoordenador: ""
-  // };
-
-  const handleAvaliacao = () => event => {
-    setAvaliacao({ ...avaliacao, [event.target.id]: event.target.value });
-  }
-
-
-  function handleMudaInfo(resp) {
-    if (resp === 'sim') {
-      setRespInfo('sim')
-      setMudaInfo(true)
-    }
-    if (resp === 'não') {
-      setRespInfo('não')
-      setMudaInfo(false)
-    }
-  }
-
-  const handleDeferido = event => {
-    setDeferido(true)
-    setMostaHoras(true);
-    setMostraObs(true);
-    setMostraButton(true)
-    setRequiredObs(false)
-    if (respInfo === 'sim') {
-      setMudaInfo(true)
-    }
-    setAvaliacao({ ...avaliacao, deferido: "true" })
-  };
-
-  const handleIndefirido = event => {
-    setDeferido(false)
-    setMostraObs(true);
-    setMostaHoras(false);
-    setMudaInfo(false)
-    setMostraButton(true)
-    setRequiredObs(true)
-    setAvaliacao({ ...avaliacao, deferido: "false" })
-  };
-
-  const _handleAtividadeChange = event => {
-    setSelectedAtividadeIndex(event.target.value);
-    setAtividade(atividades[parseInt(event.target.value)]);
-    
-    setAvaliacao({...avaliacao, idAtividade: atividades[parseInt(event.target.value)].idAtividade.toString()})
-  };
-
-  function _handleGrupoChange(grupoIndex) {
-    setSelectedAtividadeIndex("");
-    setGrupo(grupos[grupoIndex]);
-    setSelectedGrupoIndex(grupoIndex);
-  }
+  });
 
   useEffect(() => {
     async function loadGrupos() {
       api.get("solicitacao/dados").then(response => {
-        //console.log(response.data)
         setGrupos(response.data.grupos);
         setAtividades(response.data.atividades);
       });
@@ -125,13 +57,14 @@ export default function Visualizar({ history }) {
   }, []);
 
   useEffect(() => {
-    setIdSolicitacao(id)
-    setAvaliacao({ ...avaliacao, idSolicitacao: id })
+    setIdSolicitacao(id);
+    setAvaliacao({ ...avaliacao, idSolicitacao: id });
     async function getData() {
       const response = await api
         .get("/solicitacao/busca/" + id)
         .then(r => {
           console.log(r);
+          console.log(avaliacao);
           setSolicitacao(r.data.solicitacao);
           setatividadeDaSolicitacao(r.data.solicitacao.atividade.descricao);
           setgrupoDaSolicitacao(r.data.solicitacao.atividade.grupo.nome);
@@ -145,60 +78,13 @@ export default function Visualizar({ history }) {
     getData();
   }, [id]);
 
-  useEffect(() => {
-    async function loadGrupos() {
-      if (grupo != null)
-        api
-          .get(`/atividades/porGrupo/${grupo.idGrupo}`)
-          .then(response => {
-            // console.log("ATIVIDADES", response.data);
-            setAtividades(response.data);
-          })
-          .catch(e => {
-            console.log("RESPOSE ERROR", e.response);
-            // alert("erro ao buscar as atividades");
-          });
-    }
-    loadGrupos();
-  }, [grupo]);
-
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    console.log(avaliacao)
-
-    var data = {
-      cargaHorariaAtribuida: avaliacao.cargaHorariaAtribuida,
-      idAtividade: avaliacao.idAtividade,
-      parecer: avaliacao.parecer,
-      deferido: avaliacao.deferido,
-      nomeCoordenador: avaliacao.nomeCoordenador
-    }
-    
-    try {
-      const response = await api.post(`/avaliacao/${idSolicitacao}`, data
-        );
-        console.log(response)
-
-      if (response.status === 200) {
-        alert("Avaliação Realizada com Sucesso!")
-        history.push("/");
-      }
-    } catch (e) {
-      alert(
-        "Ocorreu um erro na avaliação verifique os dados informados e tente novamente !",
-        e
-      );
-    }
-  }
-
   return (
     <>
       <p>
         Avalie aqui a solicitação de : <strong>{solicitacao.nomeAluno}</strong>,
         matrícula: <strong>{solicitacao.matricula}</strong>.
       </p>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div
           style={{
             display: "flex",
@@ -313,9 +199,7 @@ export default function Visualizar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="periodoAtividadeInicio">
-              Período da atividade
-            </label>
+            <label htmlFor="periodoAtividadeInicio">Período da atividade</label>
             <input
               id="periodoAtividadeInicio"
               name="periodoAtividadeInicio"
@@ -349,9 +233,7 @@ export default function Visualizar({ history }) {
           <div
             style={{ display: "flex", flexDirection: "column", width: "48%" }}
           >
-            <label htmlFor="data">
-              Data do Pedido
-            </label>
+            <label htmlFor="data">Data do Pedido</label>
             <input
               id="data"
               name="data"
@@ -390,20 +272,24 @@ export default function Visualizar({ history }) {
           value={solicitacao.descricao}
           disabled
         />
-        <label style={{ marginTop: 10 }} htmlFor="documento">Comprovantes:</label>
+        <label style={{ marginTop: 10 }} htmlFor="documento">
+          Comprovantes:
+        </label>
         <div>
           {_.map(anexos, (anexo, index) => (
             <div key={index}>
               <p>{anexo.doc.nome}</p>
-              <button className="btn btn-add" style={{ marginTop: 3, width: "25%" }}
+              <button
+                className="btn btn-add"
+                style={{ marginTop: 3, width: "25%" }}
                 id={anexo.idAnexo}
                 name={anexo.nome}
                 placeholder={anexo.nome}
                 onClick={event => {
                   window.open(
                     `http://localhost:2222/avaliacao/anexos/${anexo.nome}`,
-                    '_blank',
-                    'noopener'
+                    "_blank",
+                    "noopener"
                   );
                 }}
               >
@@ -413,13 +299,20 @@ export default function Visualizar({ history }) {
           ))}
         </div>
 
-
-
-
-
-
-        <div className="content2">
-          <p style={{ color: 'white' }}><strong>Status do deferimento: </strong></p>
+        <div
+          className="content2"
+          style={{
+            display: temAvaliacao === true ? "flex" : "none"
+          }}
+        >
+          <p
+            style={{
+              display: "flex",
+              color: "white"
+            }}
+          >
+            <strong>Status do deferimento: </strong>
+          </p>
           <div
             style={{
               display: "flex",
@@ -444,14 +337,12 @@ export default function Visualizar({ history }) {
                   marginLeft: "3%"
                 }}
               >
-                <label style={{ color: 'white' }}>Deferido</label>
+                <label style={{ color: "white" }}>Deferido</label>
                 <input
                   style={{ marginBottom: 0, height: "auto" }}
                   type="radio"
                   name="deferimentoResultado"
-                  value={radio}
-                  onChange={handleDeferido}
-                  required
+                  value="Deferido"
                 />
               </div>
               <div
@@ -460,17 +351,15 @@ export default function Visualizar({ history }) {
                   flexDirection: "column",
                   marginTop: 10,
                   marginLeft: "3%",
-                  minWidth: "25%",
+                  minWidth: "25%"
                 }}
               >
-                <label style={{ color: 'white' }}>Indeferido</label>
+                <label style={{ color: "white" }}>Indeferido</label>
                 <input
                   style={{ marginBottom: 0, height: "auto" }}
                   type="radio"
                   name="deferimentoResultado"
                   value="Indeferido"
-                  required
-                  onChange={handleIndefirido}
                 />
               </div>
               <div
@@ -483,19 +372,25 @@ export default function Visualizar({ history }) {
                 }}
               >
                 <div
-                  style={{ flexDirection: "column", width: "100%", marginLeft: 10, display: mostraHoras === true ? "flex" : "none" }}
+                  style={{
+                    flexDirection: "column",
+                    width: "100%",
+                    marginLeft: 10,
+                    display: "flex"
+                  }}
                 >
-                  <label style={{ color: 'white' }} htmlFor="cargaHorariaAtribuida">
+                  <label
+                    style={{ color: "white" }}
+                    htmlFor="cargaHorariaAtribuida"
+                  >
                     Carga Horária Atribuida
-              </label>
+                  </label>
                   <input
                     id="cargaHorariaAtribuida"
                     name="cargaHorariaAtribuida"
                     type="number"
                     placeholder="Carga Horária Atribuida"
                     value={avaliacao.cargaHorariaAtribuida}
-                    required={mostraHoras}
-                    onChange={event => setAvaliacao({ ...avaliacao, cargaHorariaAtribuida: event.target.value })}
                   />
                 </div>
               </div>
@@ -509,13 +404,15 @@ export default function Visualizar({ history }) {
             >
               <div
                 style={{
-                  display: mostraObs === true ? "flex" : "none",
+                  display: "flex",
                   flexDirection: "column",
                   width: "100%",
                   marginTop: 15
                 }}
               >
-                <label style={{ color: 'white' }} htmlFor="parecerCoordenador">Justificativa </label>
+                <label style={{ color: "white" }} htmlFor="parecerCoordenador">
+                  Justificativa{" "}
+                </label>
                 <Input
                   multiline
                   style={{
@@ -526,18 +423,20 @@ export default function Visualizar({ history }) {
                   type="text"
                   placeholder="Parecer do Coordenador"
                   value={avaliacao.parecer}
-                  required={requiredObs}
-                  onChange={event => setAvaliacao({ ...avaliacao, parecer: event.target.value })}
                 />
               </div>
             </div>
-            <div >
-              <div style={{
-                display: mostraHoras === true ? "flex" : "none",
-                flexDirection: "column",
-                justifyContent: "flex-start"
-              }}>
-                <p style={{ color: 'white' }}><strong>Alterar grupo e atividade?</strong></p>
+            <div>
+              <div
+                style={{
+                  //display: mostraHoras === true ? "flex" : "none",
+                  flexDirection: "column",
+                  justifyContent: "flex-start"
+                }}
+              >
+                <p style={{ color: "white" }}>
+                  <strong>Alterar grupo e atividade?</strong>
+                </p>
                 <div
                   style={{
                     display: "flex",
@@ -551,16 +450,15 @@ export default function Visualizar({ history }) {
                       flexDirection: "column",
                       marginTop: 10,
                       marginLeft: "3%",
-                      minWidth: "25%",
+                      minWidth: "25%"
                     }}
                   >
-                    <label style={{ color: 'white' }}>Sim</label>
+                    <label style={{ color: "white" }}>Sim</label>
                     <input
                       style={{ marginBottom: 0, height: "auto" }}
                       type="radio"
                       name="Alterar"
                       value="sim"
-                      onChange={(e) => { handleMudaInfo('sim') }}
                     />
                   </div>
                   <div
@@ -571,17 +469,21 @@ export default function Visualizar({ history }) {
                       marginLeft: "3%"
                     }}
                   >
-                    <label style={{ color: 'white' }}>Não</label>
+                    <label style={{ color: "white" }}>Não</label>
                     <input
                       style={{ marginBottom: 0, height: "auto" }}
                       type="radio"
                       name="Alterar"
                       value="nao"
-                      onChange={(e) => { handleMudaInfo('não') }}
                     />
                   </div>
                 </div>
-                <div style={{ display: mudaInfo === true ? "flex" : "none", marginTop: 10 }}>
+                <div
+                  style={{
+                    display: precisouDecorrecao === true ? "flex" : "none",
+                    marginTop: 10
+                  }}
+                >
                   <div
                     style={{
                       display: "flex",
@@ -597,19 +499,17 @@ export default function Visualizar({ history }) {
                         width: "35%"
                       }}
                     >
-                      <label style={{ color: 'white' }} htmlFor="grupo">Grupo </label>
+                      <label style={{ color: "white" }} htmlFor="grupo">
+                        Grupo{" "}
+                      </label>
                       <select
                         id="grupo"
                         name="grupo"
                         value={selectedGrupoIndex}
-                        onChange={e => {
-                          _handleGrupoChange(e.target.value);
-                        }}
-                        required={mudaInfo}
                       >
                         <option disabled selected>
                           Selecione um grupo
-                    </option>
+                        </option>
                         {_.map(grupos, (grupo, index) => {
                           return <option value={index}>{grupo.nome}</option>;
                         })}
@@ -622,14 +522,14 @@ export default function Visualizar({ history }) {
                         width: "60%"
                       }}
                     >
-                      <label style={{ color: 'white' }} htmlFor="atividade">Atividade </label>
+                      <label style={{ color: "white" }} htmlFor="atividade">
+                        Atividade{" "}
+                      </label>
                       <select
                         id="atividade"
                         name="atividade"
                         value={selectedAtividadeIndex}
-                        onChange={_handleAtividadeChange}
-                        required={mudaInfo}
-                        disabled={grupo == null}
+                        disabled
                       >
                         <option value="" disabled>
                           Selecione uma atividade
@@ -648,7 +548,9 @@ export default function Visualizar({ history }) {
             <div
               style={{ display: "flex", flexDirection: "column", width: "48%" }}
             >
-              <label style={{ color: 'white' }} htmlFor="parecerCoordenador">Coordenador </label>
+              <label style={{ color: "white" }} htmlFor="parecerCoordenador">
+                Coordenador{" "}
+              </label>
               <input
                 id="nomeCoordenador"
                 name="nomeCoordenador"
@@ -656,27 +558,29 @@ export default function Visualizar({ history }) {
                 placeholder="Nome do Coordenador"
                 value={avaliacao.nomeCoordenador}
                 required
-                onChange={event => setAvaliacao({ ...avaliacao, nomeCoordenador: event.target.value })}
+                onChange={event =>
+                  setAvaliacao({
+                    ...avaliacao,
+                    nomeCoordenador: event.target.value
+                  })
+                }
               />
             </div>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
-          <Link to="/" style={{ width: "48%" }} >
-            <button className="btn btn-add">Voltar</button>
-          </Link>
-          <button type="submit" style={{ width: "48%", display: mostraButton === true ? "block" : "none" }} className="btn btn-add">
-            Avaliar
-          </button>
-        </div>
-
       </form>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <Link to="/" style={{ width: "48%" }}>
+          <button className="btn btn-add">Voltar</button>
+        </Link>
+      </div>
     </>
   );
 }
