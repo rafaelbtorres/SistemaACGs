@@ -75,8 +75,8 @@ export default function Visualizar({ history }) {
   return (
     <>
       <p>
-        Avalie aqui a solicitação de : <strong>{solicitacao.nomeAluno}</strong>,
-        matrícula: <strong>{solicitacao.matricula}</strong>.
+        Solicitação de : <strong>{solicitacao.nomeAluno}</strong>, matrícula:{" "}
+        <strong>{solicitacao.matricula}</strong>.
       </p>
       <form>
         <div
