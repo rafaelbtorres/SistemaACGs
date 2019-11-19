@@ -50,7 +50,7 @@ export default function Avaliar({ history }) {
     cargaHorariaAtribuida: "",
     parecer: "",
     deferido: "",
-    nomeCoordenador: "",
+    nomeCoordenador: "Maicon Bernardino",
     idSolicitacao: ""
   })
 
@@ -173,7 +173,7 @@ export default function Avaliar({ history }) {
       idAtividade: avaliacao.idAtividade,
       parecer: avaliacao.parecer,
       deferido: avaliacao.deferido,
-      nomeCoordenador: avaliacao.nomeCoordenador
+      nomeCoordenador: "Maicon Bernardino"
     }
     
     try {
@@ -663,10 +663,9 @@ export default function Avaliar({ history }) {
                 id="nomeCoordenador"
                 name="nomeCoordenador"
                 type="text"
-                placeholder="Nome do Coordenador"
-                value={avaliacao.nomeCoordenador}
-                required
-                onChange={event => setAvaliacao({ ...avaliacao, nomeCoordenador: event.target.value })}
+                placeholder="Maicon Bernardino"
+                value="Maicon Bernardino"
+                disabled
               />
             </div>
           </div>
