@@ -163,8 +163,8 @@ export default function Solicitar({ history }) {
       return;
     }
     if (
-      documentosEnv.length === 0 ||
-      documentosEnv.length < atividade.docs.length
+      _.size(documentosEnv) === 0 ||
+      _.size(documentosEnv) < atividade.docs.length
     ) {
       alert("Você precisa anexar o(s) arquivo(s) necessário(s)!");
       return;
