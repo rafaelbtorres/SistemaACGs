@@ -97,12 +97,12 @@ public class AvaliacaoController {
 
             if (avaliacao.isDeferido()) {
                 if (newAvaliacao.isPrecisouDeCorrecao()) {
-                    avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+                    avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES ");
                 } else {
-                    avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+                    avaliada.setStatus(Status.DEFERIDO.toString());
                 }
             } else {
-                avaliada.setStatus(Status.INDEFERIDO.toString() + " MOTIVO: " + avaliacao.getParecer());
+                avaliada.setStatus(Status.INDEFERIDO.toString());
             }
 
             if (!avaliacao.isDeferido()) {
