@@ -104,47 +104,81 @@ export default function Dashboard({ history }) {
                 <Td>{solicitacao.status}</Td>
                 <Td>{formatarData(solicitacao.dataAtual)}</Td>
                 <Td>
-                  {solicitacao.status === "PENDENTE" || solicitacao.status === "Pendente" || solicitacao.status === "pendente" ? (
-                    <div>
-                      <Link
-                        props={solicitacao.idSolicitacao}
-                        to={`/avaliar/${solicitacao.idSolicitacao}`}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center"
+                    }}
+                  >
+                    {solicitacao.status === "PENDENTE" || solicitacao.status === "Pendente" || solicitacao.status === "pendente" ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                        }}
                       >
-                        <button type="button" onClick={() => { }} className="btn-edit">
-                          <i className="fa fa-plus" aria-hidden="true"></i>
+                        <Link
+                          style={{ margin: "2%" }}
+                          props={solicitacao.idSolicitacao}
+                          to={`/avaliar/${solicitacao.idSolicitacao}`}
+                        >
+                          <button type="button" onClick={() => { }} className="btn-edit">
+                            <i className="fa fa-plus" aria-hidden="true"></i>
+                          </button>
+                        </Link>
+                        <button
+                          style={{ margin: "2%" }}
+                          type="button"
+                          onClick={() =>
+                            handleSubmitToDelete(solicitacao.idSolicitacao)
+                          }
+                          className="btn-delete"
+                        >
+                          <i className="fa fa-trash" aria-hidden="true"></i>
                         </button>
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleSubmitToDelete(solicitacao.idSolicitacao)
-                        }
-                        className="btn-delete"
-                      >
-                        <i className="fa fa-trash" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  ) : (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleSubmitToDeleteAvaliacao(
-                            solicitacao.avaliacao.idAvaliacao
-                          )
-                        }
-                        className="btn-delete-avaliacao"
-                      >
-                        <i className="fa fa-minus" aria-hidden="true"></i>
-                      </button>
-                    )}
-                    <Link
-                        props={solicitacao.idSolicitacao}
-                        to={`/visualizar/${solicitacao.idSolicitacao}`}
-                      >
-                        <button type="button" onClick={() => { }} className="btn-visualizar">
-                          <i className="fa fa-eye" aria-hidden="true"></i>
-                        </button>
-                      </Link>
+                        <Link
+                            style={{ margin: "2%" }}
+                            props={solicitacao.idSolicitacao}
+                            to={`/visualizar/${solicitacao.idSolicitacao}`}
+                          >
+                            <button type="button" onClick={() => { }} className="btn-visualizar">
+                              <i className="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                          </Link>
+                      </div>
+                    ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <button
+                            style={{ margin: "2%" }}
+                            type="button"
+                            onClick={() =>
+                              handleSubmitToDeleteAvaliacao(
+                                solicitacao.avaliacao.idAvaliacao
+                              )
+                            }
+                            className="btn-delete-avaliacao"
+                          >
+                            <i className="fa fa-minus" aria-hidden="true"></i>
+                          </button>
+                          <Link
+                            style={{ margin: "2%" }}
+                            props={solicitacao.idSolicitacao}
+                            to={`/visualizar/${solicitacao.idSolicitacao}`}
+                          >
+                            <button type="button" onClick={() => { }} className="btn-visualizar">
+                              <i className="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                          </Link>
+                        </div>
+                      )}
+
+                  </div>
                 </Td>
               </Tr>
             ))}
