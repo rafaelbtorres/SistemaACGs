@@ -20,8 +20,8 @@ button.btn-visualizar {
   padding: 0 13.4px;
   font-size: 16px;
   font-weight: bold;
-  background: #dcebe5;
-  color: rgb(0, 0, 0);
+  background: #7686e6;
+  color: rgb(255, 255, 255);
   cursor: pointer;
   margin-right: 1%;
 }
@@ -37,7 +37,7 @@ button.btn-edit:hover {
 }
 
 button.btn-visualizar:hover {
-  background: #b1d4c4;
+  background: #87b1e7;
 }
 
 button.btn-delete:hover {

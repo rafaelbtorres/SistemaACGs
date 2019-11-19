@@ -142,7 +142,7 @@ export default function Dashboard({ history }) {
                         to={`/visualizar/${solicitacao.idSolicitacao}`}
                       >
                         <button type="button" onClick={() => { }} className="btn-visualizar">
-                          <i style={{color: "black"}} className="far fa-eye" aria-hidden="true"></i>
+                          <i className="fa fa-eye" aria-hidden="true"></i>
                         </button>
                       </Link>
                 </Td>
