@@ -584,14 +584,29 @@ export default function Solicitar({ history }) {
             ))}
           </div>
         )}
-
-        <button type="submit" className="btn btn-add">
+<div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
+             <button type="submit" className="btn btn-add">
           Solicitar
         </button>
-      </form>
-      <Link to="/">
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+          >
+           <Link to="/">
         <button className="btn btn-add">Voltar</button>
       </Link>
+          </div>
+          </div>
+      </form>
     </>
   );
 }
