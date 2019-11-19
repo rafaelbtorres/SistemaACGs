@@ -255,8 +255,16 @@ export default function Avaliar({ history }) {
               required
             />
           </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
           <div
-            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
           >
             <label htmlFor="atividade">Atividade </label>
             <input
