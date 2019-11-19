@@ -12,14 +12,8 @@ export default function Visualizar({ history }) {
 
   const { id } = useParams("id");
 
-  const [temAvaliacao, setTemAvaliacao] = useState(false);
+  const [temAvaliacao, setTemAvaliacao] = useState(true);
   const [precisouDecorrecao, setPrecisouDecorrecao] = useState(true);
-  //Dados da avaliação
-  const [nomeCoordenador, setNomeCoordenador] = useState("");
-  const [mudarGrupoAtividade, setMudarGrupoAtividade] = useState("");
-  const [deferimentoResultado, setDeferimentoResultado] = useState("");
-  const [parecerCoordenador, setParecerCoordenador] = useState("");
-  const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
 
   const [idAtividade, setIdAtividade] = useState([]);
 
@@ -343,6 +337,7 @@ export default function Visualizar({ history }) {
                   type="radio"
                   name="deferimentoResultado"
                   value="Deferido"
+                  disabled
                 />
               </div>
               <div
@@ -360,6 +355,7 @@ export default function Visualizar({ history }) {
                   type="radio"
                   name="deferimentoResultado"
                   value="Indeferido"
+                  disabled
                 />
               </div>
               <div
@@ -391,6 +387,7 @@ export default function Visualizar({ history }) {
                     type="number"
                     placeholder="Carga Horária Atribuida"
                     value={avaliacao.cargaHorariaAtribuida}
+                    disabled
                   />
                 </div>
               </div>
@@ -423,6 +420,7 @@ export default function Visualizar({ history }) {
                   type="text"
                   placeholder="Parecer do Coordenador"
                   value={avaliacao.parecer}
+                  disabled
                 />
               </div>
             </div>
@@ -434,50 +432,6 @@ export default function Visualizar({ history }) {
                   justifyContent: "flex-start"
                 }}
               >
-                <p style={{ color: "white" }}>
-                  <strong>Alterar grupo e atividade?</strong>
-                </p>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start"
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      marginTop: 10,
-                      marginLeft: "3%",
-                      minWidth: "25%"
-                    }}
-                  >
-                    <label style={{ color: "white" }}>Sim</label>
-                    <input
-                      style={{ marginBottom: 0, height: "auto" }}
-                      type="radio"
-                      name="Alterar"
-                      value="sim"
-                    />
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      marginTop: 10,
-                      marginLeft: "3%"
-                    }}
-                  >
-                    <label style={{ color: "white" }}>Não</label>
-                    <input
-                      style={{ marginBottom: 0, height: "auto" }}
-                      type="radio"
-                      name="Alterar"
-                      value="nao"
-                    />
-                  </div>
-                </div>
                 <div
                   style={{
                     display: precisouDecorrecao === true ? "flex" : "none",
@@ -502,18 +456,14 @@ export default function Visualizar({ history }) {
                       <label style={{ color: "white" }} htmlFor="grupo">
                         Grupo{" "}
                       </label>
-                      <select
+                      <input
                         id="grupo"
                         name="grupo"
-                        value={selectedGrupoIndex}
-                      >
-                        <option disabled selected>
-                          Selecione um grupo
-                        </option>
-                        {_.map(grupos, (grupo, index) => {
-                          return <option value={index}>{grupo.nome}</option>;
-                        })}
-                      </select>
+                        type="text"
+                        placeholder="Não houveram mudanças"
+                        value={avaliacao.grupo}
+                        disabled
+                      />
                     </div>
                     <div
                       style={{
@@ -525,21 +475,14 @@ export default function Visualizar({ history }) {
                       <label style={{ color: "white" }} htmlFor="atividade">
                         Atividade{" "}
                       </label>
-                      <select
+                      <input
                         id="atividade"
                         name="atividade"
-                        value={selectedAtividadeIndex}
+                        type="text"
+                        placeholder="Não houveram mudanças"
+                        value={avaliacao.atividade}
                         disabled
-                      >
-                        <option value="" disabled>
-                          Selecione uma atividade
-                        </option>
-                        {_.map(atividades, (atividade, index) => {
-                          return (
-                            <option value={index}>{atividade.descricao}</option>
-                          );
-                        })}
-                      </select>
+                      />
                     </div>
                   </div>
                 </div>
@@ -557,13 +500,7 @@ export default function Visualizar({ history }) {
                 type="text"
                 placeholder="Nome do Coordenador"
                 value={avaliacao.nomeCoordenador}
-                required
-                onChange={event =>
-                  setAvaliacao({
-                    ...avaliacao,
-                    nomeCoordenador: event.target.value
-                  })
-                }
+                disabled
               />
             </div>
           </div>

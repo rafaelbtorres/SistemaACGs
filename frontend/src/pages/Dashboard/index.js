@@ -60,16 +60,17 @@ export default function Dashboard({ history }) {
   }
 
   function formatarData(data) {
-    var splitData = data.split("-")
-    var dataFormatada = splitData[2] + "/" + splitData[1] + "/" + splitData[0]
-    return dataFormatada
+    var splitData = data.split("-");
+    var dataFormatada = splitData[2] + "/" + splitData[1] + "/" + splitData[0];
+    return dataFormatada;
   }
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column"
-    }}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column"
+      }}
     >
       <div
         style={{
@@ -79,10 +80,12 @@ export default function Dashboard({ history }) {
         }}
       >
         <Link to="/solicitar">
-          <button style={{ width: "100%" }} className="btn btn-new-solicitacao">Nova Solicitação</button>
+          <button style={{ width: "100%" }} className="btn btn-new-solicitacao">
+            Nova Solicitação
+          </button>
         </Link>
       </div>
-      <hr style={{ width: "100%" }} ></hr>
+      <hr style={{ width: "100%" }}></hr>
       <div>
         <Table className="example">
           <Thead>
@@ -111,11 +114,13 @@ export default function Dashboard({ history }) {
                       justifyContent: "center"
                     }}
                   >
-                    {solicitacao.status === "PENDENTE" || solicitacao.status === "Pendente" || solicitacao.status === "pendente" ? (
+                    {solicitacao.status === "PENDENTE" ||
+                    solicitacao.status === "Pendente" ||
+                    solicitacao.status === "pendente" ? (
                       <div
                         style={{
                           display: "flex",
-                          flexDirection: "row",
+                          flexDirection: "row"
                         }}
                       >
                         <Link
@@ -123,7 +128,11 @@ export default function Dashboard({ history }) {
                           props={solicitacao.idSolicitacao}
                           to={`/avaliar/${solicitacao.idSolicitacao}`}
                         >
-                          <button type="button" onClick={() => { }} className="btn-edit">
+                          <button
+                            type="button"
+                            onClick={() => {}}
+                            className="btn-edit"
+                          >
                             <i className="fa fa-plus" aria-hidden="true"></i>
                           </button>
                         </Link>
@@ -138,46 +147,53 @@ export default function Dashboard({ history }) {
                           <i className="fa fa-trash" aria-hidden="true"></i>
                         </button>
                         <Link
-                            style={{ margin: "2%" }}
-                            props={solicitacao.idSolicitacao}
-                            to={`/visualizar/${solicitacao.idSolicitacao}`}
-                          >
-                            <button type="button" onClick={() => { }} className="btn-visualizar">
-                              <i className="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                          </Link>
-                      </div>
-                    ) : (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
+                          style={{ margin: "2%" }}
+                          props={solicitacao.idSolicitacao}
+                          to={`/visualizar/${solicitacao.idSolicitacao}`}
                         >
                           <button
-                            style={{ margin: "2%" }}
                             type="button"
-                            onClick={() =>
-                              handleSubmitToDeleteAvaliacao(
-                                solicitacao.avaliacao.idAvaliacao
-                              )
-                            }
-                            className="btn-delete-avaliacao"
+                            onClick={() => {}}
+                            className="btn-visualizar"
                           >
-                            <i className="fa fa-minus" aria-hidden="true"></i>
+                            <i className="fa fa-eye" aria-hidden="true"></i>
                           </button>
-                          <Link
-                            style={{ margin: "2%" }}
-                            props={solicitacao.idSolicitacao}
-                            to={`/visualizar/${solicitacao.idSolicitacao}`}
+                        </Link>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row"
+                        }}
+                      >
+                        <button
+                          style={{ margin: "2%" }}
+                          type="button"
+                          onClick={() =>
+                            handleSubmitToDeleteAvaliacao(
+                              solicitacao.avaliacao.idAvaliacao
+                            )
+                          }
+                          className="btn-delete-avaliacao"
+                        >
+                          <i className="fa fa-minus" aria-hidden="true"></i>
+                        </button>
+                        <Link
+                          style={{ margin: "2%" }}
+                          props={solicitacao.idSolicitacao}
+                          to={`/visualizar/${solicitacao.idSolicitacao}`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => {}}
+                            className="btn-visualizar"
                           >
-                            <button type="button" onClick={() => { }} className="btn-visualizar">
-                              <i className="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                          </Link>
-                        </div>
-                      )}
-
+                            <i className="fa fa-eye" aria-hidden="true"></i>
+                          </button>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </Td>
               </Tr>
@@ -185,6 +201,6 @@ export default function Dashboard({ history }) {
           </Tbody>
         </Table>
       </div>
-    </ div>
+    </div>
   );
 }
