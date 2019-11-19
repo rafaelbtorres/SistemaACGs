@@ -104,7 +104,7 @@ export default function Dashboard({ history }) {
                 <Td>{solicitacao.status}</Td>
                 <Td>{formatarData(solicitacao.dataAtual)}</Td>
                 <Td>
-                  {solicitacao.status === "PENDENTE" ? (
+                  {solicitacao.status === "PENDENTE" || solicitacao.status === "Pendente" || solicitacao.status === "pendente" ? (
                     <div>
                       <Link
                         props={solicitacao.idSolicitacao}
