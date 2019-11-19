@@ -68,7 +68,4 @@ public class AvaliacaoSolicitacao {
 			}
 		}
 	}
-    public boolean horaNegativaouZero(long ch){
-        return ch <=0;
-    }
 }
