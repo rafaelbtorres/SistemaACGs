@@ -88,7 +88,7 @@ export default function Avaliar({ history }) {
     if (respInfo === 'sim') {
       setMudaInfo(true)
     }
-    setAvaliacao({ ...avaliacao, deferido: "true" })
+    setAvaliacao({ ...avaliacao, deferido: "true", cargaHorariaAtribuida: solicitacao.cargaHorariaSoli })
   };
 
   const handleIndefirido = event => {
@@ -484,7 +484,7 @@ export default function Avaliar({ history }) {
                 }}
               >
                 <div
-                  style={{ flexDirection: "column", width: "100%", marginLeft: 10, display: mostraHoras === true ? "flex" : "none" }}
+                  style={{ flexDirection: "column", width: "100%", marginLeft: 10, display: "flex" }}
                 >
                   <label style={{ color: 'white' }} htmlFor="cargaHorariaAtribuida">
                     Carga Horária Atribuida
@@ -493,7 +493,8 @@ export default function Avaliar({ history }) {
                     id="cargaHorariaAtribuida"
                     name="cargaHorariaAtribuida"
                     type="number"
-                    placeholder="Carga Horária Atribuida"
+                    placeholder={deferido ? "Carga Horária Atribuida" : "0"}
+                    disabled={!deferido}
                     value={avaliacao.cargaHorariaAtribuida}
                     required={mostraHoras}
                     onChange={event => setAvaliacao({ ...avaliacao, cargaHorariaAtribuida: event.target.value })}
@@ -538,7 +539,7 @@ export default function Avaliar({ history }) {
                 flexDirection: "column",
                 justifyContent: "flex-start"
               }}>
-                <p style={{ color: 'white' }}><strong>Alterar grupo e atividade?</strong></p>
+                <p style={{ color: 'white', marginTop: 10 }}><strong>Alterar grupo e atividade?</strong></p>
                 <div
                   style={{
                     display: "flex",
@@ -649,7 +650,7 @@ export default function Avaliar({ history }) {
             <div
               style={{ display: "flex", flexDirection: "column", width: "48%" }}
             >
-              <label style={{ color: 'white' }} htmlFor="parecerCoordenador">Coordenador </label>
+              <label style={{ color: 'white', marginTop: 10 }} htmlFor="parecerCoordenador">Coordenador </label>
               <input
                 id="nomeCoordenador"
                 name="nomeCoordenador"

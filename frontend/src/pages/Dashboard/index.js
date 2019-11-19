@@ -115,85 +115,93 @@ export default function Dashboard({ history }) {
                     }}
                   >
                     {solicitacao.status === "PENDENTE" ||
-                    solicitacao.status === "Pendente" ||
-                    solicitacao.status === "pendente" ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row"
-                        }}
-                      >
-                        <Link
-                          style={{ margin: "2%" }}
-                          props={solicitacao.idSolicitacao}
-                          to={`/avaliar/${solicitacao.idSolicitacao}`}
+                      solicitacao.status === "Pendente" ||
+                      solicitacao.status === "pendente" ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row"
+                          }}
                         >
-                          <button
-                            type="button"
-                            onClick={() => {}}
-                            className="btn-edit"
+                          <Link
+                            style={{ margin: "2%" }}
+                            props={solicitacao.idSolicitacao}
+                            to={`/avaliar/${solicitacao.idSolicitacao}`}
                           >
-                            <i className="fa fa-plus" aria-hidden="true"></i>
-                          </button>
-                        </Link>
-                        <button
-                          style={{ margin: "2%" }}
-                          type="button"
-                          onClick={() =>
-                            handleSubmitToDelete(solicitacao.idSolicitacao)
-                          }
-                          className="btn-delete"
-                        >
-                          <i className="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                        <Link
-                          style={{ margin: "2%" }}
-                          props={solicitacao.idSolicitacao}
-                          to={`/visualizar/${solicitacao.idSolicitacao}`}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => {}}
-                            className="btn-visualizar"
+                            <tooltip title="Avaliar Solicitação">
+                              <button
+                                type="button"
+                                onClick={() => { }}
+                                className="btn-edit"
+                              >
+                                <i className="fa fa-plus" aria-hidden="true"></i>
+                              </button>
+                            </tooltip>
+                          </Link>
+                          <tooltip style={{ margin: "2%" }} title="Deletar Solicitação">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleSubmitToDelete(solicitacao.idSolicitacao)
+                              }
+                              className="btn-delete"
+                            >
+                              <i className="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </tooltip>
+                          <Link
+                            style={{ margin: "2%" }}
+                            props={solicitacao.idSolicitacao}
+                            to={`/visualizar/${solicitacao.idSolicitacao}`}
                           >
-                            <i className="fa fa-eye" aria-hidden="true"></i>
-                          </button>
-                        </Link>
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row"
-                        }}
-                      >
-                        <button
-                          style={{ margin: "2%" }}
-                          type="button"
-                          onClick={() =>
-                            handleSubmitToDeleteAvaliacao(
-                              solicitacao.avaliacao.idAvaliacao
-                            )
-                          }
-                          className="btn-delete-avaliacao"
+                            <tooltip title="Visualizar Solicitação">
+                              <button
+                                type="button"
+                                onClick={() => { }}
+                                className="btn-visualizar"
+                              >
+                                <i className="fa fa-eye" aria-hidden="true"></i>
+                              </button>
+                            </tooltip>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row"
+                          }}
                         >
-                          <i className="fa fa-minus" aria-hidden="true"></i>
-                        </button>
-                        <Link
-                          style={{ margin: "2%" }}
-                          props={solicitacao.idSolicitacao}
-                          to={`/visualizar/${solicitacao.idSolicitacao}`}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => {}}
-                            className="btn-visualizar"
+                          <tooltip style={{ margin: "2%" }} title="Remover Avaliação">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleSubmitToDeleteAvaliacao(
+                                  solicitacao.avaliacao.idAvaliacao
+                                )
+                              }
+                              className="btn-delete-avaliacao"
+                            >
+                              <i className="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                          </tooltip>
+                          <Link
+                            style={{ margin: "2%" }}
+                            props={solicitacao.idSolicitacao}
+                            to={`/visualizar/${solicitacao.idSolicitacao}`}
                           >
-                            <i className="fa fa-eye" aria-hidden="true"></i>
-                          </button>
-                        </Link>
-                      </div>
-                    )}
+                            <tooltip title="Visualizar Solicitação">
+                              <button
+                                type="button"
+                                onClick={() => { }}
+                                className="btn-visualizar"
+                              >
+                                <i className="fa fa-eye" aria-hidden="true"></i>
+                              </button>
+                            </tooltip>
+                          </Link>
+                        </div>
+                      )}
                   </div>
                 </Td>
               </Tr>

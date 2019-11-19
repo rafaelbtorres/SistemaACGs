@@ -19,6 +19,7 @@ export default function Visualizar({ history }) {
 
   const [atividadeDaSolicitacao, setatividadeDaSolicitacao] = useState([]);
   const [grupoDaSolicitacao, setgrupoDaSolicitacao] = useState([]);
+  const [status, setStatus] = useState("")
 
   // listas de grupos e atividades
   const [grupos, setGrupos] = useState([]);
@@ -41,14 +42,8 @@ export default function Visualizar({ history }) {
   });
 
   useEffect(() => {
-    async function loadGrupos() {
-      api.get("solicitacao/dados").then(response => {
-        setGrupos(response.data.grupos);
-        setAtividades(response.data.atividades);
-      });
-    }
-    loadGrupos();
-  }, []);
+    console.log(solicitacao)
+  }, [solicitacao]);
 
   useEffect(() => {
     setIdSolicitacao(id);
@@ -58,12 +53,12 @@ export default function Visualizar({ history }) {
         .get("/solicitacao/busca/" + id)
         .then(r => {
           console.log(r);
-          console.log(avaliacao);
           setSolicitacao(r.data.solicitacao);
           setatividadeDaSolicitacao(r.data.solicitacao.atividade.descricao);
           setgrupoDaSolicitacao(r.data.solicitacao.atividade.grupo.nome);
           setIdAtividade(r.data.solicitacao.atividade.idAtividade);
           setAnexos(r.data.anexosDaSolicitacao);
+          console.log(solicitacao);
           return;
         })
         .catch(e => console.log(e.response));
@@ -71,6 +66,8 @@ export default function Visualizar({ history }) {
 
     getData();
   }, [id]);
+
+
 
   return (
     <>
@@ -293,20 +290,120 @@ export default function Visualizar({ history }) {
           ))}
         </div>
 
-        <div
-          className="content2"
-          style={{
-            display: temAvaliacao === true ? "flex" : "none"
-          }}
-        >
-          <p
-            style={{
-              display: "flex",
-              color: "white"
-            }}
-          >
-            <strong>Status do deferimento: </strong>
-          </p>
+        <div className="content2" style={{ display: "flex", flexDirection: "column", }}>
+
+
+          {solicitacao.status === "Pendente" ? (
+            <div style={{ display: "flex", flexDirection: "column", }}>
+              <p style={{ display: "flex", color: "white" }}>
+                <strong>Status do deferimento: </strong>
+              </p>
+              <h2 style={{ color: "white", margin: "1%" }}> Pendente</h2>
+            </div>
+          ) : (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", width: "30%" }}>
+                    <p style={{ display: "flex", color: "white" }}>
+                      <strong>Detalhes da Avaliação: </strong>
+                    </p>
+                    <div style={{ flexDirection: "column", width: "100%", display: "flex", marginTop: 10 }}>
+                      <label style={{ color: "white" }} htmlFor="grupo">
+                        Status do deferimento:{" "}
+                      </label>
+                      <input
+                        id="status"
+                        name="status"
+                        type="text"
+                        value={solicitacao.status}
+                        disabled
+                      />
+                    </div>
+                    <div style={{ flexDirection: "column", width: "100%", display: "flex" }}>
+                      <label style={{ color: "white" }} htmlFor="cargaHorariaAtribuida" >
+                        Carga Horária Atribuida:
+                    </label>
+                      <input
+                        id="cargaHorariaAtribuida"
+                        name="cargaHorariaAtribuida"
+                        type="number"
+                        placeholder="Carga Horária Atribuida"
+                        value={solicitacao.avaliacao === undefined ? ("") : (solicitacao.avaliacao.cargaHorariaAtribuida)}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", width: "65%", justifyContent: "space-around" }}>
+                    <p style={{ display: "flex", color: "white" }}>
+                      <strong>Grupo e Atividade Atribuídos: </strong>
+                    </p>
+                    <div style={{ flexDirection: "column", width: "100%", marginTop: 10, display: "flex" }}>
+                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <label style={{ color: "white" }} htmlFor="grupo">
+                          Grupo:{" "}
+                        </label>
+                        <input
+                          id="grupo"
+                          name="grupo"
+                          type="text"
+                          placeholder="Não houveram mudanças"
+                          value={solicitacao.avaliacao === undefined ? ("Não houveram mudanças") : (solicitacao.avaliacao.solicitada.grupo.nome)}
+                          disabled
+                        />
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <label style={{ color: "white" }} htmlFor="atividade">
+                          Atividade:{" "}
+                        </label>
+                        <input
+                          id="atividade"
+                          name="atividade"
+                          type="text"
+                          placeholder="Não houveram mudanças"
+                          value={solicitacao.avaliacao === undefined ? ("Não houveram mudanças") : (solicitacao.avaliacao.solicitada.descricao)}
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+                  <div style={{ display: "flex", flexDirection: "column", width: "97.5%", marginTop: 10 }}>
+                    <label style={{ color: "white" }} htmlFor="parecerCoordenador">
+                      Justificativa:{" "}
+                    </label>
+                    <Input
+                      multiline
+                      style={{ height: "100px" }}
+                      id="parecerCoordenador"
+                      name="parecerCoordenador"
+                      type="text"
+                      placeholder="Parecer do Coordenador"
+                      value={solicitacao.avaliacao === undefined ? ("") : (solicitacao.avaliacao.justificativa)}
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", width: "48%", marginLeft: "1.3%", marginTop: 10 }}>
+                  <label style={{ color: "white" }} htmlFor="parecerCoordenador">
+                    Coordenador:{" "}
+                  </label>
+                  <input
+                    id="nomeCoordenador"
+                    name="nomeCoordenador"
+                    type="text"
+                    placeholder="Nome do Coordenador"
+                    value={solicitacao.avaliacao === undefined ? ("") : (solicitacao.avaliacao.nomeCoordenador)}
+                    disabled
+                  />
+                </div>
+              </div>
+
+            )}
+
+
+
+
           <div
             style={{
               display: "flex",
@@ -331,32 +428,7 @@ export default function Visualizar({ history }) {
                   marginLeft: "3%"
                 }}
               >
-                <label style={{ color: "white" }}>Deferido</label>
-                <input
-                  style={{ marginBottom: 0, height: "auto" }}
-                  type="radio"
-                  name="deferimentoResultado"
-                  value="Deferido"
-                  disabled
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginTop: 10,
-                  marginLeft: "3%",
-                  minWidth: "25%"
-                }}
-              >
-                <label style={{ color: "white" }}>Indeferido</label>
-                <input
-                  style={{ marginBottom: 0, height: "auto" }}
-                  type="radio"
-                  name="deferimentoResultado"
-                  value="Indeferido"
-                  disabled
-                />
+
               </div>
               <div
                 style={{
@@ -367,63 +439,10 @@ export default function Visualizar({ history }) {
                   width: "50%"
                 }}
               >
-                <div
-                  style={{
-                    flexDirection: "column",
-                    width: "100%",
-                    marginLeft: 10,
-                    display: "flex"
-                  }}
-                >
-                  <label
-                    style={{ color: "white" }}
-                    htmlFor="cargaHorariaAtribuida"
-                  >
-                    Carga Horária Atribuida
-                  </label>
-                  <input
-                    id="cargaHorariaAtribuida"
-                    name="cargaHorariaAtribuida"
-                    type="number"
-                    placeholder="Carga Horária Atribuida"
-                    value={avaliacao.cargaHorariaAtribuida}
-                    disabled
-                  />
-                </div>
+
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between"
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "100%",
-                  marginTop: 15
-                }}
-              >
-                <label style={{ color: "white" }} htmlFor="parecerCoordenador">
-                  Justificativa{" "}
-                </label>
-                <Input
-                  multiline
-                  style={{
-                    height: "100px"
-                  }}
-                  id="parecerCoordenador"
-                  name="parecerCoordenador"
-                  type="text"
-                  placeholder="Parecer do Coordenador"
-                  value={avaliacao.parecer}
-                  disabled
-                />
-              </div>
-            </div>
+
             <div>
               <div
                 style={{
@@ -446,63 +465,12 @@ export default function Visualizar({ history }) {
                       width: "100%"
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "35%"
-                      }}
-                    >
-                      <label style={{ color: "white" }} htmlFor="grupo">
-                        Grupo{" "}
-                      </label>
-                      <input
-                        id="grupo"
-                        name="grupo"
-                        type="text"
-                        placeholder="Não houveram mudanças"
-                        value={avaliacao.grupo}
-                        disabled
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "60%"
-                      }}
-                    >
-                      <label style={{ color: "white" }} htmlFor="atividade">
-                        Atividade{" "}
-                      </label>
-                      <input
-                        id="atividade"
-                        name="atividade"
-                        type="text"
-                        placeholder="Não houveram mudanças"
-                        value={avaliacao.atividade}
-                        disabled
-                      />
-                    </div>
+
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", width: "48%" }}
-            >
-              <label style={{ color: "white" }} htmlFor="parecerCoordenador">
-                Coordenador{" "}
-              </label>
-              <input
-                id="nomeCoordenador"
-                name="nomeCoordenador"
-                type="text"
-                placeholder="Nome do Coordenador"
-                value={avaliacao.nomeCoordenador}
-                disabled
-              />
-            </div>
+
           </div>
         </div>
       </form>
