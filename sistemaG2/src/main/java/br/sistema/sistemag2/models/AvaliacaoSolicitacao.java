@@ -32,7 +32,7 @@ public class AvaliacaoSolicitacao {
 
     private String justificativa;//obrigatório if indeferido
 
-    @NotEmpty
+    //@NotEmpty
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dataAvaliacao;//atual
 
@@ -57,7 +57,7 @@ public class AvaliacaoSolicitacao {
         
     public AvaliacaoSolicitacao(){}
 
-    public void ValidaDeferimento () throws Exception {
+    public void validarDeferimento() throws Exception {
 		if (this.solicitacao.getStatus().equalsIgnoreCase(("DEFERIDO"))) {
 			if(this.cargaHorariaAtribuida <=0){
 				throw new Exception("Carga horaria não pode nula");
@@ -68,7 +68,4 @@ public class AvaliacaoSolicitacao {
 			}
 		}
 	}
-    public boolean horaNegativaouZero(long ch){
-        return ch <=0;
-    }
 }

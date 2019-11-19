@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
+import br.sistema.sistemag2.models.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,17 +110,10 @@ public class SolicitacaoController {
      */
     @GetMapping(value = "/busca/{id}") // Busca uma solicitação
     public @ResponseBody ResponseEntity getSolicitacaobyId(@PathVariable long id) {
-        // Busca no banco pelo id
         Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
-        Iterable<Anexo> anexos = anexoRepository.findAll();
-        List<Anexo> anexosDaSolicitacao = new ArrayList();
-        for(Anexo anexo: anexos){
-            if(anexo.getSolicitacao().equals(retornableSolicitacao.get())){
-                anexosDaSolicitacao.add(anexo);
-            }
-        }
+        List<Anexo> anexos = retornableSolicitacao.get().getAnexos();
         SolicitacaoGetDTO dto = new SolicitacaoGetDTO();
-        dto.setAnexosDaSolicitacao(anexosDaSolicitacao);
+        dto.setAnexosDaSolicitacao(anexos);
         dto.setSolicitacao(retornableSolicitacao.get());
         return ResponseEntity.ok(dto);
     }
@@ -162,7 +156,7 @@ public class SolicitacaoController {
         newSolicitacao.setDataInicio(dataInicio);
         newSolicitacao.setDataFim(dataFim);
 
-        newSolicitacao.setStatus("PENDENTE");
+        newSolicitacao.setStatus(Status.PENDENTE.toString());
         Solicitacao retornableSolicitacao = solicitacaoRepository.save(newSolicitacao);
 
         String nome;

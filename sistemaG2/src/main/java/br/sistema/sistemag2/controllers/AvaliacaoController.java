@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,87 +62,88 @@ public class AvaliacaoController {
 
     /**
      * Metodo de salvamento da avaliação. Serve para como inclusão da avaliação de uma solicitação no banco de dados.
+     *
      * @param avaliacao
      * @param id
      * @return Retorna um Ok em caso de sucesso. Em caso de erro retorna um error.
      */
     @JsonIgnore
     @PostMapping("/{id}")
-    public ResponseEntity postAvaliacao(@RequestBody AvaliacaoDTO avaliacao, @PathVariable long id){
+    public ResponseEntity postAvaliacao(@RequestBody AvaliacaoDTO avaliacao, @PathVariable long id) {
 
-        AvaliacaoSolicitacao newavaliacao = new AvaliacaoSolicitacao();
+        AvaliacaoSolicitacao newAvaliacao = new AvaliacaoSolicitacao();
         Date dataAtual = new Date();
         Solicitacao avaliada = (solicitacaoRepository.findById(id).isPresent()) ? solicitacaoRepository.findById(id).get() : null;
-        Optional<Atividade> atividade;
-        if(avaliacao.getIdAtividade()!=0){
-            atividade = atividadeRepository.findById(avaliacao.getIdAtividade());
-        }else{
-            atividade = atividadeRepository.findById(avaliada.getAtividade().getIdAtividade());
-        }
-        String status = avaliada.getStatus();
-        if (status.equals("Deferido") || status.equals("Indeferido")) {
-            return ResponseEntity.badRequest().body("Essa avaliação da foi avaliada");
+        Atividade atividade;
+        if (avaliacao.getIdAtividade() != 0) {
+            atividade = atividadeRepository.findById(avaliacao.getIdAtividade()).get();
+        } else {
+            atividade = atividadeRepository.findById(avaliada.getAtividade().getIdAtividade()).get();
         }
 
-     try {
-        if (avaliada.getStatus().equals("Deferido") || avaliada.getStatus().equals("Indeferido")) {
-            return ResponseEntity.badRequest().body("Essa avaliação ja foi avaliada");
-        }
-
-        newavaliacao.setSolicitada(avaliada.getAtividade());
-        newavaliacao.setSolicitado(avaliada.getAtividade().getGrupo());
-
-        if(!avaliada.getAtividade().equals(atividade.get())){
-            newavaliacao.setPrecisouDeCorrecao(true);
-        }
-
-        if(avaliacao.isDeferido()){
-            if(newavaliacao.isPrecisouDeCorrecao()){
-                avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
-            }else{
-                avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+        try {
+            String status = avaliada.getStatus();
+            if (!status.equalsIgnoreCase("PENDENTE")) {
+                return ResponseEntity.badRequest().body("Essa avaliação da foi avaliada");
             }
-        }else{
-            avaliada.setStatus(Status.INDEFERIDO.toString() + " MOTIVO: " + avaliacao.getParecer());
-        }
-        avaliada.setIdSolicitacao(id);
+            //ATIVIDADE
+            newAvaliacao.setSolicitada(avaliada.getAtividade());
+            //GRUPO
+            newAvaliacao.setSolicitado(avaliada.getAtividade().getGrupo());
 
-        avaliada.setAtividade(atividade.get());
+            if (!avaliada.getAtividade().equals(atividade)) {
+                newAvaliacao.setPrecisouDeCorrecao(true);
+            }
+
+            if (avaliacao.isDeferido()) {
+                if (newAvaliacao.isPrecisouDeCorrecao()) {
+                    avaliada.setStatus(Status.DEFERIDO.toString() + " COM CORREÇÕES - CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+                } else {
+                    avaliada.setStatus(Status.DEFERIDO.toString() + " CARGA-HORÁRIA ATRIBUÍDA: " + avaliacao.getCargaHorariaAtribuida());
+                }
+            } else {
+                avaliada.setStatus(Status.INDEFERIDO.toString() + " MOTIVO: " + avaliacao.getParecer());
+            }
+
+            if (!avaliacao.isDeferido()) {
+                newAvaliacao.setCargaHorariaAtribuida(0);
+            } else if (avaliacao.isDeferido()) {
+                if (avaliacao.getCargaHorariaAtribuida() > 0) {
+                    newAvaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
+                } else {
+                    return ResponseEntity.badRequest().body("Deve-se atribir carga horária em solicitações deferidas ");
+                }
+            }
+
+            newAvaliacao.setDataAvaliacao(dataAtual);
+            newAvaliacao.setSolicitacao(avaliada);
+            newAvaliacao.setJustificativa(avaliacao.getParecer());
+            newAvaliacao.setNomeCoordenador(avaliacao.getNomeCoordenador());
+            newAvaliacao.validarDeferimento();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Houve um erro ao realizar a avaliação " + e.getMessage());
+        }
+
+
+        avaliada.setAtividade(atividade);
         solicitacaoRepository.save(avaliada);
-        
-        if(newavaliacao.horaNegativaouZero(avaliacao.getCargaHorariaAtribuida())){
-            if(!avaliacao.isDeferido()){
-                newavaliacao.setCargaHorariaAtribuida(0);
-            }else{
-                return  ResponseEntity.badRequest().body("É necessário atribir pelo menos uma hora a solicitações deferidas ");
-            }
-        }else if(avaliacao.isDeferido()){
-            newavaliacao.setCargaHorariaAtribuida(avaliacao.getCargaHorariaAtribuida());
-        }else{
-            return  ResponseEntity.badRequest().body("Não deve-se atribir carga horária em solicitações indeferidas ");
-        }
-        newavaliacao.setDataAvaliacao(dataAtual);
-        newavaliacao.setSolicitacao(avaliada);
-        newavaliacao.setJustificativa(avaliacao.getParecer());
-        newavaliacao.setNomeCoordenador(avaliacao.getNomeCoordenador());
-        newavaliacao.ValidaDeferimento();
-        }catch (Exception e){
-            return  ResponseEntity.badRequest().body("Houve um erro ao realizar a avaliação " + e.getMessage());
-        }
-        AvaliacaoSolicitacao retornableAvaliacao = avaliacaoRepository.save(newavaliacao);
+        AvaliacaoSolicitacao retornableAvaliacao = avaliacaoRepository.save(newAvaliacao);
+
 
         return ResponseEntity.ok(retornableAvaliacao);
     }
 
     /**
      * Deleta a avaliação escolhida.
+     *
      * @param id
      * @return Retorna um OK caso a seja deletado com sucesso. Em caso de erro retorna um error.
-    */
-    @DeleteMapping(value = "/{id}") 
-    public @ResponseBody ResponseEntity deleteAvaliacaobyId(@PathVariable long id) {
+     */
+    @DeleteMapping(value = "/{id}")
+    public @ResponseBody
+    ResponseEntity deleteAvaliacaobyId(@PathVariable long id) {
         Optional<AvaliacaoSolicitacao> retornableAvaliacao = avaliacaoRepository.findById(id);
-        if(retornableAvaliacao.isPresent()) {
+        if (retornableAvaliacao.isPresent()) {
             avaliacaoRepository.deleteById(id);
             retornableAvaliacao.get().getSolicitacao().setStatus(Status.PENDENTE.toString());
         } else {
@@ -156,9 +156,10 @@ public class AvaliacaoController {
 
     /**
      * Busca no banco pelo id
+     *
      * @param id
      * @return Retorna as informações da solicitacão em caso de sucesso. Em caso de erro retorna um error.
-    */
+     */
     @GetMapping(value = "/infos/{id}")
     public ResponseEntity<Optional<Solicitacao>> getInfos(@PathVariable long id) {
         Optional<Solicitacao> retornableSolicitacao = solicitacaoRepository.findById(id);
@@ -167,9 +168,10 @@ public class AvaliacaoController {
 
     /**
      * Pega um anexo a partir do nome do anexo.
+     *
      * @param filename
      * @return
-    */
+     */
     @GetMapping("/anexos/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
