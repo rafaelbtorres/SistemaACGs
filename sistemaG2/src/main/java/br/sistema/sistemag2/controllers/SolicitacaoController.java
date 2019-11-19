@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
+import br.sistema.sistemag2.models.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,7 +156,7 @@ public class SolicitacaoController {
         newSolicitacao.setDataInicio(dataInicio);
         newSolicitacao.setDataFim(dataFim);
 
-        newSolicitacao.setStatus("PENDENTE");
+        newSolicitacao.setStatus(Status.PENDENTE.toString());
         Solicitacao retornableSolicitacao = solicitacaoRepository.save(newSolicitacao);
 
         String nome;
