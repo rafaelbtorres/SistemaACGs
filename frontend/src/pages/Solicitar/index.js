@@ -126,11 +126,12 @@ export default function Solicitar({ history }) {
     var varDateFim = new Date(dataFim);
     varDateIncio.setHours(0, 0, 0, 0);
     varDateFim.setHours(0, 0, 0, 0);
+    console.log("incio ", varDateIncio.setHours(0, 0, 0, 0), "fim ", varDateFim.setHours(0, 0, 0, 0))
 
-    if (varDateIncio < varDateFim) {
-      return false;
-    } else {
+    if (varDateIncio.setHours(0, 0, 0, 0) <= varDateFim.setHours(0, 0, 0, 0)) {
       return true;
+    } else {
+      return false;
     }
   };
 
@@ -176,7 +177,7 @@ export default function Solicitar({ history }) {
       alert("As datas não podem ser maior que a data de hoje!");
       return;
     }
-    if (validarDateInicioFim(periodoAtividadeInicio, periodoAtividadeFinal)) {
+    if (!validarDateInicioFim(periodoAtividadeInicio, periodoAtividadeFinal)) {
       alert("A data de início não pode ser maior que a data de fim!");
       return;
     }
