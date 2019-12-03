@@ -14,7 +14,8 @@ export default function Avaliar({ history }) {
 
   //Dados da avaliação
   const [nomeCoordenador, setNomeCoordenador] = useState("");
-  const [mudarGrupoAtividade, setMudarGrupoAtividade] = useState("");
+  const [mudarGrupo, setMudarGrupo] = useState("");
+  const [mudarAtividade, setMudarAtividade] = useState("");
   const [deferimentoResultado, setDeferimentoResultado] = useState("");
   const [parecerCoordenador, setParecerCoordenador] = useState("");
   const [cargaHorariaAtribuida, setCargaHorariaAtribuida] = useState("");
@@ -88,6 +89,7 @@ export default function Avaliar({ history }) {
     if (respInfo === 'sim') {
       setMudaInfo(true)
     }
+    setCargaHorariaAtribuida(solicitacao.cargaHorariaSoli)
     setAvaliacao({ ...avaliacao, deferido: "true", cargaHorariaAtribuida: solicitacao.cargaHorariaSoli })
   };
 
@@ -98,14 +100,24 @@ export default function Avaliar({ history }) {
     setMudaInfo(false)
     setMostraButton(true)
     setRequiredObs(true)
+    setCargaHorariaAtribuida("0")
+    setAvaliacao({ ...avaliacao, cargaHorariaAtribuida: "0" })
     setAvaliacao({ ...avaliacao, deferido: "false" })
   };
 
   const _handleAtividadeChange = event => {
+    if(solicitacao.atividade.precisaCalcular && atividades[parseInt(event.target.value)].precisaCalcular) {
+      setCargaHorariaAtribuida((solicitacao.cargaHorariaSoli / solicitacao.atividade.cargaHoraria) * atividades[parseInt(event.target.value)].cargaHoraria)
+    }
+    if(!atividades[parseInt(event.target.value)].precisaCalcular){
+      setCargaHorariaAtribuida(atividades[parseInt(event.target.value)].cargaHoraria)
+    }
     setSelectedAtividadeIndex(event.target.value);
     setAtividade(atividades[parseInt(event.target.value)]);
-    
-    setAvaliacao({...avaliacao, idAtividade: atividades[parseInt(event.target.value)].idAtividade.toString()})
+
+    setAvaliacao({ ...avaliacao, idAtividade: atividades[parseInt(event.target.value)].idAtividade.toString() })
+    console.log("event: ", event.target.value)
+    console.log("atividade: ", atividades[parseInt(event.target.value)])
   };
 
   function _handleGrupoChange(grupoIndex) {
@@ -175,11 +187,11 @@ export default function Avaliar({ history }) {
       deferido: avaliacao.deferido,
       nomeCoordenador: "Maicon Bernardino"
     }
-    
+
     try {
       const response = await api.post(`/avaliacao/${idSolicitacao}`, data
-        );
-        console.log(response)
+      );
+      console.log(response)
 
       if (response.status === 200) {
         alert("Avaliação Realizada com Sucesso!")
@@ -199,7 +211,7 @@ export default function Avaliar({ history }) {
         Avalie aqui a solicitação de : <strong>{solicitacao.nomeAluno}</strong>,
         matrícula: <strong>{solicitacao.matricula}</strong>.
       </p>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div
           style={{
             display: "flex",
@@ -399,34 +411,33 @@ export default function Avaliar({ history }) {
           value={solicitacao.descricao}
           disabled
         />
-        <label style={{ marginTop: 10 }} htmlFor="documento">Comprovantes:</label>
-        <div>
-          {_.map(anexos, (anexo, index) => (
-            <div key={index}>
-              <p>{anexo.doc.nome}</p>
-              <button className="btn btn-add" style={{ marginTop: 3, width: "25%" }}
-                id={anexo.idAnexo}
-                name={anexo.nome}
-                placeholder={anexo.nome}
-                onClick={event => {
-                  window.open(
-                    `http://localhost:2222/avaliacao/anexos/${anexo.nome}`,
-                    '_blank',
-                    'noopener'
-                  );
-                }}
-              >
-                Comprovante {index + 1}
-              </button>
-            </div>
-          ))}
-        </div>
+      </form>
+
+      <label style={{ marginTop: 10 }} htmlFor="documento">Comprovantes:</label>
+      <div>
+        {_.map(anexos, (anexo, index) => (
+          <div key={index}>
+            <p>{anexo.doc.nome}</p>
+            <button className="btn btn-add" style={{ marginTop: 3, width: "25%" }}
+              id={anexo.idAnexo}
+              name={anexo.nome}
+              onClick={event => {
+                window.open(
+                  `http://localhost:2222/avaliacao/anexos/${anexo.nome}`,
+                  '_blank',
+                  'noopener'
+                );
+              }}
+            >
+              Comprovante {index + 1}
+            </button>
+          </div>
+        ))}
+      </div>
 
 
 
-
-
-
+      <form onSubmit={handleSubmit}>
         <div className="content2">
           <p style={{ color: 'white' }}><strong>Status do deferimento: </strong></p>
           <div
@@ -503,7 +514,7 @@ export default function Avaliar({ history }) {
                     type="number"
                     placeholder={deferido ? "Carga Horária Atribuida" : "0"}
                     disabled={!deferido}
-                    value={avaliacao.cargaHorariaAtribuida}
+                    value={cargaHorariaAtribuida}
                     required={mostraHoras}
                     onChange={event => setAvaliacao({ ...avaliacao, cargaHorariaAtribuida: event.target.value })}
                   />
@@ -618,7 +629,7 @@ export default function Avaliar({ history }) {
                         required={mudaInfo}
                       >
                         <option disabled selected>
-                          Selecione um grupo
+                        {grupoDaSolicitacao}
                     </option>
                         {_.map(grupos, (grupo, index) => {
                           return <option value={index}>{grupo.nome}</option>;
@@ -642,7 +653,7 @@ export default function Avaliar({ history }) {
                         disabled={grupo == null}
                       >
                         <option value="" disabled>
-                          Selecione uma atividade
+                          {atividadeDaSolicitacao}
                         </option>
                         {_.map(atividades, (atividade, index) => {
                           return (
@@ -656,7 +667,7 @@ export default function Avaliar({ history }) {
               </div>
             </div>
             <div
-              style={{ display: "flex", flexDirection: "column", width: "48%" }}
+              style={{ display: "flex", flexDirection: "column", width: "35%" }}
             >
               <label style={{ color: 'white', marginTop: 10 }} htmlFor="parecerCoordenador">Coordenador </label>
               <input

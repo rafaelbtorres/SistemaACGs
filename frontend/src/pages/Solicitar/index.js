@@ -390,7 +390,7 @@ export default function Solicitar({ history }) {
             </select>
           </div>
           <div
-            style={{ display: "flex", flexDirection: "column", width: "48%" }}
+            style={{ display: "flex", flexDirection: "column", width: "50%" }}
           ></div>
         </div>
 
